@@ -15,6 +15,7 @@ type Props = {
   pubDatetime?: Date;
   modDatetime?: Date | null;
   scrollSmooth?: boolean;
+  math?: boolean;
 };
 
 const {
@@ -27,6 +28,7 @@ const {
   pubDatetime,
   modDatetime,
   scrollSmooth = false,
+  math = false,
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.url);
@@ -122,6 +124,19 @@ const structuredData = {
     />
 
     <meta name="theme-color" content="" />
+
+    <meta name="baidu-site-verification" content="7Qj6Ob0N31" />
+
+    {
+      math && (
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+          integrity="sha384-nB0miv6/jRmo5RLHO8BUBkbKnUvHY/Zp2daXZn60Gm5DVEF2kOSKiMJj/pfBV/e"
+          crossorigin="anonymous"
+        />
+      )
+    }
 
     {
       // If PUBLIC_GOOGLE_SITE_VERIFICATION is set in the environment variable,

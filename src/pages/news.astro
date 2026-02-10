@@ -1,0 +1,275 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { SITE } from "@/config";
+---
+
+<Layout title={`News Feed | ${SITE.title}`}>
+  <Header />
+  <main id="main-content" class="app-layout pb-12">
+    <h1 class="pt-8 pb-2 text-2xl font-semibold sm:text-3xl">Finance News Feed</h1>
+    <p class="mb-6 italic opacity-75">Global financial headlines, updated twice daily.</p>
+
+    <div id="feed-loading" class="py-12 text-center opacity-60">
+      Loading latest news...
+    </div>
+
+    <div id="feed-error" class="hidden py-8 text-center text-red-500">
+      Failed to load news feed. Please try again later.
+    </div>
+
+    <!-- Summary & Market section -->
+    <div id="feed-summary" class="hidden mb-6"></div>
+
+    <!-- News items -->
+    <div id="feed-items" class="space-y-4"></div>
+
+    <div id="feed-updated" class="mt-8 text-center text-sm opacity-50"></div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .news-card {
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 16px 18px;
+    background: var(--background);
+    transition: box-shadow 0.2s;
+  }
+  .news-card:hover {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+  .news-source {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.6;
+  }
+  .news-headline {
+    font-size: 17px;
+    font-weight: 600;
+    margin-top: 4px;
+    color: var(--foreground);
+  }
+  .news-headline-zh {
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 6px;
+    color: var(--foreground);
+    opacity: 0.85;
+  }
+  .news-summary {
+    font-size: 14px;
+    margin-top: 6px;
+    line-height: 1.6;
+    opacity: 0.8;
+  }
+  .news-meta {
+    font-size: 12px;
+    margin-top: 10px;
+    opacity: 0.5;
+  }
+  .news-link {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 12px;
+    font-size: 13px;
+    border-radius: 6px;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+  }
+  .news-link:hover {
+    opacity: 0.85;
+  }
+  .market-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+    margin: 12px 0;
+  }
+  .market-item {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+  .market-name {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .market-price {
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .market-change {
+    font-size: 13px;
+    margin-top: 2px;
+  }
+  .section-header {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-weight: 700;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .summary-box {
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .recommendation-box {
+    border: 1px solid #16a34a40;
+    border-left: 4px solid #16a34a;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 16px;
+    white-space: pre-line;
+  }
+</style>
+
+<script is:inline>
+  const FEED_URL =
+    "https://raw.githubusercontent.com/james20141606/ai_finance_news/main/news-feed.json";
+
+  async function loadFeed() {
+    const loading = document.getElementById("feed-loading");
+    const error = document.getElementById("feed-error");
+    const summaryEl = document.getElementById("feed-summary");
+    const itemsEl = document.getElementById("feed-items");
+    const updatedEl = document.getElementById("feed-updated");
+
+    try {
+      const res = await fetch(FEED_URL + "?t=" + Date.now());
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const feed = await res.json();
+
+      loading.classList.add("hidden");
+
+      // Render summary section
+      let summaryHTML = "";
+
+      if (feed.summary_cn) {
+        summaryHTML += '<div class="section-header">Daily Outlook</div>';
+        summaryHTML += '<div class="summary-box">' + escapeHtml(feed.summary_cn) + "</div>";
+      }
+
+      if (feed.sector_recommendation) {
+        summaryHTML += '<div class="section-header">Sector & Stock Picks</div>';
+        summaryHTML +=
+          '<div class="recommendation-box">' +
+          escapeHtml(feed.sector_recommendation) +
+          "</div>";
+      }
+
+      // Market snapshot
+      if (feed.market_snapshot && feed.market_snapshot.length > 0) {
+        summaryHTML += '<div class="section-header">Market Snapshot</div>';
+        for (const section of feed.market_snapshot) {
+          summaryHTML += '<div style="font-size:12px;opacity:0.6;margin-top:12px;text-transform:uppercase;letter-spacing:1px;">' + escapeHtml(section.title) + "</div>";
+          summaryHTML += '<div class="market-grid">';
+          for (const item of section.items) {
+            const priceStr = item.price != null ? item.price.toFixed(2) : "N/A";
+            const changeStr =
+              item.change != null && item.change_percent != null
+                ? (item.change >= 0 ? "+" : "") +
+                  item.change.toFixed(2) +
+                  " (" +
+                  (item.change_percent >= 0 ? "+" : "") +
+                  item.change_percent.toFixed(2) +
+                  "%)"
+                : "N/A";
+            const color = item.change_color || (item.change >= 0 ? "#16a34a" : "#dc2626");
+            summaryHTML +=
+              '<div class="market-item">' +
+              '<div class="market-name">' + escapeHtml(item.name) +
+              ' <span style="opacity:0.5;font-weight:400;">' + escapeHtml(item.symbol) + "</span></div>" +
+              '<div class="market-price">' + priceStr + "</div>" +
+              '<div class="market-change" style="color:' + color + ';">' + changeStr + "</div>" +
+              "</div>";
+          }
+          summaryHTML += "</div>";
+        }
+      }
+
+      // Sector rankings
+      if (feed.sector_rankings && feed.sector_rankings.length > 0) {
+        summaryHTML += '<div class="section-header">Sector Rankings</div>';
+        for (const ranking of feed.sector_rankings) {
+          summaryHTML += '<div style="font-size:12px;opacity:0.6;margin-top:12px;text-transform:uppercase;letter-spacing:1px;">' + escapeHtml(ranking.title) + "</div>";
+          summaryHTML += '<div style="margin:8px 0 16px;">';
+          ranking.items.forEach(function (item, i) {
+            const color = item.change_color || (item.change_percent >= 0 ? "#16a34a" : "#dc2626");
+            summaryHTML +=
+              '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);">' +
+              '<span><span style="opacity:0.5;font-size:12px;">' + (i + 1) + ".</span> " + escapeHtml(item.name) + "</span>" +
+              '<span style="font-weight:700;color:' + color + ';">' +
+              (item.change_percent >= 0 ? "+" : "") + item.change_percent.toFixed(2) + "%" +
+              "</span></div>";
+          });
+          summaryHTML += "</div>";
+        }
+      }
+
+      if (summaryHTML) {
+        summaryEl.innerHTML = summaryHTML;
+        summaryEl.classList.remove("hidden");
+      }
+
+      // Render news items
+      let itemsHTML = '<div class="section-header">Top Briefing</div>';
+      for (const item of feed.items) {
+        const pubDate = item.published
+          ? new Date(item.published).toLocaleString()
+          : "";
+        const titleEn = item.title_en || item.title || "";
+        const titleZh = item.title_zh || "";
+        const summaryEn = item.summary_en || "";
+        const summaryZh = item.summary_zh || "";
+
+        itemsHTML +=
+          '<div class="news-card">' +
+          '<div class="news-source">' + escapeHtml(item.source) + "</div>" +
+          '<div class="news-headline">' + escapeHtml(titleEn) + "</div>" +
+          (titleZh ? '<div class="news-headline-zh">' + escapeHtml(titleZh) + "</div>" : "") +
+          (summaryEn ? '<div class="news-summary"><strong>EN:</strong> ' + escapeHtml(summaryEn) + "</div>" : "") +
+          (summaryZh ? '<div class="news-summary"><strong>CN:</strong> ' + escapeHtml(summaryZh) + "</div>" : "") +
+          '<div class="news-meta">' + pubDate + "</div>" +
+          '<a class="news-link" href="' + escapeHtml(item.link) + '" target="_blank" rel="noopener">Read source</a>' +
+          "</div>";
+      }
+      itemsEl.innerHTML = itemsHTML;
+
+      // Updated timestamp
+      if (feed.updated_at) {
+        const updatedDate = new Date(feed.updated_at).toLocaleString();
+        updatedEl.textContent = "Last updated: " + updatedDate;
+      }
+    } catch (e) {
+      console.error("Failed to load feed:", e);
+      loading.classList.add("hidden");
+      error.classList.remove("hidden");
+    }
+  }
+
+  function escapeHtml(text) {
+    if (!text) return "";
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  loadFeed();
+</script>

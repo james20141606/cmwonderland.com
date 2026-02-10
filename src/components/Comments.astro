@@ -1,0 +1,60 @@
+---
+---
+
+<section class="mt-8">
+  <div id="giscus-container">
+    <script
+      is:inline
+      src="https://giscus.app/client.js"
+      data-repo="james20141606/blog-comments"
+      data-repo-id=""
+      data-category="Announcements"
+      data-category-id=""
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="top"
+      data-theme="preferred_color_scheme"
+      data-lang="en"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </div>
+</section>
+
+<script is:inline>
+  // Sync Giscus theme with site dark mode toggle
+  function updateGiscusTheme() {
+    const theme = document.documentElement.getAttribute("data-theme");
+    const giscusTheme = theme === "dark" ? "dark" : "light";
+    const iframe = document.querySelector("iframe.giscus-frame");
+    if (iframe) {
+      iframe.contentWindow.postMessage(
+        {
+          giscus: {
+            setConfig: {
+              theme: giscusTheme,
+            },
+          },
+        },
+        "https://giscus.app"
+      );
+    }
+  }
+
+  // Observe data-theme changes
+  const observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+      if (mutation.attributeName === "data-theme") {
+        updateGiscusTheme();
+      }
+    });
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
+</script>

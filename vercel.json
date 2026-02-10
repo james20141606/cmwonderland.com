@@ -1,0 +1,44 @@
+{
+  "redirects": [
+    {
+      "source": "/blog/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:title/",
+      "destination": "/posts/:title/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/archives/:path*",
+      "destination": "/archives/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/categories/:path*",
+      "destination": "/categories/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/blog/tags/:path*",
+      "destination": "/tags/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/blog/about/:path*",
+      "destination": "/about/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/atom.xml",
+      "destination": "/rss.xml",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/",
+      "destination": "/",
+      "permanent": true
+    }
+  ]
+}

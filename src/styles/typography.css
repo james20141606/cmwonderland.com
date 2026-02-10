@@ -67,11 +67,13 @@
     }
 
     code {
-      @apply rounded bg-muted/75 p-1 wrap-break-word text-foreground before:content-none after:content-none;
+      @apply rounded bg-muted/75 p-1 wrap-break-word before:content-none after:content-none;
+      color: #ff7600;
     }
 
     .astro-code code {
       @apply flex-[1_0_100%] bg-inherit p-0;
+      color: inherit;
     }
 
     blockquote {
@@ -115,5 +117,15 @@
     .highlighted-word {
       @apply rounded-sm border border-border px-0.5 py-px;
     }
+  }
+
+  /* ===== KaTeX overrides ===== */
+  .katex-display {
+    @apply overflow-x-auto overflow-y-hidden py-2;
+  }
+
+  /* ===== iframe responsive ===== */
+  iframe {
+    @apply my-4 max-w-full;
   }
 }
