@@ -1,0 +1,67 @@
+---
+// Click-to-zoom image lightbox for blog post images
+---
+
+<div id="lightbox-overlay" class="fixed inset-0 z-[9998] hidden bg-black/80 backdrop-blur-sm cursor-zoom-out items-center justify-center" style="display:none;">
+  <img id="lightbox-img" class="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl" src="" alt="" />
+  <button id="lightbox-close" class="absolute top-4 right-4 text-white/80 hover:text-white w-10 h-10 flex items-center justify-center rounded-full bg-black/40 hover:bg-black/60 transition-colors" aria-label="Close">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+</div>
+
+<script is:inline>
+(function() {
+  function initLightbox() {
+    var overlay = document.getElementById('lightbox-overlay');
+    var lbImg = document.getElementById('lightbox-img');
+    var closeBtn = document.getElementById('lightbox-close');
+    if (!overlay || !lbImg || !closeBtn) return;
+
+    function closeLightbox() {
+      overlay.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    function openLightbox(src, alt) {
+      lbImg.src = src;
+      lbImg.alt = alt || '';
+      overlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Attach to all prose images
+    var proseContainer = document.querySelector('.prose');
+    if (proseContainer) {
+      var images = proseContainer.querySelectorAll('img');
+      images.forEach(function(img) {
+        img.style.cursor = 'zoom-in';
+        img.addEventListener('click', function(e) {
+          e.preventDefault();
+          openLightbox(img.src, img.alt);
+        });
+      });
+    }
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay || e.target === closeBtn || closeBtn.contains(e.target)) {
+        closeLightbox();
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && overlay.style.display === 'flex') {
+        closeLightbox();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLightbox);
+  } else {
+    initLightbox();
+  }
+  document.addEventListener('astro:page-load', initLightbox);
+})();
+</script>

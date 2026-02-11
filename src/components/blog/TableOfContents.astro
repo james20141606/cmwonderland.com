@@ -1,0 +1,61 @@
+---
+// Table of Contents component - rendered client-side from headings
+---
+
+<nav id="toc-container" class="hidden mx-auto px-6 sm:px-6 max-w-3xl mb-6">
+  <details class="bg-gray-50 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 p-4" open>
+    <summary class="cursor-pointer font-semibold text-default dark:text-slate-300 select-none flex items-center gap-2">
+      <svg class="w-5 h-5 text-primary dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h10M4 18h10" />
+      </svg>
+      Table of Contents
+    </summary>
+    <ul id="toc-list" class="mt-3 space-y-1 text-sm"></ul>
+  </details>
+</nav>
+
+<script is:inline>
+(function() {
+  function buildTOC() {
+    var container = document.getElementById('toc-container');
+    var list = document.getElementById('toc-list');
+    if (!container || !list) return;
+
+    var article = document.querySelector('article');
+    if (!article) return;
+
+    var headings = article.querySelectorAll('h2, h3, h4');
+    if (headings.length < 3) {
+      container.classList.add('hidden');
+      return;
+    }
+
+    list.innerHTML = '';
+    headings.forEach(function(h) {
+      if (!h.id) {
+        h.id = h.textContent.trim().toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+      }
+      var level = parseInt(h.tagName[1]);
+      var li = document.createElement('li');
+      var indent = level === 2 ? '' : level === 3 ? 'ml-4' : 'ml-8';
+      li.className = indent;
+      var a = document.createElement('a');
+      a.href = '#' + h.id;
+      a.textContent = h.textContent;
+      a.className = 'text-muted hover:text-primary dark:hover:text-indigo-400 transition-colors duration-200 block py-0.5';
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+
+    container.classList.remove('hidden');
+  }
+
+  // Run on page load and Astro transitions
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', buildTOC);
+  } else {
+    buildTOC();
+  }
+  document.addEventListener('astro:page-load', buildTOC);
+})();
+</script>

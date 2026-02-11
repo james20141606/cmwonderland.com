@@ -37,11 +37,17 @@ export interface Post {
   draft?: boolean;
 
   /**  */
+  featured?: boolean;
+
+  /**  */
   Content?: AstroComponentFactory;
   content?: string;
 
   /**  */
   readingTime?: number;
+
+  /**  */
+  wordCount?: number;
 }
 
 export interface Taxonomy {

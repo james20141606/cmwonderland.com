@@ -7,9 +7,11 @@ export const readingTimeRemarkPlugin: RemarkPlugin = () => {
   return function (tree, file) {
     const textOnPage = toString(tree);
     const readingTime = Math.ceil(getReadingTime(textOnPage).minutes);
+    const words = getReadingTime(textOnPage).words;
 
     if (typeof file?.data?.astro?.frontmatter !== 'undefined') {
       file.data.astro.frontmatter.readingTime = readingTime;
+      file.data.astro.frontmatter.wordCount = words;
     }
   };
 };
