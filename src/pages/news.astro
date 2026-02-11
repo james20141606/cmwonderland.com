@@ -185,29 +185,74 @@ import Layout from "~/layouts/PageLayout.astro";
     color: var(--aw-color-text-default);
   }
 
-  /* ── Edition Toggle ── */
-  .ed-toggle {
+  /* ── Date Divider ── */
+  .date-divider {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 14px 18px;
-    border-radius: 14px;
-    border: 1px solid rgba(148,163,184,0.15);
-    background: white;
+    gap: 14px;
+    margin: 28px 0 16px;
     cursor: pointer;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--aw-color-text-default, #0f172a);
-    transition: all 0.15s;
+    user-select: none;
   }
-  .dark .ed-toggle { background: rgba(15,23,42,0.6); border-color: rgba(148,163,184,0.1); color: var(--aw-color-text-default, #e2e8f0); }
-  .ed-toggle:hover { border-color: rgba(99,102,241,0.3); }
-  .ed-meta { font-size: 12px; font-weight: 400; opacity: 0.45; margin-left: 8px; }
-  .ed-arrow { font-size: 10px; opacity: 0.3; transition: transform 0.2s; }
-  .ed-arrow.open { transform: rotate(90deg); }
-  .ed-body { overflow: hidden; transition: max-height 0.35s ease; }
-  .ed-body.collapsed { max-height: 0 !important; }
+  .date-divider:first-child { margin-top: 0; }
+  .date-divider-label {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    color: var(--aw-color-text-default, #0f172a);
+  }
+  .dark .date-divider-label { color: var(--aw-color-text-default, #e2e8f0); }
+  .date-divider-line { flex: 1; height: 1px; background: rgba(148,163,184,0.2); }
+  .date-divider-meta {
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.4;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .date-divider-arrow { font-size: 9px; opacity: 0.5; transition: transform 0.2s; display: inline-block; }
+  .date-divider-arrow.open { transform: rotate(90deg); }
+  .date-today {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(99,102,241,0.1);
+    color: #6366f1;
+    margin-left: 8px;
+  }
+  .dark .date-today { background: rgba(129,140,248,0.12); color: #818cf8; }
+
+  /* ── Edition sub-label within a day ── */
+  .ed-sub {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(100,116,139,0.6);
+    margin: 12px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .ed-sub::before {
+    content: "";
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(99,102,241,0.3);
+  }
+  .dark .ed-sub::before { background: rgba(129,140,248,0.3); }
+
+  /* ── Day body collapsible ── */
+  .day-body { overflow: hidden; transition: max-height 0.4s ease; }
+  .day-body.collapsed { max-height: 0 !important; }
 
   /* ── Two-column layout for market + sectors ── */
   @media (min-width: 768px) {
@@ -230,6 +275,124 @@ function fmtChg(c, p) {
 }
 function esc(t) { if (!t) return ""; var d = document.createElement("div"); d.textContent = t; return d.innerHTML; }
 function arrow(v) { return v > 0 ? "&#9650;" : v < 0 ? "&#9660;" : "&#8212;"; }
+function dateKey(iso) { return iso ? iso.slice(0, 10) : "unknown"; }
+function isToday(dk) { return dk === new Date().toISOString().slice(0, 10); }
+function isYesterday(dk) { var y = new Date(); y.setDate(y.getDate()-1); return dk === y.toISOString().slice(0,10); }
+function fmtDate(dk) {
+  if (isToday(dk)) return "Today";
+  if (isYesterday(dk)) return "Yesterday";
+  var d = new Date(dk + "T12:00:00Z");
+  return d.toLocaleDateString("en-US", {weekday:"long", month:"short", day:"numeric", year:"numeric"});
+}
+function fmtTime(iso) {
+  if (!iso) return "";
+  var d = new Date(iso);
+  return d.toLocaleTimeString("en-US", {hour:"2-digit", minute:"2-digit"});
+}
+
+function renderEdition(ed) {
+  var html = "";
+
+  // Outlook + Picks
+  var hasOutlook = ed.summary_cn || ed.market_hotspots_cn;
+  var hasPicks = ed.sector_recommendation;
+  if (hasOutlook || hasPicks) {
+    var cols = (hasOutlook && hasPicks) ? ' two-col' : '';
+    html += '<div class="' + cols + '">';
+    if (hasOutlook) {
+      html += '<div class="nc"><div class="nc-head">Daily Outlook</div><div class="nc-body"><div class="summary-text">';
+      if (ed.summary_cn) html += esc(ed.summary_cn);
+      if (ed.market_hotspots_cn) html += (ed.summary_cn ? '\n\n' : '') + esc(ed.market_hotspots_cn);
+      html += '</div></div></div>';
+    }
+    if (hasPicks) {
+      html += '<div class="nc"><div class="nc-head">Sector & Stock Picks</div><div class="nc-body"><div class="summary-text">' + esc(ed.sector_recommendation) + '</div></div></div>';
+    }
+    html += '</div>';
+  }
+
+  // Market + Sectors
+  var hasMarket = ed.market_snapshot && ed.market_snapshot.length;
+  var hasSectors = ed.sector_rankings && ed.sector_rankings.length;
+  if (hasMarket || hasSectors) {
+    html += '<div class="two-col">';
+    if (hasMarket) {
+      html += '<div class="nc"><div class="nc-head">Market Snapshot</div><div class="nc-body">';
+      for (var s = 0; s < ed.market_snapshot.length; s++) {
+        var sec = ed.market_snapshot[s];
+        html += '<div class="mkt-section-label">' + esc(sec.title) + '</div><div class="mkt-grid">';
+        for (var i = 0; i < sec.items.length; i++) {
+          var m = sec.items[i];
+          var co = m.change_color || (m.change >= 0 ? "#16a34a" : "#dc2626");
+          html += '<div class="mkt-card"><div class="mkt-name">' + esc(m.name) + '</div>';
+          html += '<div class="mkt-price">' + fmt(m.price) + '</div>';
+          if (m.change != null && m.change_percent != null) {
+            html += '<div class="mkt-chg" style="color:' + co + '"><span>' + arrow(m.change) + '</span> ' + fmtChg(m.change, m.change_percent) + '</div>';
+          }
+          html += '</div>';
+        }
+        html += '</div>';
+      }
+      html += '</div></div>';
+    }
+    if (hasSectors) {
+      html += '<div class="nc"><div class="nc-head">Sector Rankings</div><div class="nc-body">';
+      for (var rr = 0; rr < ed.sector_rankings.length; rr++) {
+        var rk = ed.sector_rankings[rr];
+        if (ed.sector_rankings.length > 1) html += '<div class="mkt-section-label">' + esc(rk.title) + '</div>';
+        for (var ri = 0; ri < rk.items.length; ri++) {
+          var si = rk.items[ri], sc = si.change_color || (si.change_percent >= 0 ? "#16a34a" : "#dc2626");
+          html += '<div class="sec-row"><span><span class="sec-rank">' + (ri + 1) + '</span>' + esc(si.name) + '</span><span class="sec-pct" style="color:' + sc + '">' + (si.change_percent >= 0 ? "+" : "") + si.change_percent.toFixed(2) + '%</span></div>';
+        }
+      }
+      html += '</div></div>';
+    }
+    html += '</div>';
+  }
+
+  // Social summary
+  if (ed.social_summary_cn) {
+    html += '<div class="nc"><div class="nc-head">Social Media Digest</div><div class="nc-body"><div class="summary-text">' + esc(ed.social_summary_cn) + '</div></div></div>';
+  }
+
+  // News items
+  if (ed.items && ed.items.length) {
+    html += '<div class="nc"><div class="nc-head">Top Briefing (' + ed.items.length + ')</div><div class="nc-body">';
+    for (var j = 0; j < ed.items.length; j++) {
+      var it = ed.items[j];
+      var tEn = it.title_en || it.title || "";
+      var tZh = it.title_zh || "";
+      var tm = "";
+      if (it.published) { var dd = new Date(it.published), hh = dd.getHours(), mm = dd.getMinutes(); tm = (hh < 10 ? "0" : "") + hh + ":" + (mm < 10 ? "0" : "") + mm; }
+      html += '<div class="nr"><div class="nr-time">' + tm + '</div><div class="nr-body">';
+      html += '<a class="nr-title" href="' + esc(it.link) + '" target="_blank" rel="noopener">' + esc(tEn) + '</a>';
+      if (tZh && tZh !== tEn) html += '<div class="nr-zh">' + esc(tZh) + '</div>';
+      html += '</div><div class="nr-src">' + esc(it.source) + '</div></div>';
+    }
+    html += '</div></div>';
+  }
+
+  // Social media links
+  if (ed.social_media && ed.social_media.length) {
+    html += '<div class="nc"><div class="nc-head">Social Media</div><div class="nc-body">';
+    for (var sg = 0; sg < ed.social_media.length; sg++) {
+      var grp = ed.social_media[sg];
+      html += '<div class="mkt-section-label">' + esc(grp.platform) + '</div>';
+      for (var gi = 0; gi < grp.items.length; gi++) {
+        var sit = grp.items[gi];
+        var stEn = sit.title_en || sit.title || "";
+        var stZh = sit.title_zh || "";
+        html += '<div class="nr"><div class="nr-body">';
+        html += '<a class="nr-title" href="' + esc(sit.link) + '" target="_blank" rel="noopener">' + esc(stEn) + '</a>';
+        if (stZh && stZh !== stEn) html += '<div class="nr-zh">' + esc(stZh) + '</div>';
+        html += '</div></div>';
+      }
+    }
+    html += '</div></div>';
+  }
+
+  return html;
+}
 
 async function loadFeed() {
   var ld = document.getElementById("feed-loading");
@@ -242,142 +405,80 @@ async function loadFeed() {
     ld.classList.add("hidden");
     var editions = feed.editions && Array.isArray(feed.editions) ? feed.editions : feed.items ? [feed] : [];
     if (!editions.length) { ct.innerHTML = '<p class="py-16 text-center text-muted text-sm">No editions available yet.</p>'; ct.classList.remove("hidden"); return; }
+
+    // Sort newest first
     editions.sort(function(a,b){ return (b.updated_at||"").localeCompare(a.updated_at||""); });
 
-    var html = "";
+    // Group by date
+    var dayGroups = [];
+    var dayMap = {};
     for (var idx = 0; idx < editions.length; idx++) {
-      var ed = editions[idx], isFirst = idx === 0, edId = "ed-" + idx;
-      var dt = ed.updated_at ? new Date(ed.updated_at) : null;
-      var dateStr = dt ? dt.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric",year:"numeric"}) + " " + dt.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"}) : "";
-      var label = ed.edition_label || "Edition";
-      var cnt = (ed.items||[]).length;
+      var dk = dateKey(editions[idx].updated_at);
+      if (!dayMap[dk]) { dayMap[dk] = []; dayGroups.push(dk); }
+      dayMap[dk].push(editions[idx]);
+    }
 
-      if (!isFirst) {
-        html += '<div style="margin-top:12px;">';
-        html += '<button class="ed-toggle" data-target="' + edId + '"><span>' + esc(label) + '<span class="ed-meta">' + dateStr + ' &middot; ' + cnt + ' items</span></span><span class="ed-arrow">&#9654;</span></button>';
-        html += '<div id="' + edId + '" class="ed-body collapsed" style="margin-top:12px;">';
-      }
+    var html = "";
+    for (var di = 0; di < dayGroups.length; di++) {
+      var day = dayGroups[di];
+      var dayEditions = dayMap[day];
+      var today = isToday(day);
+      var expanded = di === 0; // latest day expanded
+      var dayId = "day-" + di;
+      var totalItems = 0;
+      for (var ei = 0; ei < dayEditions.length; ei++) totalItems += (dayEditions[ei].items || []).length;
 
-      // Row 1: Outlook + Hotspots / Sector Picks (side by side if both exist)
-      var hasOutlook = ed.summary_cn || ed.market_hotspots_cn;
-      var hasPicks = ed.sector_recommendation;
-      if (hasOutlook || hasPicks) {
-        var cols = (hasOutlook && hasPicks) ? ' two-col' : '';
-        html += '<div class="' + cols + '">';
-        if (hasOutlook) {
-          html += '<div class="nc"><div class="nc-head">Daily Outlook</div><div class="nc-body"><div class="summary-text">';
-          if (ed.summary_cn) html += esc(ed.summary_cn);
-          if (ed.market_hotspots_cn) html += (ed.summary_cn ? '\n\n' : '') + esc(ed.market_hotspots_cn);
-          html += '</div></div></div>';
+      // Date divider
+      html += '<div class="date-divider" data-day="' + dayId + '">';
+      html += '<span class="date-divider-label">' + fmtDate(day) + (today ? '<span class="date-today">Live</span>' : '') + '</span>';
+      html += '<span class="date-divider-line"></span>';
+      html += '<span class="date-divider-meta">' + dayEditions.length + (dayEditions.length > 1 ? ' editions' : ' edition') + ' &middot; ' + totalItems + ' items <span class="date-divider-arrow' + (expanded ? ' open' : '') + '">&#9654;</span></span>';
+      html += '</div>';
+
+      // Day content
+      html += '<div id="' + dayId + '" class="day-body' + (expanded ? '' : ' collapsed') + '" style="padding-bottom:8px;">';
+
+      for (var ei2 = 0; ei2 < dayEditions.length; ei2++) {
+        var ed = dayEditions[ei2];
+        var label = ed.edition_label || "Edition";
+        var time = fmtTime(ed.updated_at);
+        var itemCnt = (ed.items || []).length;
+
+        // Show sub-label if multiple editions in one day
+        if (dayEditions.length > 1) {
+          html += '<div class="ed-sub">' + esc(label) + ' &middot; ' + time + ' &middot; ' + itemCnt + ' items</div>';
         }
-        if (hasPicks) {
-          html += '<div class="nc"><div class="nc-head">Sector & Stock Picks</div><div class="nc-body"><div class="summary-text">' + esc(ed.sector_recommendation) + '</div></div></div>';
-        }
-        html += '</div>';
-      }
 
-      // Row 2: Market Snapshot + Sector Rankings (side by side on desktop)
-      var hasMarket = ed.market_snapshot && ed.market_snapshot.length;
-      var hasSectors = ed.sector_rankings && ed.sector_rankings.length;
-      if (hasMarket || hasSectors) {
-        html += '<div class="two-col">';
-        if (hasMarket) {
-          html += '<div class="nc"><div class="nc-head">Market Snapshot</div><div class="nc-body">';
-          for (var s = 0; s < ed.market_snapshot.length; s++) {
-            var sec = ed.market_snapshot[s];
-            html += '<div class="mkt-section-label">' + esc(sec.title) + '</div><div class="mkt-grid">';
-            for (var i = 0; i < sec.items.length; i++) {
-              var m = sec.items[i];
-              var co = m.change_color || (m.change >= 0 ? "#16a34a" : "#dc2626");
-              html += '<div class="mkt-card"><div class="mkt-name">' + esc(m.name) + '</div>';
-              html += '<div class="mkt-price">' + fmt(m.price) + '</div>';
-              if (m.change != null && m.change_percent != null) {
-                html += '<div class="mkt-chg" style="color:' + co + '"><span>' + arrow(m.change) + '</span> ' + fmtChg(m.change, m.change_percent) + '</div>';
-              }
-              html += '</div>';
-            }
-            html += '</div>';
-          }
-          html += '</div></div>';
-        }
-        if (hasSectors) {
-          html += '<div class="nc"><div class="nc-head">Sector Rankings</div><div class="nc-body">';
-          for (var rr = 0; rr < ed.sector_rankings.length; rr++) {
-            var rk = ed.sector_rankings[rr];
-            if (ed.sector_rankings.length > 1) html += '<div class="mkt-section-label">' + esc(rk.title) + '</div>';
-            for (var ri = 0; ri < rk.items.length; ri++) {
-              var si = rk.items[ri], sc = si.change_color || (si.change_percent >= 0 ? "#16a34a" : "#dc2626");
-              html += '<div class="sec-row"><span><span class="sec-rank">' + (ri + 1) + '</span>' + esc(si.name) + '</span><span class="sec-pct" style="color:' + sc + '">' + (si.change_percent >= 0 ? "+" : "") + si.change_percent.toFixed(2) + '%</span></div>';
-            }
-          }
-          html += '</div></div>';
-        }
-        html += '</div>';
+        html += renderEdition(ed);
       }
-
-      // Row 3: Social media summary
-      if (ed.social_summary_cn) {
-        html += '<div class="nc"><div class="nc-head">Social Media Digest</div><div class="nc-body"><div class="summary-text">' + esc(ed.social_summary_cn) + '</div></div></div>';
-      }
-
-      // Row 4: News items
-      if (ed.items && ed.items.length) {
-        html += '<div class="nc"><div class="nc-head">Top Briefing (' + ed.items.length + ')</div><div class="nc-body">';
-        for (var j = 0; j < ed.items.length; j++) {
-          var it = ed.items[j];
-          var tEn = it.title_en || it.title || "";
-          var tZh = it.title_zh || "";
-          var tm = "";
-          if (it.published) { var dd = new Date(it.published), hh = dd.getHours(), mm = dd.getMinutes(); tm = (hh < 10 ? "0" : "") + hh + ":" + (mm < 10 ? "0" : "") + mm; }
-          html += '<div class="nr"><div class="nr-time">' + tm + '</div><div class="nr-body">';
-          html += '<a class="nr-title" href="' + esc(it.link) + '" target="_blank" rel="noopener">' + esc(tEn) + '</a>';
-          if (tZh && tZh !== tEn) html += '<div class="nr-zh">' + esc(tZh) + '</div>';
-          html += '</div><div class="nr-src">' + esc(it.source) + '</div></div>';
-        }
-        html += '</div></div>';
-      }
-
-      // Social media links
-      if (ed.social_media && ed.social_media.length) {
-        html += '<div class="nc"><div class="nc-head">Social Media</div><div class="nc-body">';
-        for (var sg = 0; sg < ed.social_media.length; sg++) {
-          var grp = ed.social_media[sg];
-          html += '<div class="mkt-section-label">' + esc(grp.platform) + '</div>';
-          for (var gi = 0; gi < grp.items.length; gi++) {
-            var sit = grp.items[gi];
-            var stEn = sit.title_en || sit.title || "";
-            var stZh = sit.title_zh || "";
-            html += '<div class="nr"><div class="nr-body">';
-            html += '<a class="nr-title" href="' + esc(sit.link) + '" target="_blank" rel="noopener">' + esc(stEn) + '</a>';
-            if (stZh && stZh !== stEn) html += '<div class="nr-zh">' + esc(stZh) + '</div>';
-            html += '</div></div>';
-          }
-        }
-        html += '</div></div>';
-      }
-
-      if (!isFirst) html += '</div></div>';
+      html += '</div>';
     }
 
     ct.innerHTML = html;
     ct.classList.remove("hidden");
-    var toggles = ct.querySelectorAll(".ed-toggle");
-    for (var t = 0; t < toggles.length; t++) toggles[t].addEventListener("click", handleToggle);
-  } catch(e) { console.error(e); ld.classList.add("hidden"); er.classList.remove("hidden"); }
-}
 
-function handleToggle(e) {
-  var btn = e.currentTarget, id = btn.getAttribute("data-target");
-  var body = document.getElementById(id), arr = btn.querySelector(".ed-arrow");
-  if (!body) return;
-  if (body.classList.contains("collapsed")) {
-    body.classList.remove("collapsed"); body.style.maxHeight = body.scrollHeight + "px";
-    if (arr) arr.classList.add("open");
-  } else {
-    body.style.maxHeight = body.scrollHeight + "px"; body.offsetHeight;
-    body.classList.add("collapsed"); body.style.maxHeight = "0";
-    if (arr) arr.classList.remove("open");
-  }
+    // Bind date toggles
+    var dividers = ct.querySelectorAll(".date-divider");
+    for (var t = 0; t < dividers.length; t++) {
+      dividers[t].addEventListener("click", function() {
+        var dayId = this.getAttribute("data-day");
+        var body = document.getElementById(dayId);
+        var arr = this.querySelector(".date-divider-arrow");
+        if (!body) return;
+        if (body.classList.contains("collapsed")) {
+          body.classList.remove("collapsed");
+          body.style.maxHeight = body.scrollHeight + "px";
+          if (arr) arr.classList.add("open");
+        } else {
+          body.style.maxHeight = body.scrollHeight + "px";
+          body.offsetHeight;
+          body.classList.add("collapsed");
+          body.style.maxHeight = "0";
+          if (arr) arr.classList.remove("open");
+        }
+      });
+    }
+  } catch(e) { console.error(e); ld.classList.add("hidden"); er.classList.remove("hidden"); }
 }
 
 loadFeed();
