@@ -122,6 +122,9 @@ import Layout from "~/layouts/PageLayout.astro";
   .sec-rank { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 5px; font-size: 10px; font-weight: 800; background: rgba(99,102,241,0.08); color: #6366f1; margin-right: 8px; flex-shrink: 0; }
   .dark .sec-rank { background: rgba(129,140,248,0.12); color: #818cf8; }
   .sec-pct { font-weight: 800; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .sec-pct-small { font-weight: 600; font-size: 11px; font-variant-numeric: tabular-nums; opacity: 0.7; }
+  .sec-trend-nums { display: flex; align-items: center; gap: 12px; }
+  .sec-label { font-size: 9px; font-weight: 600; opacity: 0.5; text-transform: uppercase; }
 
   /* ── News Rows ── */
   .nr {
@@ -336,7 +339,7 @@ function renderEdition(ed) {
       html += '</div></div>';
     }
     if (hasSectors) {
-      html += '<div class="nc"><div class="nc-head">Sector Rankings</div><div class="nc-body">';
+      html += '<div class="nc"><div class="nc-head">Sector Rankings (Today)</div><div class="nc-body">';
       for (var rr = 0; rr < ed.sector_rankings.length; rr++) {
         var rk = ed.sector_rankings[rr];
         if (ed.sector_rankings.length > 1) html += '<div class="mkt-section-label">' + esc(rk.title) + '</div>';
@@ -348,6 +351,29 @@ function renderEdition(ed) {
       html += '</div></div>';
     }
     html += '</div>';
+  }
+
+  // Weekly Sector Trends
+  var hasWeekly = ed.weekly_sector_rankings && ed.weekly_sector_rankings.length;
+  if (hasWeekly) {
+    html += '<div class="nc"><div class="nc-head">Weekly Sector Trends (5-Day)</div><div class="nc-body">';
+    for (var wr = 0; wr < ed.weekly_sector_rankings.length; wr++) {
+      var wk = ed.weekly_sector_rankings[wr];
+      html += '<div class="mkt-section-label">' + esc(wk.title) + '</div>';
+      for (var wi = 0; wi < wk.items.length; wi++) {
+        var wsi = wk.items[wi];
+        var wc = wsi.weekly_change_color || (wsi.weekly_change_percent >= 0 ? "#16a34a" : "#dc2626");
+        var dc = wsi.change_color || (wsi.change_percent >= 0 ? "#16a34a" : "#dc2626");
+        var wp = wsi.weekly_change_percent != null ? wsi.weekly_change_percent : 0;
+        html += '<div class="sec-row">';
+        html += '<span><span class="sec-rank">' + (wi + 1) + '</span>' + esc(wsi.name) + '</span>';
+        html += '<span class="sec-trend-nums">';
+        html += '<span class="sec-pct-small" style="color:' + dc + '">' + (wsi.change_percent >= 0 ? "+" : "") + wsi.change_percent.toFixed(2) + '% <span class="sec-label">1d</span></span>';
+        html += '<span class="sec-pct" style="color:' + wc + '">' + (wp >= 0 ? "+" : "") + wp.toFixed(2) + '% <span class="sec-label">5d</span></span>';
+        html += '</span></div>';
+      }
+    }
+    html += '</div></div>';
   }
 
   // Social summary
