@@ -1,5 +1,5 @@
 ---
-layout: ../layouts/AboutLayout.astro
+layout: ~/layouts/MarkdownLayout.astro
 title: "About Me"
 ---
 
@@ -23,5 +23,5 @@ I changed my study field to EE and start my Ph.D. study in [NYU Tandon School](h
 
 - [GitHub](https://github.com/james20141606)
 - [Projects](/categories/projects/)
-- [Blogs](/)
+- [Blogs](/blog/)
 - [Books](/categories/book/)

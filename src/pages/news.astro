@@ -1,15 +1,43 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer.astro";
-import { SITE } from "@/config";
+import Layout from "~/layouts/PageLayout.astro";
 ---
 
-<Layout title={`News Feed | ${SITE.title}`}>
-  <Header />
-  <main id="main-content" class="app-layout pb-12">
+<Layout metadata={{ title: "Finance News Feed" }}>
+  <main class="mx-auto max-w-4xl px-4 pb-12 sm:px-6">
     <h1 class="pt-8 pb-2 text-2xl font-semibold sm:text-3xl">Finance News Feed</h1>
-    <p class="mb-6 italic opacity-75">Global financial headlines, updated twice daily.</p>
+    <div class="mb-6 flex flex-wrap items-center gap-4">
+      <p class="italic opacity-75">Global financial headlines, updated twice daily.</p>
+      <a
+        href="https://raw.githubusercontent.com/james20141606/ai_finance_news/main/news-feed.xml"
+        target="_blank"
+        rel="noopener"
+        class="inline-flex items-center gap-1 rounded-md bg-orange-500 px-3 py-1 text-xs font-semibold text-white hover:bg-orange-600"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        RSS
+      </a>
+    </div>
+
+    <!-- Email subscription form -->
+    <div id="subscribe-section" class="mb-8 rounded-lg border border-border p-4">
+      <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider opacity-70">Subscribe to email digest</h3>
+      <form id="subscribe-form" class="flex flex-col gap-2 sm:flex-row">
+        <input
+          type="email"
+          id="subscribe-email"
+          placeholder="your@email.com"
+          required
+          class="flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:opacity-50 focus:border-accent focus:outline-none"
+        />
+        <button
+          type="submit"
+          class="rounded-md bg-accent px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
+        >
+          Subscribe
+        </button>
+      </form>
+      <p id="subscribe-msg" class="mt-2 hidden text-sm"></p>
+    </div>
 
     <div id="feed-loading" class="py-12 text-center opacity-60">
       Loading latest news...
@@ -19,15 +47,8 @@ import { SITE } from "@/config";
       Failed to load news feed. Please try again later.
     </div>
 
-    <!-- Summary & Market section -->
-    <div id="feed-summary" class="hidden mb-6"></div>
-
-    <!-- News items -->
-    <div id="feed-items" class="space-y-4"></div>
-
-    <div id="feed-updated" class="mt-8 text-center text-sm opacity-50"></div>
+    <div id="feed-container" class="hidden"></div>
   </main>
-  <Footer />
 </Layout>
 
 <style>
@@ -138,6 +159,44 @@ import { SITE } from "@/config";
     margin-bottom: 16px;
     white-space: pre-line;
   }
+  .edition-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--background);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--foreground);
+    transition: background 0.15s;
+  }
+  .edition-toggle:hover {
+    background: var(--border);
+  }
+  .edition-toggle .arrow {
+    transition: transform 0.2s;
+    font-size: 12px;
+    opacity: 0.5;
+  }
+  .edition-toggle .arrow.open {
+    transform: rotate(90deg);
+  }
+  .edition-body {
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .edition-body.collapsed {
+    max-height: 0 !important;
+  }
+  .edition-meta {
+    font-size: 13px;
+    opacity: 0.55;
+    font-weight: 400;
+  }
 </style>
 
 <script is:inline>
@@ -145,117 +204,97 @@ import { SITE } from "@/config";
     "https://raw.githubusercontent.com/james20141606/ai_finance_news/main/news-feed.json";
 
   async function loadFeed() {
-    const loading = document.getElementById("feed-loading");
-    const error = document.getElementById("feed-error");
-    const summaryEl = document.getElementById("feed-summary");
-    const itemsEl = document.getElementById("feed-items");
-    const updatedEl = document.getElementById("feed-updated");
+    var loading = document.getElementById("feed-loading");
+    var error = document.getElementById("feed-error");
+    var container = document.getElementById("feed-container");
 
     try {
-      const res = await fetch(FEED_URL + "?t=" + Date.now());
+      var res = await fetch(FEED_URL + "?t=" + Date.now());
       if (!res.ok) throw new Error("HTTP " + res.status);
-      const feed = await res.json();
+      var feed = await res.json();
 
       loading.classList.add("hidden");
 
-      // Render summary section
-      let summaryHTML = "";
-
-      if (feed.summary_cn) {
-        summaryHTML += '<div class="section-header">Daily Outlook</div>';
-        summaryHTML += '<div class="summary-box">' + escapeHtml(feed.summary_cn) + "</div>";
+      // Normalize: support both old single-edition and new editions format
+      var editions;
+      if (feed.editions && Array.isArray(feed.editions)) {
+        editions = feed.editions;
+      } else if (feed.items) {
+        editions = [feed];
+      } else {
+        editions = [];
       }
 
-      if (feed.sector_recommendation) {
-        summaryHTML += '<div class="section-header">Sector & Stock Picks</div>';
-        summaryHTML +=
-          '<div class="recommendation-box">' +
-          escapeHtml(feed.sector_recommendation) +
-          "</div>";
+      if (editions.length === 0) {
+        container.innerHTML = '<p class="py-8 text-center opacity-60">No editions available yet.</p>';
+        container.classList.remove("hidden");
+        return;
       }
 
-      // Market snapshot
-      if (feed.market_snapshot && feed.market_snapshot.length > 0) {
-        summaryHTML += '<div class="section-header">Market Snapshot</div>';
-        for (const section of feed.market_snapshot) {
-          summaryHTML += '<div style="font-size:12px;opacity:0.6;margin-top:12px;text-transform:uppercase;letter-spacing:1px;">' + escapeHtml(section.title) + "</div>";
-          summaryHTML += '<div class="market-grid">';
-          for (const item of section.items) {
-            const priceStr = item.price != null ? item.price.toFixed(2) : "N/A";
-            const changeStr =
-              item.change != null && item.change_percent != null
-                ? (item.change >= 0 ? "+" : "") +
-                  item.change.toFixed(2) +
-                  " (" +
-                  (item.change_percent >= 0 ? "+" : "") +
-                  item.change_percent.toFixed(2) +
-                  "%)"
-                : "N/A";
-            const color = item.change_color || (item.change >= 0 ? "#16a34a" : "#dc2626");
-            summaryHTML +=
-              '<div class="market-item">' +
-              '<div class="market-name">' + escapeHtml(item.name) +
-              ' <span style="opacity:0.5;font-weight:400;">' + escapeHtml(item.symbol) + "</span></div>" +
-              '<div class="market-price">' + priceStr + "</div>" +
-              '<div class="market-change" style="color:' + color + ';">' + changeStr + "</div>" +
-              "</div>";
-          }
-          summaryHTML += "</div>";
-        }
-      }
+      // Sort editions newest first
+      editions.sort(function (a, b) {
+        return (b.updated_at || "").localeCompare(a.updated_at || "");
+      });
 
-      // Sector rankings
-      if (feed.sector_rankings && feed.sector_rankings.length > 0) {
-        summaryHTML += '<div class="section-header">Sector Rankings</div>';
-        for (const ranking of feed.sector_rankings) {
-          summaryHTML += '<div style="font-size:12px;opacity:0.6;margin-top:12px;text-transform:uppercase;letter-spacing:1px;">' + escapeHtml(ranking.title) + "</div>";
-          summaryHTML += '<div style="margin:8px 0 16px;">';
-          ranking.items.forEach(function (item, i) {
-            const color = item.change_color || (item.change_percent >= 0 ? "#16a34a" : "#dc2626");
-            summaryHTML +=
-              '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);">' +
-              '<span><span style="opacity:0.5;font-size:12px;">' + (i + 1) + ".</span> " + escapeHtml(item.name) + "</span>" +
-              '<span style="font-weight:700;color:' + color + ';">' +
-              (item.change_percent >= 0 ? "+" : "") + item.change_percent.toFixed(2) + "%" +
-              "</span></div>";
+      var html = "";
+      for (var idx = 0; idx < editions.length; idx++) {
+        var edition = editions[idx];
+        var isFirst = idx === 0;
+        var editionId = "edition-" + idx;
+
+        // Format the edition date and label
+        var dateStr = "";
+        if (edition.updated_at) {
+          var d = new Date(edition.updated_at);
+          dateStr = d.toLocaleDateString("en-US", {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
           });
-          summaryHTML += "</div>";
         }
+        var label = edition.edition_label || "Edition";
+        var itemCount = (edition.items || []).length;
+
+        // Edition header (toggle button)
+        html +=
+          '<div style="margin-top:' + (idx === 0 ? "0" : "16px") + ';">' +
+          '<button class="edition-toggle" data-target="' + editionId + '">' +
+          "<span>" + escapeHtml(label) +
+          ' <span class="edition-meta">' + dateStr +
+          " &middot; " + itemCount + " items</span></span>" +
+          '<span class="arrow' + (isFirst ? " open" : "") + '">&#9654;</span>' +
+          "</button>";
+
+        // Edition body
+        html += '<div id="' + editionId + '" class="edition-body' + (isFirst ? "" : " collapsed") + '">';
+
+        // Summary section
+        html += renderEditionSummary(edition);
+
+        // News items
+        if (edition.items && edition.items.length > 0) {
+          html += '<div class="section-header" style="margin-top:16px;">Top Briefing</div>';
+          html += '<div style="display:flex;flex-direction:column;gap:12px;">';
+          for (var j = 0; j < edition.items.length; j++) {
+            html += renderNewsCard(edition.items[j]);
+          }
+          html += "</div>";
+        }
+
+        html += "</div>"; // edition-body
+        html += "</div>"; // wrapper
       }
 
-      if (summaryHTML) {
-        summaryEl.innerHTML = summaryHTML;
-        summaryEl.classList.remove("hidden");
-      }
+      container.innerHTML = html;
+      container.classList.remove("hidden");
 
-      // Render news items
-      let itemsHTML = '<div class="section-header">Top Briefing</div>';
-      for (const item of feed.items) {
-        const pubDate = item.published
-          ? new Date(item.published).toLocaleString()
-          : "";
-        const titleEn = item.title_en || item.title || "";
-        const titleZh = item.title_zh || "";
-        const summaryEn = item.summary_en || "";
-        const summaryZh = item.summary_zh || "";
-
-        itemsHTML +=
-          '<div class="news-card">' +
-          '<div class="news-source">' + escapeHtml(item.source) + "</div>" +
-          '<div class="news-headline">' + escapeHtml(titleEn) + "</div>" +
-          (titleZh ? '<div class="news-headline-zh">' + escapeHtml(titleZh) + "</div>" : "") +
-          (summaryEn ? '<div class="news-summary"><strong>EN:</strong> ' + escapeHtml(summaryEn) + "</div>" : "") +
-          (summaryZh ? '<div class="news-summary"><strong>CN:</strong> ' + escapeHtml(summaryZh) + "</div>" : "") +
-          '<div class="news-meta">' + pubDate + "</div>" +
-          '<a class="news-link" href="' + escapeHtml(item.link) + '" target="_blank" rel="noopener">Read source</a>' +
-          "</div>";
-      }
-      itemsEl.innerHTML = itemsHTML;
-
-      // Updated timestamp
-      if (feed.updated_at) {
-        const updatedDate = new Date(feed.updated_at).toLocaleString();
-        updatedEl.textContent = "Last updated: " + updatedDate;
+      // Wire up toggle buttons
+      var toggles = container.querySelectorAll(".edition-toggle");
+      for (var t = 0; t < toggles.length; t++) {
+        toggles[t].addEventListener("click", handleToggle);
       }
     } catch (e) {
       console.error("Failed to load feed:", e);
@@ -264,12 +303,168 @@ import { SITE } from "@/config";
     }
   }
 
+  function handleToggle(e) {
+    var btn = e.currentTarget;
+    var targetId = btn.getAttribute("data-target");
+    var body = document.getElementById(targetId);
+    var arrow = btn.querySelector(".arrow");
+    if (!body) return;
+
+    if (body.classList.contains("collapsed")) {
+      body.classList.remove("collapsed");
+      body.style.maxHeight = body.scrollHeight + "px";
+      if (arrow) arrow.classList.add("open");
+    } else {
+      body.style.maxHeight = body.scrollHeight + "px";
+      // Force reflow then collapse
+      body.offsetHeight;
+      body.classList.add("collapsed");
+      body.style.maxHeight = "0";
+      if (arrow) arrow.classList.remove("open");
+    }
+  }
+
+  function renderEditionSummary(edition) {
+    var html = "";
+
+    if (edition.summary_cn) {
+      html += '<div class="section-header">Daily Outlook</div>';
+      html += '<div class="summary-box">' + escapeHtml(edition.summary_cn) + "</div>";
+    }
+
+    if (edition.sector_recommendation) {
+      html += '<div class="section-header">Sector & Stock Picks</div>';
+      html +=
+        '<div class="recommendation-box">' +
+        escapeHtml(edition.sector_recommendation) +
+        "</div>";
+    }
+
+    // Market snapshot
+    if (edition.market_snapshot && edition.market_snapshot.length > 0) {
+      html += '<div class="section-header">Market Snapshot</div>';
+      for (var s = 0; s < edition.market_snapshot.length; s++) {
+        var section = edition.market_snapshot[s];
+        html +=
+          '<div style="font-size:12px;opacity:0.6;margin-top:12px;text-transform:uppercase;letter-spacing:1px;">' +
+          escapeHtml(section.title) + "</div>";
+        html += '<div class="market-grid">';
+        for (var i = 0; i < section.items.length; i++) {
+          var item = section.items[i];
+          var priceStr = item.price != null ? item.price.toFixed(2) : "N/A";
+          var changeStr =
+            item.change != null && item.change_percent != null
+              ? (item.change >= 0 ? "+" : "") +
+                item.change.toFixed(2) +
+                " (" +
+                (item.change_percent >= 0 ? "+" : "") +
+                item.change_percent.toFixed(2) +
+                "%)"
+              : "N/A";
+          var color = item.change_color || (item.change >= 0 ? "#16a34a" : "#dc2626");
+          html +=
+            '<div class="market-item">' +
+            '<div class="market-name">' + escapeHtml(item.name) +
+            ' <span style="opacity:0.5;font-weight:400;">' + escapeHtml(item.symbol) + "</span></div>" +
+            '<div class="market-price">' + priceStr + "</div>" +
+            '<div class="market-change" style="color:' + color + ';">' + changeStr + "</div>" +
+            "</div>";
+        }
+        html += "</div>";
+      }
+    }
+
+    // Sector rankings
+    if (edition.sector_rankings && edition.sector_rankings.length > 0) {
+      html += '<div class="section-header">Sector Rankings</div>';
+      for (var r = 0; r < edition.sector_rankings.length; r++) {
+        var ranking = edition.sector_rankings[r];
+        html +=
+          '<div style="font-size:12px;opacity:0.6;margin-top:12px;text-transform:uppercase;letter-spacing:1px;">' +
+          escapeHtml(ranking.title) + "</div>";
+        html += '<div style="margin:8px 0 16px;">';
+        for (var ri = 0; ri < ranking.items.length; ri++) {
+          var rItem = ranking.items[ri];
+          var rColor = rItem.change_color || (rItem.change_percent >= 0 ? "#16a34a" : "#dc2626");
+          html +=
+            '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);">' +
+            '<span><span style="opacity:0.5;font-size:12px;">' + (ri + 1) + ".</span> " + escapeHtml(rItem.name) + "</span>" +
+            '<span style="font-weight:700;color:' + rColor + ';">' +
+            (rItem.change_percent >= 0 ? "+" : "") + rItem.change_percent.toFixed(2) + "%" +
+            "</span></div>";
+        }
+        html += "</div>";
+      }
+    }
+
+    return html;
+  }
+
+  function renderNewsCard(item) {
+    var pubDate = item.published
+      ? new Date(item.published).toLocaleString()
+      : "";
+    var titleEn = item.title_en || item.title || "";
+    var titleZh = item.title_zh || "";
+    var summaryEn = item.summary_en || "";
+    var summaryZh = item.summary_zh || "";
+
+    return (
+      '<div class="news-card">' +
+      '<div class="news-source">' + escapeHtml(item.source) + "</div>" +
+      '<div class="news-headline">' + escapeHtml(titleEn) + "</div>" +
+      (titleZh ? '<div class="news-headline-zh">' + escapeHtml(titleZh) + "</div>" : "") +
+      (summaryEn ? '<div class="news-summary"><strong>EN:</strong> ' + escapeHtml(summaryEn) + "</div>" : "") +
+      (summaryZh ? '<div class="news-summary"><strong>CN:</strong> ' + escapeHtml(summaryZh) + "</div>" : "") +
+      '<div class="news-meta">' + pubDate + "</div>" +
+      '<a class="news-link" href="' + escapeHtml(item.link) + '" target="_blank" rel="noopener">Read source</a>' +
+      "</div>"
+    );
+  }
+
   function escapeHtml(text) {
     if (!text) return "";
-    const div = document.createElement("div");
+    var div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
   }
 
   loadFeed();
+
+  // Email subscription handler
+  var subscribeForm = document.getElementById("subscribe-form");
+  if (subscribeForm) {
+    subscribeForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var emailInput = document.getElementById("subscribe-email");
+      var msg = document.getElementById("subscribe-msg");
+      var email = emailInput.value.trim();
+      if (!email) return;
+
+      msg.textContent = "Subscribing...";
+      msg.className = "mt-2 text-sm opacity-60";
+      msg.classList.remove("hidden");
+
+      fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email }),
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.ok) {
+            msg.textContent = "Subscribed! You'll receive the next digest.";
+            msg.className = "mt-2 text-sm text-green-600";
+            emailInput.value = "";
+          } else {
+            msg.textContent = data.error || "Failed to subscribe. Please try again.";
+            msg.className = "mt-2 text-sm text-red-500";
+          }
+        })
+        .catch(function () {
+          msg.textContent = "Network error. Please try again later.";
+          msg.className = "mt-2 text-sm text-red-500";
+        });
+    });
+  }
 </script>

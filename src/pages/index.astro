@@ -1,109 +1,93 @@
 ---
-import { getCollection } from "astro:content";
-import Layout from "@/layouts/Layout.astro";
-import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer.astro";
-import Socials from "@/components/Socials.astro";
-import LinkButton from "@/components/LinkButton.astro";
-import Card from "@/components/Card.astro";
-import getSortedPosts from "@/utils/getSortedPosts";
-import IconRss from "@/assets/icons/IconRss.svg";
-import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
-import { SITE } from "@/config";
-import { SOCIALS } from "@/constants";
-
-const posts = await getCollection("blog");
-
-const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+// Landing page - standalone Aerial theme (no Astro Layout wrapper)
 ---
 
-<Layout>
-  <Header />
-  <main id="main-content" data-layout="index" class="app-layout">
-    <section id="hero" class:list={["pt-8 pb-6", "border-b border-border"]}>
-      <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
-        WonderLand
-      </h1>
-      <a
-        target="_blank"
-        href="/rss.xml"
-        class="inline-block"
-        aria-label="rss feed"
-        title="RSS Feed"
-      >
-        <IconRss
-          width={20}
-          height={20}
-          class="scale-125 stroke-accent stroke-3 rtl:-rotate-90"
-        />
-        <span class="sr-only">RSS Feed</span>
-      </a>
-
-      <p class="italic opacity-75">Somnium & Somniator</p>
-      <p class="mt-2">
-        Personal blog of James Chen &mdash; thoughts on research, life, and everything in between.
-      </p>
-      {
-        SOCIALS.length > 0 && (
-          <div class="mt-4 flex max-sm:flex-col sm:items-center">
-            <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">Social Links:</div>
-            <Socials />
-          </div>
-        )
-      }
-    </section>
-
-    {
-      featuredPosts.length > 0 && (
-        <section
-          id="featured"
-          class:list={[
-            "pt-12 pb-6",
-            { "border-b border-border": recentPosts.length > 0 },
-          ]}
-        >
-          <h2 class="text-2xl font-semibold tracking-wide">Featured</h2>
-          <ul>
-            {featuredPosts.map(data => (
-              <Card variant="h3" {...data} />
-            ))}
-          </ul>
-        </section>
-      )
-    }
-
-    {
-      recentPosts.length > 0 && (
-        <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-semibold tracking-wide">Recent Posts</h2>
-          <ul>
-            {recentPosts.map(
-              (data, index) =>
-                index < SITE.postPerIndex && <Card variant="h3" {...data} />
-            )}
-          </ul>
-        </section>
-      )
-    }
-
-    <div class="my-8 text-center">
-      <LinkButton href="/posts/">
-        All Posts
-        <IconArrowRight class="inline-block rtl:-rotate-180" />
-      </LinkButton>
-    </div>
-  </main>
-  <Footer />
-</Layout>
-
-<script>
-  document.addEventListener("astro:page-load", () => {
-    const indexLayout = (document.querySelector("#main-content") as HTMLElement)
-      ?.dataset?.layout;
-    if (indexLayout) {
-      sessionStorage.setItem("backUrl", "/");
-    }
-  });
-</script>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>WonderLand — Xupeng Chen</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/landing/favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="keywords" content="Xupeng Chen, WonderLand, CMwonderland, Biology, AI, Finance" />
+	<meta name="description" content="Somnium & Somniator: Biology and Life in Future" />
+	<link rel="stylesheet" href="/landing/assets/animate.css" />
+	<link rel="stylesheet" href="/landing/css/font-awesome.min.css" />
+	<script is:inline src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script is:inline src="/landing/assets/jquery.lettering.js"></script>
+	<script is:inline src="/landing/jquery.textillate.js"></script>
+	<script is:inline>
+		$(function() {
+			$('.text1').textillate({ in: { effect: 'flipInX' } });
+			$('.text3').textillate({
+				initialDelay: 9000,
+				in: { effect: 'bounceInDown' }
+			});
+		});
+	</script>
+	<script is:inline src="/landing/js/skel.min.js"></script>
+	<script is:inline src="/landing/js/init.js"></script>
+	<noscript>
+		<link rel="stylesheet" href="/landing/css/skel.css" />
+		<link rel="stylesheet" href="/landing/css/style.css" />
+		<link rel="stylesheet" href="/landing/css/style-wide.css" />
+		<link rel="stylesheet" href="/landing/css/style-noscript.css" />
+	</noscript>
+</head>
+<style>
+.blog_txt {
+	font-size: 22px;
+	color: #000000;
+	font-weight: bold;
+}
+</style>
+<body class="loading">
+	<div id="wrapper">
+		<div id="bg"></div>
+		<div id="overlay"></div>
+		<div id="main">
+			<header id="header" style="height:70vh;">
+				<div style="text-align:center;">
+					<img src="/landing/css/images/portrait.jpg" style="width:100px; height:100px; border-radius:50%; overflow:hidden;" alt="Xupeng Chen" />
+				</div>
+				<font class="text1" style="text-align: center; text-decoration: none; color: white; font-size: 24px;">Xupeng Chen</font>
+				<p class="text3" style="text-align:center;">Somnium and Somniator: Biology and Life in Future</p>
+				<nav>
+					<ul>
+						<li>
+							<div>
+								<span class="blog_txt">BLOG</span>
+								<a href="/blog/" class="fa fa-pencil-square-o" style="color:mediumspringgreen"><span>Blog</span></a>
+							</div>
+						</li>
+						<li>
+							<span class="blog_txt">CV</span>
+							<a href="/about/" class="fa fa-id-card-o"><span>CV</span></a>
+						</li>
+						<li>
+							<span class="blog_txt">Project</span>
+							<a href="/categories/projects/" class="fa fa-bar-chart"><span>Project</span></a>
+						</li>
+						<li>
+							<span class="blog_txt">GitHub</span>
+							<a href="https://github.com/james20141606" class="fa fa-github"><span>Github</span></a>
+						</li>
+						<li>
+							<span class="blog_txt">BOOK</span>
+							<a href="/categories/book/" class="fa fa-book"><span>Book</span></a>
+						</li>
+						<li>
+							<span class="blog_txt">NEWS</span>
+							<a href="/news/" class="fa fa-line-chart" style="color:#fbbf24"><span>News</span></a>
+						</li>
+					</ul>
+				</nav>
+			</header>
+			<footer id="footer">
+				<div style="text-align:center;">
+					Powered by Xupeng Chen
+				</div>
+			</footer>
+		</div>
+	</div>
+</body>
+</html>

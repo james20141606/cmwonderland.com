@@ -1,79 +1,92 @@
-import { defineConfig, envField, fontProviders } from "astro/config";
-import tailwindcss from "@tailwindcss/vite";
-import sitemap from "@astrojs/sitemap";
-import remarkToc from "remark-toc";
-import remarkCollapse from "remark-collapse";
-import remarkMath from "remark-math";
-import rehypeKatex from "rehype-katex";
-import {
-  transformerNotationDiff,
-  transformerNotationHighlight,
-  transformerNotationWordHighlight,
-} from "@shikijs/transformers";
-import { transformerFileName } from "./src/utils/transformers/fileName";
-import { SITE } from "./src/config";
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-// https://astro.build/config
+import { defineConfig } from 'astro/config';
+
+import sitemap from '@astrojs/sitemap';
+import tailwind from '@astrojs/tailwind';
+import mdx from '@astrojs/mdx';
+import partytown from '@astrojs/partytown';
+import icon from 'astro-icon';
+import compress from 'astro-compress';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import type { AstroIntegration } from 'astro';
+
+import astrowind from './vendor/integration';
+
+import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin, lazyImagesRehypePlugin } from './src/utils/frontmatter';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const hasExternalScripts = false;
+const whenExternalScripts = (items: (() => AstroIntegration) | (() => AstroIntegration)[] = []) =>
+  hasExternalScripts ? (Array.isArray(items) ? items.map((item) => item()) : [items()]) : [];
+
 export default defineConfig({
-  site: SITE.website,
+  output: 'static',
+
   integrations: [
-    sitemap({
-      filter: page => SITE.showArchives || !page.endsWith("/archives"),
+    tailwind({
+      applyBaseStyles: false,
+    }),
+    sitemap(),
+    mdx(),
+    icon({
+      include: {
+        tabler: ['*'],
+        'flat-color-icons': [
+          'template',
+          'gallery',
+          'approval',
+          'document',
+          'advertising',
+          'currency-exchange',
+          'voice-presentation',
+          'business-contact',
+          'database',
+        ],
+      },
+    }),
+
+    ...whenExternalScripts(() =>
+      partytown({
+        config: { forward: ['dataLayer.push'] },
+      })
+    ),
+
+    compress({
+      CSS: true,
+      HTML: {
+        'html-minifier-terser': {
+          removeAttributeQuotes: false,
+        },
+      },
+      Image: false,
+      JavaScript: true,
+      SVG: false,
+      Logger: 1,
+    }),
+
+    astrowind({
+      config: './src/config.yaml',
     }),
   ],
-  markdown: {
-    remarkPlugins: [
-      remarkMath,
-      remarkToc,
-      [remarkCollapse, { test: "Table of contents" }],
-    ],
-    rehypePlugins: [rehypeKatex],
-    shikiConfig: {
-      themes: { light: "github-light", dark: "github-dark" },
-      defaultColor: false,
-      wrap: false,
-      transformers: [
-        transformerFileName({ style: "v2", hideDot: false }),
-        transformerNotationHighlight(),
-        transformerNotationWordHighlight(),
-        transformerNotationDiff({ matchAlgorithm: "v3" }),
-      ],
-    },
-  },
-  vite: {
-    // eslint-disable-next-line
-    // @ts-ignore
-    // This will be fixed in Astro 6 with Vite 7 support
-    // See: https://github.com/withastro/astro/issues/14030
-    plugins: [tailwindcss()],
-    optimizeDeps: {
-      exclude: ["@resvg/resvg-js"],
-    },
-  },
+
   image: {
-    responsiveStyles: true,
-    layout: "constrained",
+    domains: ['cdn.pixabay.com'],
   },
-  env: {
-    schema: {
-      PUBLIC_GOOGLE_SITE_VERIFICATION: envField.string({
-        access: "public",
-        context: "client",
-        optional: true,
-      }),
-    },
+
+  markdown: {
+    remarkPlugins: [readingTimeRemarkPlugin, remarkMath],
+    rehypePlugins: [responsiveTablesRehypePlugin, lazyImagesRehypePlugin, rehypeKatex],
   },
-  experimental: {
-    preserveScriptOrder: true,
-    fonts: [
-      {
-        name: "Google Sans Code",
-        cssVariable: "--font-google-sans-code",
-        provider: fontProviders.google(),
-        fallbacks: ["monospace"],
-        weights: [300, 400, 500, 600, 700],
-        styles: ["normal", "italic"],
+
+  vite: {
+    resolve: {
+      alias: {
+        '~': path.resolve(__dirname, './src'),
       },
-    ],
+    },
   },
 });

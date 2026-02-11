@@ -1,0 +1,64 @@
+site:
+  name: WonderLand
+  site: 'https://www.cmwonderland.com'
+  base: '/'
+  trailingSlash: false
+
+  googleSiteVerificationId: google5b248f7b86cbcee5
+
+# Default SEO metadata
+metadata:
+  title:
+    default: WonderLand
+    template: '%s — WonderLand'
+  description: 'Personal blog of James Chen — thoughts on research, life, and everything in between.'
+  robots:
+    index: true
+    follow: true
+  openGraph:
+    site_name: WonderLand
+    type: website
+
+i18n:
+  language: en
+  textDirection: ltr
+
+apps:
+  blog:
+    isEnabled: true
+    postsPerPage: 10
+
+    post:
+      isEnabled: true
+      permalink: '/posts/%slug%'
+      robots:
+        index: true
+
+    list:
+      isEnabled: true
+      pathname: 'blog'
+      robots:
+        index: true
+
+    category:
+      isEnabled: true
+      pathname: 'categories'
+      robots:
+        index: true
+
+    tag:
+      isEnabled: true
+      pathname: 'tags'
+      robots:
+        index: true
+
+    isRelatedPostsEnabled: true
+    relatedPostsCount: 4
+
+analytics:
+  vendors:
+    googleAnalytics:
+      id: null
+
+ui:
+  theme: 'system'
