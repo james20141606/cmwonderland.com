@@ -74,6 +74,11 @@ import Layout from "~/layouts/PageLayout.astro";
     font-weight: 600;
     margin-top: 4px;
     color: var(--foreground);
+    cursor: pointer;
+  }
+  .news-headline:hover {
+    color: var(--accent, #4f46e5);
+    text-decoration: underline;
   }
   .news-headline-zh {
     font-size: 16px;
@@ -81,6 +86,11 @@ import Layout from "~/layouts/PageLayout.astro";
     margin-top: 6px;
     color: var(--foreground);
     opacity: 0.85;
+    cursor: pointer;
+  }
+  .news-headline-zh:hover {
+    color: var(--accent, #4f46e5);
+    text-decoration: underline;
   }
   .news-summary {
     font-size: 14px;
@@ -412,12 +422,11 @@ import Layout from "~/layouts/PageLayout.astro";
     return (
       '<div class="news-card">' +
       '<div class="news-source">' + escapeHtml(item.source) + "</div>" +
-      '<div class="news-headline">' + escapeHtml(titleEn) + "</div>" +
-      (titleZh ? '<div class="news-headline-zh">' + escapeHtml(titleZh) + "</div>" : "") +
+      '<a class="news-headline" href="' + escapeHtml(item.link) + '" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:inherit;">' + escapeHtml(titleEn) + "</a>" +
+      (titleZh ? '<a class="news-headline-zh" href="' + escapeHtml(item.link) + '" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:inherit;">' + escapeHtml(titleZh) + "</a>" : "") +
       (summaryEn ? '<div class="news-summary"><strong>EN:</strong> ' + escapeHtml(summaryEn) + "</div>" : "") +
       (summaryZh ? '<div class="news-summary"><strong>CN:</strong> ' + escapeHtml(summaryZh) + "</div>" : "") +
       '<div class="news-meta">' + pubDate + "</div>" +
-      '<a class="news-link" href="' + escapeHtml(item.link) + '" target="_blank" rel="noopener">Read source</a>' +
       "</div>"
     );
   }
