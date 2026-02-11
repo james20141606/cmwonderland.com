@@ -16,62 +16,76 @@ I changed my study field to EE and start my Ph.D. study in [NYU Tandon School](h
 
 - [Download PDF Version](/about/xupeng_chen_resume_cv.pdf)
 
+<iframe src="/about/xupeng_chen_resume_cv.pdf" width="100%" height="600px"></iframe>
+
+(It has some mistakes showing the second page if you are using browser on the phone.)
+
 ---
 
 ### Xupeng Chen
 
-New York, NY | [xupeng.chen@nyu.edu](mailto:xupeng.chen@nyu.edu) | [GitHub](https://github.com/james20141606) | [LinkedIn](https://www.linkedin.com/in/xupeng-chen-1a3b3b1a3/)
+New York, NY 11201 | [xupeng.chen@nyu.edu](mailto:xupeng.chen@nyu.edu) | [GitHub](https://github.com/james20141606) | [LinkedIn](https://www.linkedin.com/in/xupeng-chen-1a3b3b1a3/)
 
 ---
 
 ### Education
 
-**New York University, Tandon School of Engineering** — Brooklyn, NY
+**New York University** — Brooklyn, NY
 *Ph.D. in Electrical and Computer Engineering* | Sep 2019 – Present
-- Advisor: Prof. Yao Wang
-- Research: Deep learning for medical image analysis, video understanding
+- Advisor: Prof. Yao Wang (Video Lab)
 
 **Tsinghua University** — Beijing, China
-*B.S. in Biological Sciences, Minor in Statistics* | Sep 2014 – Jul 2018
-- GPA: 3.7/4.0
-- Honors: Tsinghua Xuetang Talent Program (Life Sciences)
+*B.S. in Biological Sciences (Xuetang Program), Minor in Statistics* | Sep 2014 – Jul 2018
+- Advisor: Prof. Zhi Lu (Bioinformatics Division, BNRIST)
 
 ---
 
 ### Research Experience
 
-**NYU Video Lab** — Research Assistant | Sep 2019 – Present
-- Developed deep learning models for medical image segmentation and analysis
-- Worked on electron microscopy (EM) neuron image segmentation (ISBI 2020)
-- Research on video quality enhancement and understanding
+**NYU Wireless & Video Lab, New York University** — Research Assistant | Sep 2019 – Present
+- Working on deep learning for medical image segmentation problems in electron microscopy (EM) neuron images
+- Proposed a deep learning based method for synapse detection, segmentation, and partner assignment
+- Published at ISBI 2020 on synaptic partner assignment in EM images
 
-**Tsinghua University, Bioinformatics Lab** — Research Assistant | Sep 2016 – Jul 2018
-- RNA structural motif finding using deep learning (DeepShape project)
-- Graph convolutional networks for RNA structure prediction
-- Developed eMAIZE: a database for crop genomics
+**Bioinformatics Division, Tsinghua University** — Research Assistant | Sep 2016 – Jul 2018
+- Developed **DeepShape**: RNA structural motif finding using deep learning
+- Used variational autoencoders (VAE) and graph convolutional networks (GCN) for RNA structure analysis
+- Developed mixture models for position weight matrix (PWM) optimization
+- Contributed to **eMAIZE**: a comprehensive database for maize multi-omics (published in *Molecular Plant*)
 
 **Janelia Research Campus, HHMI** — Summer Intern | Jun 2018 – Aug 2018
-- Synaptic partner prediction in electron microscopy images
-- NMJ (neuromuscular junction) segmentation
-- Synaptic cluster analysis using deep learning
+- Worked on neuromuscular junction (NMJ) segmentation in electron microscopy images
+- Synaptic partner prediction using deep learning approaches
+- Synaptic cluster analysis project
 
 ---
 
 ### Publications
 
-1. **X. Chen**, Y. Wang, et al. "Deep Learning Based Segmentation of Synaptic Partners in Electron Microscopy Images." *ISBI 2020*.
-2. Z. Lu, ..., **X. Chen**, et al. "eMAIZE: A comprehensive database for maize multi-omics." *Plant Cell*, 2019.
-3. **X. Chen**, et al. "DeepShape: RNA Structural Motif Finding using Deep Learning." *Undergraduate Thesis*, Tsinghua University, 2018.
+1. **Xupeng Chen**, Yinda Zhang, Wei Huang, Yun Wang, Yao Wang, Toufiq Parag. *Synapse Detection, Segmentation, and Partner Assignment with Deep Learning.* **ISBI 2020**.
+2. Zijian Ding, ..., **Xupeng Chen**, et al. *eMAIZE: A comprehensive database integrating genetic, genomic, and transcriptomic data for maize.* **Molecular Plant**, 2019.
+
+---
+
+### Teaching & Activities
+
+- 2020 — **Teaching Assistant for Medical Imaging** Lecturer: Prof. Jonathan Mamou — *New York University*
+- 2018 — **Teaching Assistant for Bioinformatics Basic Course** Lecturer: Prof. Zhi Lu — *Tsinghua University*
+- 2015-2018 — **Scholarship** XueTang scholarship — *Tsinghua University*
+- 2017 — **Second prize** The First National College Students' Brain Computation and Application Competition — *International*
+- 2017 — **First Prize** eMaize Challenge: Machine learning in breeding — *National*
+- 2018 — **Meritorious Winner** Mathematical Contest in Modeling (MCM) — *International*
+- 2016-2018 — **Xuetang Research Funding** $10,000 for Research in Lu lab — *Tsinghua University*
+- 2016-2018 — **Initiative Scientific Research Program** $8,000 for Research in Biomedical Image analysis — *Tsinghua University*
+- 2015 — **Golden Prize** Social practice award for investigation on e-cycling — *Tsinghua University*
 
 ---
 
 ### Skills
 
-- **Programming**: Python, R, C/C++, JavaScript, MATLAB, Bash
-- **Deep Learning**: PyTorch, TensorFlow, Keras
-- **Bioinformatics**: RNA-seq, Genome Analysis, Structural Biology
-- **Tools**: Git, Docker, LaTeX, Linux, HPC/Slurm
-- **Languages**: Chinese (native), English (fluent)
+- Proficient in Python, MATLAB, R, Bash, LaTeX
+- Familiar with Machine Learning, Deep Learning (Tensorflow, Keras, Pytorch), and Computer Vision tools
+- Familiar with Linux, MacOS, Windows
 
 ---
 

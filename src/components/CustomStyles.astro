@@ -1,5 +1,6 @@
 ---
 import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
 
 // 'DM Sans'
 // Nunito
@@ -25,19 +26,19 @@ import '@fontsource-variable/inter';
     --aw-font-serif: 'Inter Variable';
     --aw-font-heading: 'Inter Variable';
 
-    --aw-color-primary: rgb(1 97 239);
-    --aw-color-secondary: rgb(1 84 207);
-    --aw-color-accent: rgb(109 40 217);
+    --aw-color-primary: rgb(79 70 229);
+    --aw-color-secondary: rgb(59 130 246);
+    --aw-color-accent: rgb(236 72 153);
 
-    --aw-color-text-heading: rgb(0 0 0);
-    --aw-color-text-default: rgb(16 16 16);
-    --aw-color-text-muted: rgb(16 16 16 / 66%);
-    --aw-color-bg-page: rgb(255 255 255);
+    --aw-color-text-heading: rgb(15 23 42);
+    --aw-color-text-default: rgb(30 41 59);
+    --aw-color-text-muted: rgb(100 116 139);
+    --aw-color-bg-page: rgb(249 250 251);
 
-    --aw-color-bg-page-dark: rgb(3 6 32);
+    --aw-color-bg-page-dark: rgb(15 23 42);
 
     ::selection {
-      background-color: lavender;
+      background-color: rgb(79 70 229 / 20%);
     }
   }
 
@@ -46,18 +47,77 @@ import '@fontsource-variable/inter';
     --aw-font-serif: 'Inter Variable';
     --aw-font-heading: 'Inter Variable';
 
-    --aw-color-primary: rgb(1 97 239);
-    --aw-color-secondary: rgb(1 84 207);
-    --aw-color-accent: rgb(109 40 217);
+    --aw-color-primary: rgb(129 140 248);
+    --aw-color-secondary: rgb(96 165 250);
+    --aw-color-accent: rgb(244 114 182);
 
-    --aw-color-text-heading: rgb(247, 248, 248);
-    --aw-color-text-default: rgb(229 236 246);
-    --aw-color-text-muted: rgb(229 236 246 / 66%);
-    --aw-color-bg-page: rgb(3 6 32);
+    --aw-color-text-heading: rgb(241 245 249);
+    --aw-color-text-default: rgb(203 213 225);
+    --aw-color-text-muted: rgb(148 163 184);
+    --aw-color-bg-page: rgb(15 23 42);
 
     ::selection {
-      background-color: black;
-      color: snow;
+      background-color: rgb(129 140 248 / 30%);
+      color: white;
     }
+  }
+
+  /* Code blocks */
+  code:not(pre code) {
+    color: rgb(79 70 229);
+    background: rgb(79 70 229 / 8%);
+    padding: 0.15em 0.4em;
+    border-radius: 0.25em;
+    font-size: 0.875em;
+    font-family: 'JetBrains Mono Variable', monospace;
+  }
+
+  .dark code:not(pre code) {
+    color: rgb(165 180 252);
+    background: rgb(129 140 248 / 15%);
+  }
+
+  pre {
+    font-family: 'JetBrains Mono Variable', monospace !important;
+    border-radius: 0.75rem !important;
+    border: 1px solid rgb(226 232 240) !important;
+  }
+
+  .dark pre {
+    border-color: rgb(51 65 85) !important;
+  }
+
+  /* Smooth scrollbar */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Better link underline animation */
+  .prose a {
+    text-decoration: none;
+    background-image: linear-gradient(transparent calc(100% - 2px), rgb(79 70 229) 2px);
+    background-size: 0% 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.3s ease;
+  }
+  .prose a:hover {
+    background-size: 100% 100%;
+  }
+  .dark .prose a {
+    background-image: linear-gradient(transparent calc(100% - 2px), rgb(129 140 248) 2px);
+  }
+
+  /* KaTeX overflow */
+  .katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.5em 0;
+  }
+
+  /* Responsive iframes */
+  iframe {
+    max-width: 100%;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
   }
 </style>

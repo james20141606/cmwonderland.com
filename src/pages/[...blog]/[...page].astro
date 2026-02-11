@@ -5,7 +5,6 @@ import Layout from '~/layouts/PageLayout.astro';
 import BlogList from '~/components/blog/List.astro';
 import Headline from '~/components/blog/Headline.astro';
 import Pagination from '~/components/blog/Pagination.astro';
-// import PostTags from "~/components/blog/Tags.astro";
 
 import { blogListRobots, getStaticPathsBlogList } from '~/utils/blog';
 
@@ -20,9 +19,6 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { page } = Astro.props as Props;
 const currentPage = page.currentPage ?? 1;
 
-// const allCategories = await findCategories();
-// const allTags = await findTags();
-
 const metadata = {
   title: `Blog${currentPage > 1 ? ` — Page ${currentPage}` : ''}`,
   robots: {
@@ -36,17 +32,19 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <section class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
-    <Headline
-      subtitle="Thoughts on research, AI, life, and everything in between."
-    >
-      WonderLand Blog
-    </Headline>
+  <!-- Hero section with gradient -->
+  <div class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-indigo-950/30 dark:via-slate-900 dark:to-purple-950/20"></div>
+    <section class="relative px-6 sm:px-6 pt-12 sm:pt-16 lg:pt-20 pb-8 mx-auto max-w-4xl">
+      <Headline
+        subtitle="Thoughts on research, AI, life, and everything in between."
+      >
+        WonderLand Blog
+      </Headline>
+    </section>
+  </div>
+  <section class="px-6 sm:px-6 py-8 sm:py-12 mx-auto max-w-4xl">
     <BlogList posts={page.data} />
     <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
-    <!--
-      <PostTags tags={allCategories} class="mb-2" title="Search by Categories:" isCategory />
-      <PostTags tags={allTags}  title="Search by Tags:" />
-    -->
   </section>
 </Layout>

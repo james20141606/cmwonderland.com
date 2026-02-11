@@ -62,10 +62,10 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
         </div>
       ))
   }
-  <div class="mt-2">
+  <div class="mt-2 p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-gray-100 dark:border-slate-700/50 shadow-sm hover:shadow-md transition-shadow duration-300">
     <header>
       <div class="mb-1">
-        <span class="text-sm">
+        <span class="text-sm text-muted">
           <Icon name="tabler:clock" class="w-3.5 h-3.5 inline-block -mt-0.5 dark:text-gray-400" />
           <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
           {
