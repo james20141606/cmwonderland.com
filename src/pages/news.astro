@@ -3,302 +3,400 @@ import Layout from "~/layouts/PageLayout.astro";
 ---
 
 <Layout metadata={{ title: "Finance News Feed" }}>
-  <main class="mx-auto max-w-5xl px-4 pb-12 sm:px-6">
-    <!-- Hero -->
-    <div class="relative overflow-hidden rounded-xl bg-gradient-to-br from-indigo-50 via-white to-blue-50 dark:from-indigo-950/30 dark:via-slate-900 dark:to-blue-950/20 p-6 sm:p-8 mt-6 mb-6">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 class="text-2xl font-bold sm:text-3xl font-heading bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-indigo-400 dark:to-blue-400 bg-clip-text text-transparent">Finance News Feed</h1>
-          <p class="text-muted mt-1 text-sm">Global financial headlines, updated twice daily.</p>
-        </div>
-        <a
-          href="https://raw.githubusercontent.com/james20141606/ai_finance_news/main/news-feed.xml"
-          target="_blank"
-          rel="noopener"
-          class="inline-flex items-center gap-1.5 rounded-full bg-orange-500 px-4 py-1.5 text-xs font-semibold text-white hover:bg-orange-600 transition-colors self-start"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+  <main class="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
+    <!-- Hero Header -->
+    <div class="mt-6 mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
+          <span class="bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">Finance</span>
+          <span class="text-default"> News</span>
+        </h1>
+        <p class="mt-1 text-sm text-muted">Global financial headlines &middot; Updated twice daily</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="https://raw.githubusercontent.com/james20141606/ai_finance_news/main/news-feed.xml" target="_blank" rel="noopener"
+          class="inline-flex items-center gap-1.5 rounded-lg bg-orange-500/10 px-3 py-1.5 text-xs font-bold text-orange-600 dark:text-orange-400 hover:bg-orange-500/20 transition-colors ring-1 ring-orange-500/20">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
           RSS
         </a>
+        <button id="subscribe-toggle"
+          class="inline-flex items-center gap-1.5 rounded-lg bg-indigo-500/10 px-3 py-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 transition-colors ring-1 ring-indigo-500/20">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          Subscribe
+        </button>
       </div>
     </div>
 
-    <!-- Subscribe -->
-    <details class="mb-6 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800/50">
-      <summary class="cursor-pointer px-4 py-3 text-sm font-semibold text-muted select-none">Subscribe to email digest</summary>
-      <form id="subscribe-form" class="flex flex-col gap-2 sm:flex-row px-4 pb-4">
+    <!-- Subscribe Form (hidden by default) -->
+    <div id="subscribe-panel" class="hidden mb-6 rounded-xl border border-indigo-200 dark:border-indigo-800/50 bg-indigo-50/50 dark:bg-indigo-950/20 p-4">
+      <form id="subscribe-form" class="flex flex-col gap-2 sm:flex-row">
         <input type="email" id="subscribe-email" placeholder="your@email.com" required
-          class="flex-1 rounded-md border border-gray-200 dark:border-slate-600 bg-transparent px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none" />
-        <button type="submit" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors">Subscribe</button>
+          class="flex-1 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none" />
+        <button type="submit" class="rounded-lg bg-indigo-600 px-5 py-2 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">Subscribe</button>
       </form>
-      <p id="subscribe-msg" class="hidden px-4 pb-3 text-sm"></p>
-    </details>
+      <p id="subscribe-msg" class="hidden mt-2 text-sm"></p>
+    </div>
 
-    <div id="feed-loading" class="py-12 text-center text-muted">Loading latest news...</div>
-    <div id="feed-error" class="hidden py-8 text-center text-red-500">Failed to load news feed.</div>
-    <div id="feed-container" class="hidden"></div>
+    <div id="feed-loading" class="flex flex-col items-center justify-center py-20 text-muted">
+      <div class="mb-3 h-8 w-8 animate-spin rounded-full border-2 border-indigo-200 border-t-indigo-600 dark:border-indigo-800 dark:border-t-indigo-400"></div>
+      <span class="text-sm">Loading latest news...</span>
+    </div>
+    <div id="feed-error" class="hidden py-12 text-center">
+      <p class="text-red-500 font-semibold">Failed to load news feed.</p>
+      <p class="text-sm text-muted mt-1">Please try refreshing the page.</p>
+    </div>
+    <div id="feed-container" class="hidden space-y-3"></div>
   </main>
 </Layout>
 
-<style>
-  /* Compact news item row */
-  .news-row {
+<style is:global>
+  /* ── Card ── */
+  .nc {
+    border-radius: 14px;
+    border: 1px solid rgba(148,163,184,0.15);
+    background: white;
+    overflow: hidden;
+  }
+  .dark .nc {
+    background: rgba(15,23,42,0.6);
+    border-color: rgba(148,163,184,0.1);
+  }
+  .nc-head {
+    padding: 14px 18px 10px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    font-weight: 800;
+    color: #6366f1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dark .nc-head { color: #818cf8; }
+  .nc-head::before {
+    content: "";
+    display: inline-block;
+    width: 3px; height: 14px;
+    border-radius: 2px;
+    background: currentColor;
+  }
+  .nc-body { padding: 0 18px 16px; }
+
+  /* ── Market Cards Grid ── */
+  .mkt-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+  }
+  .mkt-card {
+    border-radius: 10px;
+    padding: 10px 12px;
+    border: 1px solid rgba(148,163,184,0.1);
+    background: linear-gradient(135deg, rgba(249,250,251,0.8), rgba(241,245,249,0.5));
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .dark .mkt-card {
+    background: linear-gradient(135deg, rgba(30,41,59,0.5), rgba(15,23,42,0.5));
+    border-color: rgba(148,163,184,0.08);
+  }
+  .mkt-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+  .mkt-name { font-size: 10px; font-weight: 700; opacity: 0.55; text-transform: uppercase; letter-spacing: 0.3px; }
+  .mkt-price { font-size: 17px; font-weight: 800; margin-top: 2px; letter-spacing: -0.3px; }
+  .mkt-chg { font-size: 11px; font-weight: 600; margin-top: 2px; display: flex; align-items: center; gap: 2px; }
+  .mkt-section-label {
+    font-size: 11px; font-weight: 700; opacity: 0.4;
+    margin: 12px 0 6px; padding-bottom: 4px;
+    border-bottom: 1px solid rgba(148,163,184,0.08);
+  }
+  .mkt-section-label:first-child { margin-top: 0; }
+
+  /* ── Sector Ranking ── */
+  .sec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 13px;
+  }
+  .sec-row + .sec-row { border-top: 1px solid rgba(148,163,184,0.06); }
+  .sec-rank { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 5px; font-size: 10px; font-weight: 800; background: rgba(99,102,241,0.08); color: #6366f1; margin-right: 8px; flex-shrink: 0; }
+  .dark .sec-rank { background: rgba(129,140,248,0.12); color: #818cf8; }
+  .sec-pct { font-weight: 800; font-size: 13px; font-variant-numeric: tabular-nums; }
+
+  /* ── News Rows ── */
+  .nr {
     display: flex;
     align-items: flex-start;
     gap: 10px;
     padding: 10px 0;
-    border-bottom: 1px solid rgba(128,128,128,0.12);
-    transition: background 0.15s;
+    border-bottom: 1px solid rgba(148,163,184,0.07);
   }
-  .news-row:last-child { border-bottom: none; }
-  .news-row:hover { background: rgba(79,70,229,0.03); }
-  .news-time {
+  .nr:last-child { border-bottom: none; }
+  .nr:hover { background: rgba(99,102,241,0.02); margin: 0 -18px; padding-left: 18px; padding-right: 18px; }
+  .nr-time {
     font-size: 11px;
-    color: rgba(128,128,128,0.7);
-    min-width: 44px;
+    font-weight: 600;
+    color: rgba(100,116,139,0.6);
+    min-width: 42px;
     padding-top: 2px;
     white-space: nowrap;
     flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
   }
-  .news-body { flex: 1; min-width: 0; }
-  .news-title-link {
+  .nr-body { flex: 1; min-width: 0; }
+  .nr-title {
     font-size: 14px;
     font-weight: 600;
-    line-height: 1.4;
-    color: var(--aw-color-text-default, #1e293b);
+    line-height: 1.45;
+    color: inherit;
     text-decoration: none;
     display: block;
+    transition: color 0.15s;
   }
-  .news-title-link:hover { color: rgb(79 70 229); }
-  :global(.dark) .news-title-link { color: var(--aw-color-text-default, #cbd5e1); }
-  :global(.dark) .news-title-link:hover { color: rgb(129 140 248); }
-  .news-title-zh {
-    font-size: 13px;
-    color: rgba(128,128,128,0.75);
+  .nr-title:hover { color: #6366f1; }
+  .dark .nr-title:hover { color: #818cf8; }
+  .nr-zh {
+    font-size: 12.5px;
+    color: rgba(100,116,139,0.65);
     margin-top: 1px;
     line-height: 1.4;
   }
-  .news-source-badge {
+  .nr-src {
     display: inline-block;
-    font-size: 10px;
-    font-weight: 600;
+    font-size: 9px;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    padding: 1px 6px;
-    border-radius: 3px;
-    background: rgba(79,70,229,0.08);
-    color: rgb(79 70 229);
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: rgba(99,102,241,0.07);
+    color: #6366f1;
     white-space: nowrap;
     flex-shrink: 0;
-    margin-top: 2px;
+    margin-top: 3px;
   }
-  :global(.dark) .news-source-badge {
-    background: rgba(129,140,248,0.12);
-    color: rgb(129 140 248);
-  }
-  /* Sections */
-  .feed-section {
-    background: white;
-    border: 1px solid rgba(128,128,128,0.12);
-    border-radius: 12px;
-    padding: 16px 20px;
-    margin-bottom: 12px;
-  }
-  :global(.dark) .feed-section {
-    background: rgba(30,41,59,0.5);
-    border-color: rgba(128,128,128,0.15);
-  }
-  .feed-section-title {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-weight: 700;
-    color: rgb(79 70 229);
-    margin-bottom: 8px;
-  }
-  :global(.dark) .feed-section-title { color: rgb(129 140 248); }
-  /* Summary box */
-  .feed-summary {
+  .dark .nr-src { background: rgba(129,140,248,0.1); color: #818cf8; }
+
+  /* ── Summary Text ── */
+  .summary-text {
     font-size: 14px;
-    line-height: 1.7;
-    color: var(--aw-color-text-default);
+    line-height: 1.8;
     white-space: pre-line;
+    color: var(--aw-color-text-default);
   }
-  /* Market grid */
-  .market-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 6px;
+
+  /* ── Edition Toggle ── */
+  .ed-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(148,163,184,0.15);
+    background: white;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--aw-color-text-default, #0f172a);
+    transition: all 0.15s;
   }
-  .market-chip {
-    border: 1px solid rgba(128,128,128,0.12);
-    border-radius: 8px;
-    padding: 8px 10px;
-    background: rgba(249,250,251,0.5);
+  .dark .ed-toggle { background: rgba(15,23,42,0.6); border-color: rgba(148,163,184,0.1); color: var(--aw-color-text-default, #e2e8f0); }
+  .ed-toggle:hover { border-color: rgba(99,102,241,0.3); }
+  .ed-meta { font-size: 12px; font-weight: 400; opacity: 0.45; margin-left: 8px; }
+  .ed-arrow { font-size: 10px; opacity: 0.3; transition: transform 0.2s; }
+  .ed-arrow.open { transform: rotate(90deg); }
+  .ed-body { overflow: hidden; transition: max-height 0.35s ease; }
+  .ed-body.collapsed { max-height: 0 !important; }
+
+  /* ── Two-column layout for market + sectors ── */
+  @media (min-width: 768px) {
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .two-col > .nc { min-width: 0; }
   }
-  :global(.dark) .market-chip { background: rgba(15,23,42,0.3); }
-  .market-chip-name { font-size: 11px; font-weight: 600; opacity: 0.7; }
-  .market-chip-price { font-size: 16px; font-weight: 700; margin-top: 1px; }
-  .market-chip-change { font-size: 11px; margin-top: 1px; }
-  /* Edition toggle */
-  .edition-toggle {
-    display: flex; align-items: center; justify-content: space-between;
-    width: 100%; padding: 12px 16px;
-    border: 1px solid rgba(128,128,128,0.12); border-radius: 10px;
-    background: white; cursor: pointer;
-    font-size: 15px; font-weight: 600;
-    color: var(--aw-color-text-default, #1e293b);
-    transition: background 0.15s;
-  }
-  :global(.dark) .edition-toggle { background: rgba(30,41,59,0.5); color: var(--aw-color-text-default, #cbd5e1); border-color: rgba(128,128,128,0.15); }
-  .edition-toggle:hover { background: rgba(79,70,229,0.04); }
-  :global(.dark) .edition-toggle:hover { background: rgba(129,140,248,0.06); }
-  .edition-toggle .arrow { transition: transform 0.2s; font-size: 11px; opacity: 0.4; }
-  .edition-toggle .arrow.open { transform: rotate(90deg); }
-  .edition-meta { font-size: 12px; opacity: 0.5; font-weight: 400; }
-  .edition-body { overflow: hidden; transition: max-height 0.3s ease; }
-  .edition-body.collapsed { max-height: 0 !important; }
-  /* Sector ranking row */
-  .sector-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 3px 0; font-size: 13px;
-  }
-  .sector-row + .sector-row { border-top: 1px solid rgba(128,128,128,0.08); }
 </style>
 
 <script is:inline>
-  var FEED_URL = "https://raw.githubusercontent.com/james20141606/ai_finance_news/main/news-feed.json";
+var FEED_URL = "https://raw.githubusercontent.com/james20141606/ai_finance_news/main/news-feed.json";
 
-  async function loadFeed() {
-    var loading = document.getElementById("feed-loading");
-    var error = document.getElementById("feed-error");
-    var container = document.getElementById("feed-container");
-    try {
-      var res = await fetch(FEED_URL + "?t=" + Date.now());
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      var feed = await res.json();
-      loading.classList.add("hidden");
+function fmt(n) {
+  if (n == null) return "N/A";
+  if (Math.abs(n) >= 1000) return n.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  return n.toFixed(2);
+}
+function fmtChg(c, p) {
+  if (c == null || p == null) return "";
+  return (c >= 0 ? "+" : "") + fmt(c) + " (" + (p >= 0 ? "+" : "") + p.toFixed(2) + "%)";
+}
+function esc(t) { if (!t) return ""; var d = document.createElement("div"); d.textContent = t; return d.innerHTML; }
+function arrow(v) { return v > 0 ? "&#9650;" : v < 0 ? "&#9660;" : "&#8212;"; }
 
-      var editions = (feed.editions && Array.isArray(feed.editions)) ? feed.editions : (feed.items ? [feed] : []);
-      if (!editions.length) { container.innerHTML = '<p class="py-8 text-center text-muted">No editions yet.</p>'; container.classList.remove("hidden"); return; }
+async function loadFeed() {
+  var ld = document.getElementById("feed-loading");
+  var er = document.getElementById("feed-error");
+  var ct = document.getElementById("feed-container");
+  try {
+    var r = await fetch(FEED_URL + "?t=" + Date.now());
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    var feed = await r.json();
+    ld.classList.add("hidden");
+    var editions = feed.editions && Array.isArray(feed.editions) ? feed.editions : feed.items ? [feed] : [];
+    if (!editions.length) { ct.innerHTML = '<p class="py-16 text-center text-muted text-sm">No editions available yet.</p>'; ct.classList.remove("hidden"); return; }
+    editions.sort(function(a,b){ return (b.updated_at||"").localeCompare(a.updated_at||""); });
 
-      editions.sort(function(a,b){ return (b.updated_at||"").localeCompare(a.updated_at||""); });
+    var html = "";
+    for (var idx = 0; idx < editions.length; idx++) {
+      var ed = editions[idx], isFirst = idx === 0, edId = "ed-" + idx;
+      var dt = ed.updated_at ? new Date(ed.updated_at) : null;
+      var dateStr = dt ? dt.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric",year:"numeric"}) + " " + dt.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"}) : "";
+      var label = ed.edition_label || "Edition";
+      var cnt = (ed.items||[]).length;
 
-      var html = "";
-      for (var idx = 0; idx < editions.length; idx++) {
-        var ed = editions[idx], isFirst = idx === 0, edId = "edition-" + idx;
-        var dateStr = ed.updated_at ? new Date(ed.updated_at).toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}) : "";
-        var label = ed.edition_label || "Edition";
-        var count = (ed.items||[]).length;
+      if (!isFirst) {
+        html += '<div style="margin-top:12px;">';
+        html += '<button class="ed-toggle" data-target="' + edId + '"><span>' + esc(label) + '<span class="ed-meta">' + dateStr + ' &middot; ' + cnt + ' items</span></span><span class="ed-arrow">&#9654;</span></button>';
+        html += '<div id="' + edId + '" class="ed-body collapsed" style="margin-top:12px;">';
+      }
 
-        html += '<div style="margin-top:' + (idx?12:0) + 'px;">';
-        html += '<button class="edition-toggle" data-target="' + edId + '"><span>' + esc(label) + ' <span class="edition-meta">' + dateStr + ' &middot; ' + count + ' items</span></span><span class="arrow' + (isFirst?" open":"") + '">&#9654;</span></button>';
-        html += '<div id="' + edId + '" class="edition-body' + (isFirst?"":" collapsed") + '" style="margin-top:8px;">';
-
-        // Summary
-        if (ed.summary_cn) {
-          html += '<div class="feed-section"><div class="feed-section-title">Daily Outlook</div><div class="feed-summary">' + esc(ed.summary_cn) + '</div></div>';
+      // Row 1: Outlook + Hotspots / Sector Picks (side by side if both exist)
+      var hasOutlook = ed.summary_cn || ed.market_hotspots_cn;
+      var hasPicks = ed.sector_recommendation;
+      if (hasOutlook || hasPicks) {
+        var cols = (hasOutlook && hasPicks) ? ' two-col' : '';
+        html += '<div class="' + cols + '">';
+        if (hasOutlook) {
+          html += '<div class="nc"><div class="nc-head">Daily Outlook</div><div class="nc-body"><div class="summary-text">';
+          if (ed.summary_cn) html += esc(ed.summary_cn);
+          if (ed.market_hotspots_cn) html += (ed.summary_cn ? '\n\n' : '') + esc(ed.market_hotspots_cn);
+          html += '</div></div></div>';
         }
-        if (ed.sector_recommendation) {
-          html += '<div class="feed-section"><div class="feed-section-title">Sector & Stock Picks</div><div class="feed-summary">' + esc(ed.sector_recommendation) + '</div></div>';
+        if (hasPicks) {
+          html += '<div class="nc"><div class="nc-head">Sector & Stock Picks</div><div class="nc-body"><div class="summary-text">' + esc(ed.sector_recommendation) + '</div></div></div>';
         }
+        html += '</div>';
+      }
 
-        // Market
-        if (ed.market_snapshot && ed.market_snapshot.length) {
-          html += '<div class="feed-section"><div class="feed-section-title">Market Snapshot</div>';
-          for (var s=0;s<ed.market_snapshot.length;s++) {
+      // Row 2: Market Snapshot + Sector Rankings (side by side on desktop)
+      var hasMarket = ed.market_snapshot && ed.market_snapshot.length;
+      var hasSectors = ed.sector_rankings && ed.sector_rankings.length;
+      if (hasMarket || hasSectors) {
+        html += '<div class="two-col">';
+        if (hasMarket) {
+          html += '<div class="nc"><div class="nc-head">Market Snapshot</div><div class="nc-body">';
+          for (var s = 0; s < ed.market_snapshot.length; s++) {
             var sec = ed.market_snapshot[s];
-            html += '<div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;opacity:0.5;margin:8px 0 4px;">' + esc(sec.title) + '</div><div class="market-grid">';
-            for (var i=0;i<sec.items.length;i++) {
+            html += '<div class="mkt-section-label">' + esc(sec.title) + '</div><div class="mkt-grid">';
+            for (var i = 0; i < sec.items.length; i++) {
               var m = sec.items[i];
-              var pr = m.price!=null?m.price.toFixed(2):"N/A";
-              var ch = (m.change!=null&&m.change_percent!=null) ? ((m.change>=0?"+":"")+m.change.toFixed(2)+" ("+(m.change_percent>=0?"+":"")+m.change_percent.toFixed(2)+"%)") : "";
-              var co = m.change_color||(m.change>=0?"#16a34a":"#dc2626");
-              html += '<div class="market-chip"><div class="market-chip-name">' + esc(m.name) + '</div><div class="market-chip-price">' + pr + '</div>' + (ch?'<div class="market-chip-change" style="color:'+co+';">'+ch+'</div>':'') + '</div>';
+              var co = m.change_color || (m.change >= 0 ? "#16a34a" : "#dc2626");
+              html += '<div class="mkt-card"><div class="mkt-name">' + esc(m.name) + '</div>';
+              html += '<div class="mkt-price">' + fmt(m.price) + '</div>';
+              if (m.change != null && m.change_percent != null) {
+                html += '<div class="mkt-chg" style="color:' + co + '"><span>' + arrow(m.change) + '</span> ' + fmtChg(m.change, m.change_percent) + '</div>';
+              }
+              html += '</div>';
             }
             html += '</div>';
           }
-          html += '</div>';
+          html += '</div></div>';
         }
-
-        // Sectors
-        if (ed.sector_rankings && ed.sector_rankings.length) {
-          html += '<div class="feed-section"><div class="feed-section-title">Sector Rankings</div>';
-          for (var r=0;r<ed.sector_rankings.length;r++) {
-            var rk = ed.sector_rankings[r];
-            html += '<div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;opacity:0.5;margin:8px 0 4px;">' + esc(rk.title) + '</div>';
-            for (var ri=0;ri<rk.items.length;ri++) {
-              var si = rk.items[ri]; var sc = si.change_color||(si.change_percent>=0?"#16a34a":"#dc2626");
-              html += '<div class="sector-row"><span><span style="opacity:0.4;font-size:11px;">' + (ri+1) + '.</span> ' + esc(si.name) + '</span><span style="font-weight:700;color:'+sc+';">' + (si.change_percent>=0?"+":"") + si.change_percent.toFixed(2) + '%</span></div>';
+        if (hasSectors) {
+          html += '<div class="nc"><div class="nc-head">Sector Rankings</div><div class="nc-body">';
+          for (var rr = 0; rr < ed.sector_rankings.length; rr++) {
+            var rk = ed.sector_rankings[rr];
+            if (ed.sector_rankings.length > 1) html += '<div class="mkt-section-label">' + esc(rk.title) + '</div>';
+            for (var ri = 0; ri < rk.items.length; ri++) {
+              var si = rk.items[ri], sc = si.change_color || (si.change_percent >= 0 ? "#16a34a" : "#dc2626");
+              html += '<div class="sec-row"><span><span class="sec-rank">' + (ri + 1) + '</span>' + esc(si.name) + '</span><span class="sec-pct" style="color:' + sc + '">' + (si.change_percent >= 0 ? "+" : "") + si.change_percent.toFixed(2) + '%</span></div>';
             }
           }
-          html += '</div>';
+          html += '</div></div>';
         }
+        html += '</div>';
+      }
 
-        // News items - compact list
-        if (ed.items && ed.items.length) {
-          html += '<div class="feed-section"><div class="feed-section-title">Top Briefing (' + ed.items.length + ')</div>';
-          for (var j=0;j<ed.items.length;j++) { html += renderRow(ed.items[j]); }
-          html += '</div>';
+      // Row 3: Social media summary
+      if (ed.social_summary_cn) {
+        html += '<div class="nc"><div class="nc-head">Social Media Digest</div><div class="nc-body"><div class="summary-text">' + esc(ed.social_summary_cn) + '</div></div></div>';
+      }
+
+      // Row 4: News items
+      if (ed.items && ed.items.length) {
+        html += '<div class="nc"><div class="nc-head">Top Briefing (' + ed.items.length + ')</div><div class="nc-body">';
+        for (var j = 0; j < ed.items.length; j++) {
+          var it = ed.items[j];
+          var tEn = it.title_en || it.title || "";
+          var tZh = it.title_zh || "";
+          var tm = "";
+          if (it.published) { var dd = new Date(it.published), hh = dd.getHours(), mm = dd.getMinutes(); tm = (hh < 10 ? "0" : "") + hh + ":" + (mm < 10 ? "0" : "") + mm; }
+          html += '<div class="nr"><div class="nr-time">' + tm + '</div><div class="nr-body">';
+          html += '<a class="nr-title" href="' + esc(it.link) + '" target="_blank" rel="noopener">' + esc(tEn) + '</a>';
+          if (tZh && tZh !== tEn) html += '<div class="nr-zh">' + esc(tZh) + '</div>';
+          html += '</div><div class="nr-src">' + esc(it.source) + '</div></div>';
         }
-
         html += '</div></div>';
       }
 
-      container.innerHTML = html;
-      container.classList.remove("hidden");
-      var toggles = container.querySelectorAll(".edition-toggle");
-      for (var t=0;t<toggles.length;t++) toggles[t].addEventListener("click", handleToggle);
-    } catch(e) { console.error(e); loading.classList.add("hidden"); error.classList.remove("hidden"); }
-  }
+      // Social media links
+      if (ed.social_media && ed.social_media.length) {
+        html += '<div class="nc"><div class="nc-head">Social Media</div><div class="nc-body">';
+        for (var sg = 0; sg < ed.social_media.length; sg++) {
+          var grp = ed.social_media[sg];
+          html += '<div class="mkt-section-label">' + esc(grp.platform) + '</div>';
+          for (var gi = 0; gi < grp.items.length; gi++) {
+            var sit = grp.items[gi];
+            var stEn = sit.title_en || sit.title || "";
+            var stZh = sit.title_zh || "";
+            html += '<div class="nr"><div class="nr-body">';
+            html += '<a class="nr-title" href="' + esc(sit.link) + '" target="_blank" rel="noopener">' + esc(stEn) + '</a>';
+            if (stZh && stZh !== stEn) html += '<div class="nr-zh">' + esc(stZh) + '</div>';
+            html += '</div></div>';
+          }
+        }
+        html += '</div></div>';
+      }
 
-  function renderRow(item) {
-    var titleEn = item.title_en || item.title || "";
-    var titleZh = item.title_zh || "";
-    var timeStr = "";
-    if (item.published) {
-      var d = new Date(item.published);
-      var h = d.getHours(), m = d.getMinutes();
-      timeStr = (h<10?"0":"") + h + ":" + (m<10?"0":"") + m;
+      if (!isFirst) html += '</div></div>';
     }
-    return '<div class="news-row">' +
-      '<div class="news-time">' + timeStr + '</div>' +
-      '<div class="news-body">' +
-        '<a class="news-title-link" href="' + esc(item.link) + '" target="_blank" rel="noopener">' + esc(titleEn) + '</a>' +
-        (titleZh && titleZh !== titleEn ? '<div class="news-title-zh">' + esc(titleZh) + '</div>' : '') +
-      '</div>' +
-      '<div class="news-source-badge">' + esc(item.source) + '</div>' +
-    '</div>';
+
+    ct.innerHTML = html;
+    ct.classList.remove("hidden");
+    var toggles = ct.querySelectorAll(".ed-toggle");
+    for (var t = 0; t < toggles.length; t++) toggles[t].addEventListener("click", handleToggle);
+  } catch(e) { console.error(e); ld.classList.add("hidden"); er.classList.remove("hidden"); }
+}
+
+function handleToggle(e) {
+  var btn = e.currentTarget, id = btn.getAttribute("data-target");
+  var body = document.getElementById(id), arr = btn.querySelector(".ed-arrow");
+  if (!body) return;
+  if (body.classList.contains("collapsed")) {
+    body.classList.remove("collapsed"); body.style.maxHeight = body.scrollHeight + "px";
+    if (arr) arr.classList.add("open");
+  } else {
+    body.style.maxHeight = body.scrollHeight + "px"; body.offsetHeight;
+    body.classList.add("collapsed"); body.style.maxHeight = "0";
+    if (arr) arr.classList.remove("open");
   }
+}
 
-  function handleToggle(e) {
-    var btn = e.currentTarget, id = btn.getAttribute("data-target");
-    var body = document.getElementById(id), arrow = btn.querySelector(".arrow");
-    if (!body) return;
-    if (body.classList.contains("collapsed")) {
-      body.classList.remove("collapsed"); body.style.maxHeight = body.scrollHeight + "px";
-      if (arrow) arrow.classList.add("open");
-    } else {
-      body.style.maxHeight = body.scrollHeight + "px"; body.offsetHeight;
-      body.classList.add("collapsed"); body.style.maxHeight = "0";
-      if (arrow) arrow.classList.remove("open");
-    }
-  }
+loadFeed();
 
-  function esc(t) { if (!t) return ""; var d = document.createElement("div"); d.textContent = t; return d.innerHTML; }
+// Subscribe toggle
+var stBtn = document.getElementById("subscribe-toggle");
+var stPanel = document.getElementById("subscribe-panel");
+if (stBtn && stPanel) stBtn.addEventListener("click", function() { stPanel.classList.toggle("hidden"); });
 
-  loadFeed();
-
-  // Subscribe
-  var sf = document.getElementById("subscribe-form");
-  if (sf) sf.addEventListener("submit", function(e) {
-    e.preventDefault();
-    var ei = document.getElementById("subscribe-email"), msg = document.getElementById("subscribe-msg"), em = ei.value.trim();
-    if (!em) return;
-    msg.textContent = "Subscribing..."; msg.className = "px-4 pb-3 text-sm text-muted"; msg.classList.remove("hidden");
-    fetch("/api/subscribe",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:em})})
-      .then(function(r){return r.json();})
-      .then(function(d){ if(d.ok){msg.textContent="Subscribed!";msg.className="px-4 pb-3 text-sm text-green-600";ei.value="";}else{msg.textContent=d.error||"Failed.";msg.className="px-4 pb-3 text-sm text-red-500";}})
-      .catch(function(){msg.textContent="Network error.";msg.className="px-4 pb-3 text-sm text-red-500";});
-  });
+// Subscribe form
+var sf = document.getElementById("subscribe-form");
+if (sf) sf.addEventListener("submit", function(e) {
+  e.preventDefault();
+  var ei = document.getElementById("subscribe-email"), msg = document.getElementById("subscribe-msg"), em = ei.value.trim();
+  if (!em) return;
+  msg.textContent = "Subscribing..."; msg.className = "mt-2 text-sm text-muted"; msg.classList.remove("hidden");
+  fetch("/api/subscribe",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:em})})
+    .then(function(r){return r.json();})
+    .then(function(d){ if(d.ok){msg.textContent="Subscribed!";msg.className="mt-2 text-sm text-green-600";ei.value="";}else{msg.textContent=d.error||"Failed.";msg.className="mt-2 text-sm text-red-500";}})
+    .catch(function(){msg.textContent="Network error.";msg.className="mt-2 text-sm text-red-500";});
+});
 </script>
