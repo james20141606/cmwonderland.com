@@ -26,3 +26,6 @@ pnpm-debug.log*
 # pagefind
 
 public/pagefind
+
+# design-tool handoff bundles (kept locally, not deployed)
+claudedesign/
