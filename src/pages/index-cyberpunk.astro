@@ -82,15 +82,35 @@
   }
   .cursor-glow.active { opacity: 1; }
 
-  /* ——— top bar ——— */
+  /* ——— top bar (Shader OS style) ——— */
   .topbar {
     position: fixed; top: 0; left: 0; right: 0; z-index: 10;
-    padding: 14px 24px;
+    padding: 18px 24px 0;
     display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 1px solid rgba(5,217,232,.2);
-    font-size: 10px; letter-spacing: .25em; color: var(--cyan);
+    font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+    mix-blend-mode: difference; color: #fff;
   }
-  .topbar .rec { color: var(--magenta); }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .brand .dot {
+    width: 7px; height: 7px; border-radius: 999px;
+    background: var(--cyan); box-shadow: 0 0 12px var(--cyan);
+  }
+  .brand b { font-weight: 500; letter-spacing: .22em; }
+  .brand span { color: rgba(255,255,255,.55); }
+  .meta {
+    display: flex; gap: 14px; align-items: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: .14em; color: rgba(255,255,255,.65);
+  }
+  .meta .chip {
+    padding: 6px 10px; border: 1px solid rgba(255,255,255,.12);
+    border-radius: 999px; background: rgba(8,10,16,.35);
+    backdrop-filter: blur(10px);
+  }
+  .meta .chip b { color: #fff; font-weight: 500; }
 
   /* ——— terminal frame ——— */
   .terminal {
@@ -204,7 +224,7 @@
   @media (max-width: 720px) {
     .nav-grid { grid-template-columns: repeat(2, 1fr); bottom: 6%; }
     .fun-list { grid-template-columns: 1fr; }
-    .topbar { display: none; }
+    .meta { display: none; }
     .footer { display: none; }
   }
 </style>
@@ -223,10 +243,16 @@
   <div class="vignette"></div>
   <div class="cursor-glow" id="cursorGlow"></div>
 
-  <!-- top bar -->
+  <!-- top bar (Shader OS style) -->
   <div class="topbar">
-    <span>[WONDERLAND.EXE] // TTY0 READY</span>
-    <span class="rec">● REC <span id="recCounter">0000</span></span>
+    <div class="brand">
+      <span class="dot"></span><b>WonderLand OS</b><span>/ v2.6</span>
+    </div>
+    <div class="meta">
+      <span class="chip">THEME <b>CYBERPUNK</b></span>
+      <span class="chip">FPS <b id="fps">—</b></span>
+      <span class="chip" id="clock">00:00:00</span>
+    </div>
   </div>
 
   <!-- terminal window -->
@@ -318,10 +344,32 @@
   }, 55);
 })();
 
-// ——— Counter + grid animation + mouse tracking ———
+// ——— Clock (Shader OS style) ———
+(function(){
+  function clock(){
+    const d = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    document.getElementById('clock').textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  }
+  setInterval(clock, 500); clock();
+})();
+
+// ——— FPS counter ———
+(function(){
+  let last = performance.now(), fAcc = 0, fCnt = 0;
+  function frame(){
+    const now = performance.now();
+    const dt = (now - last)/1000; last = now;
+    fAcc += dt; fCnt++;
+    if(fAcc > 0.5){ document.getElementById('fps').textContent = Math.round(fCnt/fAcc); fAcc=0; fCnt=0; }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+// ——— Grid animation + mouse tracking ———
 (function(){
   let t = 0;
-  const counter = document.getElementById('recCounter');
   const grid = document.getElementById('gridInner');
   const sun = document.getElementById('sun');
   const sunSlits = document.getElementById('sunSlits');
@@ -375,11 +423,9 @@
     });
   });
 
-  // Tick
+  // Grid scroll tick
   setInterval(() => {
     t++;
-    counter.textContent = String(t % 10000).padStart(4, '0');
-    // scroll grid
     grid.style.backgroundPosition = `0 ${t % 80}px, 0 0`;
   }, 70);
 })();
