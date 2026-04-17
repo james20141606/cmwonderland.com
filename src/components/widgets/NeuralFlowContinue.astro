@@ -1,0 +1,55 @@
+---
+// Dark themed continuation wrapper — use after NeuralFlowHero
+---
+<div class="nf-continue">
+  <slot />
+</div>
+
+<style is:global>
+  .nf-continue {
+    background:
+      radial-gradient(ellipse at 10% 0%, rgba(95, 211, 255, 0.05), transparent 50%),
+      radial-gradient(ellipse at 90% 20%, rgba(140, 100, 255, 0.04), transparent 60%),
+      linear-gradient(180deg, #0a1326 0%, #0c1530 50%, #0a1326 100%);
+    min-height: 60vh;
+    position: relative;
+    color: #d7dff0;
+  }
+  .nf-continue::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(95, 211, 255, 0.02) 0 1px, transparent 1px 4px);
+    opacity: 0.5;
+  }
+  .nf-continue > * { position: relative; z-index: 1; }
+
+  /* content styling */
+  .nf-continue h1,
+  .nf-continue h2,
+  .nf-continue h3,
+  .nf-continue h4 {
+    color: #f1f5ff;
+  }
+  .nf-continue a:not(.nf-raw) {
+    color: #bfd7ff;
+    transition: color 0.2s;
+  }
+  .nf-continue a:not(.nf-raw):hover {
+    color: #5fd3ff;
+  }
+  .nf-continue p,
+  .nf-continue li,
+  .nf-continue time {
+    color: rgba(215, 225, 245, 0.8);
+  }
+  .nf-continue article {
+    border-bottom: 1px solid rgba(95, 211, 255, 0.12);
+    padding-bottom: 2rem;
+  }
+  .nf-continue article:last-child {
+    border-bottom: none;
+  }
+</style>

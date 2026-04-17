@@ -1,11 +1,15 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
+import NeuralFlowHero from '~/components/widgets/NeuralFlowHero.astro';
 
 import type { MetaData } from '~/types';
 
 export interface Props {
   frontmatter: {
     title?: string;
+    subtitle?: string;
+    subtitleZh?: string;
+    hero?: boolean;
   };
 }
 
@@ -14,15 +18,71 @@ const { frontmatter } = Astro.props;
 const metadata: MetaData = {
   title: frontmatter?.title,
 };
+
+// Per-page taglines (keyed by title)
+const defaultTags: Record<string, { en: string; zh: string }> = {
+  'About Me': {
+    en: 'Bio of a curious mind — research, travels, and the occasional detour.',
+    zh: '一个好奇的人——研究、旅行、以及偶尔的岔路。',
+  },
+};
+const tag = defaultTags[frontmatter?.title || ''] || { en: '', zh: '' };
+const showHero = frontmatter?.hero !== false;
 ---
 
 <Layout metadata={metadata}>
-  <section class="px-4 py-16 sm:px-6 mx-auto lg:px-8 lg:py-20 max-w-4xl">
-    <h1 class="font-bold font-heading text-4xl md:text-5xl leading-tighter tracking-tighter">{frontmatter.title}</h1>
-    <div
-      class="mx-auto prose prose-lg max-w-4xl dark:prose-invert dark:prose-headings:text-slate-300 prose-md prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-img:rounded-md prose-img:shadow-lg mt-8"
-    >
-      <slot />
-    </div>
-  </section>
+  {showHero && frontmatter?.title && (
+    <NeuralFlowHero
+      kicker={`NEURAL FLOW · ${String(frontmatter.title).toUpperCase()}`}
+      title={String(frontmatter.title)}
+      subtitle={frontmatter.subtitle || tag.en}
+      subtitleZh={frontmatter.subtitleZh || tag.zh}
+      height="clamp(300px, 44vh, 420px)"
+    />
+  )}
+
+  <div class="nf-continue">
+    <section class="px-4 py-16 sm:px-6 mx-auto lg:px-8 lg:py-20 max-w-4xl">
+      <div
+        class="mx-auto prose prose-lg max-w-4xl prose-invert nf-prose prose-md prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-img:rounded-md prose-img:shadow-lg"
+      >
+        <slot />
+      </div>
+    </section>
+  </div>
 </Layout>
+
+<style is:global>
+  /* Ensure markdown content is readable on the dark nf-continue backdrop */
+  .nf-continue .nf-prose {
+    color: rgba(220, 228, 248, 0.88);
+  }
+  .nf-continue .nf-prose h1,
+  .nf-continue .nf-prose h2,
+  .nf-continue .nf-prose h3,
+  .nf-continue .nf-prose h4 {
+    color: #f1f5ff;
+  }
+  .nf-continue .nf-prose a {
+    color: #7fb8ff;
+    text-decoration-color: rgba(127, 184, 255, 0.4);
+  }
+  .nf-continue .nf-prose a:hover {
+    color: #9fd3ff;
+  }
+  .nf-continue .nf-prose strong {
+    color: #f1f5ff;
+  }
+  .nf-continue .nf-prose code {
+    color: #a8e3ff;
+    background: rgba(95, 211, 255, 0.08);
+  }
+  .nf-continue .nf-prose blockquote {
+    border-left-color: rgba(95, 211, 255, 0.3);
+    color: rgba(200, 215, 240, 0.75);
+  }
+  .nf-continue .nf-prose iframe {
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  }
+</style>
