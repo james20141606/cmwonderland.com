@@ -40,6 +40,47 @@ const metadata = {
   />
 
   <div class="nf-continue">
+    <!-- Ambient decorative backdrop: HUD marks + floating nodes -->
+    <div class="nf-amb" aria-hidden="true">
+      <svg class="nf-amb-svg" viewBox="0 0 1200 1600" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="nfDot" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#5fd3ff" stop-opacity="0.9" />
+            <stop offset="100%" stop-color="#5fd3ff" stop-opacity="0" />
+          </radialGradient>
+          <pattern id="nfGrid" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+            <path d="M 80 0 L 0 0 0 80" fill="none" stroke="rgba(95,211,255,0.05)" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="1200" height="1600" fill="url(#nfGrid)" />
+        <!-- drifting nodes -->
+        <g class="nf-nodes">
+          <circle cx="120" cy="200" r="2.5" fill="url(#nfDot)"><animate attributeName="opacity" values="0.2;1;0.2" dur="4s" repeatCount="indefinite"/></circle>
+          <circle cx="980" cy="340" r="3" fill="url(#nfDot)"><animate attributeName="opacity" values="0.3;1;0.3" dur="5.5s" repeatCount="indefinite"/></circle>
+          <circle cx="60" cy="560" r="2" fill="url(#nfDot)"><animate attributeName="opacity" values="0.1;0.8;0.1" dur="6s" repeatCount="indefinite"/></circle>
+          <circle cx="1120" cy="700" r="2.5" fill="url(#nfDot)"><animate attributeName="opacity" values="0.2;0.9;0.2" dur="4.8s" repeatCount="indefinite"/></circle>
+          <circle cx="200" cy="900" r="2" fill="url(#nfDot)"><animate attributeName="opacity" values="0.2;0.7;0.2" dur="5s" repeatCount="indefinite"/></circle>
+          <circle cx="900" cy="1080" r="3" fill="url(#nfDot)"><animate attributeName="opacity" values="0.3;1;0.3" dur="4.2s" repeatCount="indefinite"/></circle>
+          <circle cx="50" cy="1240" r="2" fill="url(#nfDot)"><animate attributeName="opacity" values="0.1;0.8;0.1" dur="5.6s" repeatCount="indefinite"/></circle>
+          <circle cx="1080" cy="1400" r="2.5" fill="url(#nfDot)"><animate attributeName="opacity" values="0.2;0.9;0.2" dur="4.4s" repeatCount="indefinite"/></circle>
+        </g>
+        <!-- schematic diagonal lines -->
+        <g stroke="rgba(95,211,255,0.08)" stroke-width="1" fill="none">
+          <line x1="0" y1="280" x2="220" y2="180"/>
+          <line x1="1020" y1="260" x2="1200" y2="380"/>
+          <line x1="0" y1="900" x2="200" y2="820"/>
+          <line x1="1100" y1="1200" x2="1200" y2="1280"/>
+        </g>
+        <!-- HUD crosshair marks at corners -->
+        <g stroke="rgba(95,211,255,0.25)" stroke-width="1" fill="none">
+          <path d="M 40 40 L 40 60 M 40 40 L 60 40"/>
+          <path d="M 1160 40 L 1160 60 M 1160 40 L 1140 40"/>
+          <path d="M 40 1560 L 40 1540 M 40 1560 L 60 1560"/>
+          <path d="M 1160 1560 L 1160 1540 M 1160 1560 L 1140 1560"/>
+        </g>
+      </svg>
+    </div>
+
     <section class="nf-listwrap">
       <div class="nf-section-head">
         <span class="bar"></span>
@@ -56,12 +97,15 @@ const metadata = {
   /* ======== Neural Flow continuation backdrop ======== */
   .nf-continue {
     background:
-      radial-gradient(ellipse at 8% -5%, rgba(95, 211, 255, 0.06), transparent 55%),
-      radial-gradient(ellipse at 92% 30%, rgba(140, 100, 255, 0.04), transparent 60%),
-      linear-gradient(180deg, #0a1326 0%, #0c1530 50%, #0a1326 100%);
+      radial-gradient(ellipse 60% 40% at 10% 5%, rgba(95, 211, 255, 0.14), transparent 60%),
+      radial-gradient(ellipse 50% 50% at 92% 25%, rgba(140, 100, 255, 0.10), transparent 65%),
+      radial-gradient(ellipse 70% 50% at 50% 90%, rgba(255, 42, 109, 0.06), transparent 70%),
+      radial-gradient(ellipse 40% 30% at 85% 70%, rgba(95, 211, 255, 0.08), transparent 60%),
+      linear-gradient(180deg, #0a1326 0%, #0c1630 50%, #09122a 100%);
     min-height: 70vh;
     position: relative;
     color: #d7dff0;
+    overflow: hidden;
   }
   .nf-continue::before {
     content: '';
@@ -70,11 +114,33 @@ const metadata = {
     pointer-events: none;
     background-image: repeating-linear-gradient(
       0deg,
-      rgba(95, 211, 255, 0.018) 0 1px,
-      transparent 1px 4px
+      rgba(95, 211, 255, 0.025) 0 1px,
+      transparent 1px 5px
     );
-    opacity: 0.6;
+    opacity: 0.5;
     z-index: 0;
+  }
+  /* ambient decoration layer */
+  .nf-amb {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.8;
+  }
+  .nf-amb-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  /* slow drift on the whole svg */
+  .nf-amb .nf-nodes {
+    animation: nfDrift 18s ease-in-out infinite alternate;
+    transform-origin: center;
+  }
+  @keyframes nfDrift {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(-12px, 8px); }
   }
   .nf-listwrap {
     position: relative;

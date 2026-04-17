@@ -59,6 +59,34 @@ const tag = taglines[slug] || { en: 'Entries filed under this stream.', zh: '这
   />
 
   <div class="nf-continue">
+    <div class="nf-amb" aria-hidden="true">
+      <svg class="nf-amb-svg" viewBox="0 0 1200 1200" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="nfDot2" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#5fd3ff" stop-opacity="0.9" />
+            <stop offset="100%" stop-color="#5fd3ff" stop-opacity="0" />
+          </radialGradient>
+          <pattern id="nfGrid2" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+            <path d="M 80 0 L 0 0 0 80" fill="none" stroke="rgba(95,211,255,0.05)" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="1200" height="1200" fill="url(#nfGrid2)" />
+        <g class="nf-nodes">
+          <circle cx="140" cy="200" r="2.5" fill="url(#nfDot2)"><animate attributeName="opacity" values="0.2;1;0.2" dur="4s" repeatCount="indefinite"/></circle>
+          <circle cx="980" cy="340" r="3" fill="url(#nfDot2)"><animate attributeName="opacity" values="0.3;1;0.3" dur="5.5s" repeatCount="indefinite"/></circle>
+          <circle cx="60" cy="680" r="2" fill="url(#nfDot2)"><animate attributeName="opacity" values="0.1;0.8;0.1" dur="6s" repeatCount="indefinite"/></circle>
+          <circle cx="1120" cy="820" r="2.5" fill="url(#nfDot2)"><animate attributeName="opacity" values="0.2;0.9;0.2" dur="4.8s" repeatCount="indefinite"/></circle>
+          <circle cx="220" cy="1040" r="2" fill="url(#nfDot2)"><animate attributeName="opacity" values="0.2;0.7;0.2" dur="5s" repeatCount="indefinite"/></circle>
+        </g>
+        <g stroke="rgba(95,211,255,0.25)" stroke-width="1" fill="none">
+          <path d="M 40 40 L 40 60 M 40 40 L 60 40"/>
+          <path d="M 1160 40 L 1160 60 M 1160 40 L 1140 40"/>
+          <path d="M 40 1160 L 40 1140 M 40 1160 L 60 1160"/>
+          <path d="M 1160 1160 L 1160 1140 M 1160 1160 L 1140 1160"/>
+        </g>
+      </svg>
+    </div>
+
     <section class="nf-listwrap">
       <div class="nf-section-head">
         <span class="bar"></span>

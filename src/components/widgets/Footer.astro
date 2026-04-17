@@ -23,47 +23,72 @@ export interface Props {
   theme?: string;
 }
 
-const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme = 'light' } = Astro.props;
+const { socialLinks = [], secondaryLinks = [], links = [], footNote = '' } = Astro.props;
 ---
 
-<footer class:list={[{ dark: theme === 'dark' }, 'relative border-t border-gray-200 dark:border-slate-800 not-prose']}>
-  <div class="dark:bg-dark absolute inset-0 pointer-events-none" aria-hidden="true"></div>
-  <div
-    class="relative max-w-7xl mx-auto px-4 sm:px-6 dark:text-slate-300 intersect-once intersect-quarter intersect-no-queue motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
-  >
-    <div class="grid grid-cols-12 gap-4 gap-y-8 sm:gap-8 py-8 md:py-12">
-      <div class="col-span-12 lg:col-span-4">
-        <div class="mb-2">
-          <a class="inline-block font-bold text-xl" href={getHomePermalink()}>{SITE?.name}</a>
+<footer class="nf-footer">
+  <!-- decorative glow backdrop -->
+  <div class="nf-footer-bg" aria-hidden="true"></div>
+
+  <div class="nf-footer-inner">
+
+    <!-- Visitor map — big hero panel -->
+    <section class="nf-map-section">
+      <div class="nf-section-head">
+        <span class="bar"></span>
+        <span>WHO DROPS BY · 谁来过这里</span>
+        <span class="bar"></span>
+      </div>
+
+      <div class="nf-map-frame">
+        <!-- corner HUD marks -->
+        <span class="nf-corner tl"></span>
+        <span class="nf-corner tr"></span>
+        <span class="nf-corner bl"></span>
+        <span class="nf-corner br"></span>
+
+        <div class="nf-map-holder" id="nfMap">
+          <script is:inline type="text/javascript" id="clustrmaps" src="//cdn.clustrmaps.com/map_v2.js?cl=0a1326&w=720&t=tt&d=MGAfMNv-Snrv0Yg1d2t2EH3ATBUCJtdgbna_qHvb4AI&co=5fd3ff&ct=ff2a6d"></script>
         </div>
-        <div class="text-sm text-muted flex gap-1">
-          {
-            secondaryLinks.map(({ text, href }, index) => (
-              <>
-                {index !== 0 ? ' · ' : ''}
-                <a
-                  class="text-muted hover:text-gray-700 dark:text-gray-400 hover:underline transition duration-150 ease-in-out"
-                  href={href}
-                  set:html={text}
-                />
-              </>
-            ))
-          }
+
+        <div class="nf-stats">
+          <div class="nf-stat">
+            <span class="v" id="busuanzi_value_site_uv">—</span>
+            <span class="l">visitors · 访客</span>
+          </div>
+          <div class="nf-stat-div"></div>
+          <div class="nf-stat">
+            <span class="v" id="busuanzi_value_site_pv">—</span>
+            <span class="l">views · 浏览</span>
+          </div>
         </div>
       </div>
-      {
-        links.map(({ title, links }) => (
-          <div class="col-span-6 md:col-span-3 lg:col-span-2">
-            <div class="dark:text-gray-300 font-medium mb-2">{title}</div>
-            {links && Array.isArray(links) && links.length > 0 && (
-              <ul class="text-sm">
-                {links.map(({ text, href, ariaLabel }) => (
-                  <li class="mb-2">
-                    <a
-                      class="text-muted hover:text-gray-700 hover:underline dark:text-gray-400 transition duration-150 ease-in-out"
-                      href={href}
-                      aria-label={ariaLabel}
-                    >
+    </section>
+
+    <!-- Link columns -->
+    {links.length > 0 && (
+      <section class="nf-links">
+        <div class="nf-brand-col">
+          <a class="nf-brand" href={getHomePermalink()}>{SITE?.name}</a>
+          <p class="nf-brand-sub">Somnium &amp; Somniator <br />Brain &amp; AI in Future</p>
+          <div class="nf-secondary">
+            {secondaryLinks.map(({ text, href }, i) => (
+              <>
+                {i !== 0 ? <span class="dot">·</span> : ''}
+                <a href={href} set:html={text} />
+              </>
+            ))}
+          </div>
+        </div>
+
+        {links.map(({ title, links: col }) => (
+          <div class="nf-link-col">
+            <div class="nf-col-title">{title}</div>
+            {col && Array.isArray(col) && col.length > 0 && (
+              <ul>
+                {col.map(({ text, href, ariaLabel }) => (
+                  <li>
+                    <a href={href} aria-label={ariaLabel}>
                       <Fragment set:html={text} />
                     </a>
                   </li>
@@ -71,45 +96,270 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme 
               </ul>
             )}
           </div>
-        ))
-      }
-    </div>
-    <!-- ClustrMaps Visitor Map -->
-    <div class="flex justify-center py-4 border-t border-gray-200 dark:border-slate-700">
-      <div class="w-[200px]">
-        <script is:inline type="text/javascript" id="clustrmaps" src="//cdn.clustrmaps.com/map_v2.js?cl=d9dbc8&w=200&t=n&d=MGAfMNv-Snrv0Yg1d2t2EH3ATBUCJtdgbna_qHvb4AI&co=302dad"></script>
-      </div>
-    </div>
+        ))}
+      </section>
+    )}
 
-    <div class="md:flex md:items-center md:justify-between py-6 md:py-8">
-      {
-        socialLinks?.length ? (
-          <ul class="flex mb-4 md:order-1 -ml-2 md:ml-4 md:mb-0 rtl:ml-0 rtl:-mr-2 rtl:md:ml-0 rtl:md:mr-4">
-            {socialLinks.map(({ ariaLabel, href, text, icon }) => (
-              <li>
-                <a
-                  class="text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center"
-                  aria-label={ariaLabel}
-                  href={href}
-                >
-                  {icon && <Icon name={icon} class="w-5 h-5" />}
-                  <Fragment set:html={text} />
-                </a>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          ''
-        )
-      }
+    <!-- Social + copyright bar -->
+    <section class="nf-bottom">
+      {socialLinks?.length ? (
+        <ul class="nf-social">
+          {socialLinks.map(({ ariaLabel, href, text, icon }) => (
+            <li>
+              <a aria-label={ariaLabel} href={href}>
+                {icon && <Icon name={icon} class="w-5 h-5" />}
+                <Fragment set:html={text} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : ''}
 
-      <div class="text-sm mr-4 dark:text-muted">
+      <div class="nf-foot-note">
         <Fragment set:html={footNote} />
-        <span class="ml-2 text-xs text-muted">
-          Total visitors: <span id="busuanzi_value_site_uv">-</span> ·
-          Total views: <span id="busuanzi_value_site_pv">-</span>
-        </span>
       </div>
-    </div>
+    </section>
   </div>
 </footer>
+
+<style is:global>
+  .nf-footer {
+    position: relative;
+    background: #0a1326;
+    color: #d7dff0;
+    overflow: hidden;
+    border-top: 1px solid rgba(95, 211, 255, 0.15);
+  }
+  .nf-footer-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 18% -10%, rgba(95, 211, 255, 0.12), transparent 55%),
+      radial-gradient(ellipse at 85% 110%, rgba(255, 42, 109, 0.10), transparent 60%),
+      radial-gradient(ellipse at 50% 50%, rgba(140, 100, 255, 0.05), transparent 70%);
+  }
+  .nf-footer-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(0deg, rgba(95, 211, 255, 0.025) 0 1px, transparent 1px 5px);
+    opacity: 0.7;
+  }
+  .nf-footer-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 72px 24px 32px;
+  }
+
+  /* Section heading band (also re-used by .nf-continue) */
+  .nf-footer .nf-section-head {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: rgba(170, 200, 240, 0.7);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .nf-footer .nf-section-head .bar {
+    flex: 1;
+    max-width: 140px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(95, 211, 255, 0.45), transparent);
+  }
+
+  /* Map panel */
+  .nf-map-section { margin-bottom: 60px; }
+  .nf-map-frame {
+    position: relative;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 28px 28px 22px;
+    background: linear-gradient(180deg, rgba(10, 19, 38, 0.6), rgba(12, 22, 44, 0.9));
+    border: 1px solid rgba(95, 211, 255, 0.2);
+    border-radius: 6px;
+    box-shadow: 0 0 60px rgba(95, 211, 255, 0.08), inset 0 0 40px rgba(5, 10, 25, 0.5);
+  }
+  .nf-corner {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-style: solid;
+    border-color: #5fd3ff;
+    border-width: 0;
+    opacity: 0.75;
+  }
+  .nf-corner.tl { top: -1px; left: -1px; border-top-width: 1px; border-left-width: 1px; }
+  .nf-corner.tr { top: -1px; right: -1px; border-top-width: 1px; border-right-width: 1px; }
+  .nf-corner.bl { bottom: -1px; left: -1px; border-bottom-width: 1px; border-left-width: 1px; }
+  .nf-corner.br { bottom: -1px; right: -1px; border-bottom-width: 1px; border-right-width: 1px; }
+
+  .nf-map-holder {
+    display: flex;
+    justify-content: center;
+    min-height: 380px;
+    margin: 0 auto;
+    max-width: 720px;
+    overflow: hidden;
+  }
+  /* ClustrMap canvas sizing */
+  .nf-map-holder > * { max-width: 100% !important; }
+  .nf-map-holder canvas,
+  .nf-map-holder img,
+  .nf-map-holder div {
+    max-width: 100% !important;
+  }
+
+  .nf-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1px dashed rgba(95, 211, 255, 0.2);
+  }
+  .nf-stat { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .nf-stat .v {
+    font-family: 'Instrument Serif', 'Times New Roman', serif;
+    font-size: clamp(36px, 5vw, 54px);
+    line-height: 1;
+    color: #f1f5ff;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 0 24px rgba(95, 211, 255, 0.3);
+    letter-spacing: -0.01em;
+  }
+  .nf-stat .l {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    color: rgba(170, 200, 240, 0.65);
+    text-transform: uppercase;
+  }
+  .nf-stat-div {
+    width: 1px;
+    height: 52px;
+    background: linear-gradient(180deg, transparent, rgba(95, 211, 255, 0.4), transparent);
+  }
+
+  /* Link columns */
+  .nf-links {
+    display: grid;
+    grid-template-columns: 2fr repeat(3, 1fr);
+    gap: 40px;
+    padding: 40px 0;
+    border-top: 1px solid rgba(95, 211, 255, 0.12);
+    border-bottom: 1px solid rgba(95, 211, 255, 0.12);
+  }
+  .nf-brand {
+    display: inline-block;
+    font-family: 'Instrument Serif', serif;
+    font-size: 28px;
+    color: #f1f5ff;
+    text-decoration: none;
+    font-style: italic;
+  }
+  .nf-brand-sub {
+    margin-top: 10px;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: rgba(175, 200, 235, 0.6);
+    line-height: 1.5;
+  }
+  .nf-secondary {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(170, 200, 240, 0.55);
+  }
+  .nf-secondary a {
+    color: rgba(175, 200, 235, 0.7);
+    text-decoration: none;
+    border-bottom: 1px dotted rgba(95, 211, 255, 0.3);
+  }
+  .nf-secondary a:hover { color: #5fd3ff; border-bottom-color: #5fd3ff; }
+  .nf-secondary .dot { opacity: 0.4; }
+
+  .nf-col-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    color: rgba(95, 211, 255, 0.75);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .nf-link-col ul { list-style: none; padding: 0; margin: 0; }
+  .nf-link-col li { margin-bottom: 8px; }
+  .nf-link-col a {
+    font-family: 'Instrument Serif', serif;
+    font-size: 16px;
+    color: rgba(210, 222, 245, 0.78);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nf-link-col a:hover { color: #9fe5ff; }
+
+  /* Bottom bar */
+  .nf-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .nf-social {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 6px;
+  }
+  .nf-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(95, 211, 255, 0.2);
+    border-radius: 4px;
+    color: rgba(175, 200, 235, 0.65);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .nf-social a:hover {
+    color: #9fe5ff;
+    border-color: #5fd3ff;
+    background: rgba(95, 211, 255, 0.08);
+    transform: translateY(-1px);
+  }
+  .nf-foot-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: rgba(170, 200, 240, 0.5);
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 820px) {
+    .nf-links { grid-template-columns: 1fr 1fr; gap: 28px; }
+    .nf-stats { gap: 24px; }
+    .nf-stat-div { height: 40px; }
+    .nf-map-holder { min-height: 240px; }
+  }
+  @media (max-width: 540px) {
+    .nf-links { grid-template-columns: 1fr; }
+    .nf-bottom { flex-direction: column-reverse; }
+    .nf-footer-inner { padding: 48px 18px 24px; }
+  }
+</style>
