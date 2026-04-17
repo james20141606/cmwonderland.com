@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>VoxelFormer · Fun Papers 08</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<div class="wrap">
+  <nav class="crumb">
+    <a href="index.html">← Fun Papers</a>
+    <span>Paper 08 of 12</span>
+  </nav>
+
+  <header class="head">
+    <div class="kicker"><span>arXiv · cs.LG · 2509.09015</span><span class="bar"></span><span>9 min read</span></div>
+    <h1>VoxelFormer, <em>reading pictures out of brains, cheaply.</em></h1>
+    <div class="dek">To reconstruct what someone is <em>looking at</em> from their fMRI, the standard pipeline is one enormous adapter per subject. We took the other road — made the voxels themselves the tokens, and the model a single, shared, tiny transformer. Many brains. Fewer parameters. Same retrieval.</div>
+    <div class="byline">
+      <span>Le · Chen · collaborators</span>
+      <span>NYU · 2025</span>
+    </div>
+  </header>
+
+  <figure class="hero-fig">
+    <svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="vf1" x1="0" x2="1"><stop offset="0" stop-color="#fce3dc"/><stop offset="1" stop-color="#e3ccca"/></linearGradient>
+      </defs>
+
+      <!-- voxel cube -->
+      <g transform="translate(40,40)">
+        <text x="0" y="-10" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">fMRI voxels · visual cortex (flattened)</text>
+        <g stroke="#1b1b1a" stroke-width=".4" fill="#ede6d3">
+          <g>
+            <rect x="0" y="0" width="18" height="18"/><rect x="20" y="0" width="18" height="18" fill="#b43a2a" opacity=".5"/><rect x="40" y="0" width="18" height="18"/><rect x="60" y="0" width="18" height="18" fill="#b43a2a" opacity=".7"/><rect x="80" y="0" width="18" height="18"/><rect x="100" y="0" width="18" height="18" fill="#234e70" opacity=".4"/><rect x="120" y="0" width="18" height="18"/>
+          </g>
+          <g transform="translate(0,20)">
+            <rect x="0" y="0" width="18" height="18" fill="#234e70" opacity=".5"/><rect x="20" y="0" width="18" height="18" fill="#b43a2a" opacity=".9"/><rect x="40" y="0" width="18" height="18" fill="#b43a2a" opacity=".85"/><rect x="60" y="0" width="18" height="18"/><rect x="80" y="0" width="18" height="18" fill="#234e70" opacity=".5"/><rect x="100" y="0" width="18" height="18"/><rect x="120" y="0" width="18" height="18"/>
+          </g>
+          <g transform="translate(0,40)">
+            <rect x="0" y="0" width="18" height="18"/><rect x="20" y="0" width="18" height="18"/><rect x="40" y="0" width="18" height="18" fill="#234e70" opacity=".65"/><rect x="60" y="0" width="18" height="18" fill="#b43a2a" opacity=".7"/><rect x="80" y="0" width="18" height="18"/><rect x="100" y="0" width="18" height="18" fill="#b43a2a" opacity=".5"/><rect x="120" y="0" width="18" height="18"/>
+          </g>
+          <g transform="translate(0,60)">
+            <rect x="0" y="0" width="18" height="18" fill="#b43a2a" opacity=".4"/><rect x="20" y="0" width="18" height="18"/><rect x="40" y="0" width="18" height="18"/><rect x="60" y="0" width="18" height="18" fill="#234e70" opacity=".6"/><rect x="80" y="0" width="18" height="18"/><rect x="100" y="0" width="18" height="18"/><rect x="120" y="0" width="18" height="18"/>
+          </g>
+          <g transform="translate(0,80)">
+            <rect x="0" y="0" width="18" height="18"/><rect x="20" y="0" width="18" height="18" fill="#b43a2a" opacity=".7"/><rect x="40" y="0" width="18" height="18"/><rect x="60" y="0" width="18" height="18"/><rect x="80" y="0" width="18" height="18" fill="#b43a2a" opacity=".5"/><rect x="100" y="0" width="18" height="18"/><rect x="120" y="0" width="18" height="18"/>
+          </g>
+        </g>
+
+        <text x="0" y="120" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5a564e">· each voxel = one token ·</text>
+      </g>
+
+      <!-- arrow to transformer -->
+      <g stroke="#1b1b1a" fill="none" stroke-width="1">
+        <line x1="210" y1="85" x2="270" y2="85"/>
+        <polyline points="263,80 270,85 263,90"/>
+      </g>
+
+      <!-- tiny transformer -->
+      <g transform="translate(280,45)">
+        <rect x="0" y="0" width="180" height="90" fill="#ede6d3" stroke="#1b1b1a"/>
+        <text x="90" y="16" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">VoxelFormer</text>
+        <text x="90" y="28" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="#5a564e">2 layers · 4 heads · shared</text>
+        <g fill="#234e70" opacity=".6" class="svg-pulse"><circle cx="30" cy="55" r="3"/><circle cx="60" cy="55" r="3"/><circle cx="90" cy="55" r="3"/><circle cx="120" cy="55" r="3"/><circle cx="150" cy="55" r="3"/></g>
+        <g stroke="#b43a2a" stroke-width=".4" opacity=".5">
+          <line x1="30" y1="55" x2="150" y2="75"/>
+          <line x1="60" y1="55" x2="120" y2="75"/>
+          <line x1="90" y1="55" x2="90" y2="75"/>
+          <line x1="120" y1="55" x2="60" y2="75"/>
+          <line x1="150" y1="55" x2="30" y2="75"/>
+        </g>
+        <g fill="#b43a2a"><circle cx="30" cy="75" r="3"/><circle cx="60" cy="75" r="3"/><circle cx="90" cy="75" r="3"/><circle cx="120" cy="75" r="3"/><circle cx="150" cy="75" r="3"/></g>
+      </g>
+
+      <!-- arrow to CLIP embedding, then images -->
+      <g stroke="#1b1b1a" fill="none" stroke-width="1">
+        <line x1="470" y1="90" x2="520" y2="90"/>
+        <polyline points="513,85 520,90 513,95"/>
+      </g>
+
+      <g transform="translate(530,35)">
+        <rect x="0" y="0" width="100" height="120" fill="#f5eadd" stroke="#1b1b1a"/>
+        <text x="10" y="16" font-family="IBM Plex Mono, monospace" font-size="9" fill="#1b1b1a">retrieved img</text>
+        <!-- abstract image -->
+        <g>
+          <circle cx="50" cy="65" r="22" fill="#b43a2a" opacity=".6" class="svg-pulse"/>
+          <rect x="20" y="90" width="60" height="8" fill="#234e70" opacity=".5"/>
+          <rect x="15" y="100" width="70" height="8" fill="#234e70" opacity=".3"/>
+        </g>
+      </g>
+
+      <!-- param count callout -->
+      <g transform="translate(40,200)">
+        <text x="0" y="0" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">PARAMETER COUNT · INVERSE LOG SCALE</text>
+        <g transform="translate(0,20)">
+          <text x="0" y="14" font-family="Fraunces, serif" font-size="12">Per-subject adapter (MindEye2)</text>
+          <rect x="220" y="4" width="500" height="12" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
+          <rect x="220" y="4" width="420" height="12" fill="#234e70" opacity=".55"/>
+          <text x="730" y="14" font-family="IBM Plex Mono, monospace" font-size="10">~1B</text>
+        </g>
+        <g transform="translate(0,44)">
+          <text x="0" y="14" font-family="Fraunces, serif" font-size="12">VoxelFormer (shared)</text>
+          <rect x="220" y="4" width="500" height="12" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
+          <rect x="220" y="4" width="60" height="12" fill="#b43a2a"/>
+          <text x="730" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#b43a2a">~30M</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption>Fig. 1 — Voxels go in as tokens, a tiny shared transformer handles the rest.</figcaption>
+  </figure>
+
+  <article class="prose">
+
+    <p>If you have watched fMRI visual decoding evolve over the last two years, you have watched an arms race. Every new model is bigger, has more per-subject parameters, and claims a couple more points on retrieval accuracy. The state of the art could reconstruct strikingly good images — at the cost of training a roughly GPT-2-sized network <em>per subject</em>, usually on 30+ hours of carefully collected scan data.</p>
+
+    <p>VoxelFormer is my co-authors' attempt to ask whether the arms race is, technically, necessary.</p>
+
+    <h2>The idea, smaller than it looks</h2>
+
+    <p>Standard pipelines treat fMRI decoding as a per-subject adapter problem. Voxels for subject A are a fixed vector of some length <em>N_A</em>; a big neural network maps it into CLIP space; retrieve images from there. Voxels for subject B are a different fixed vector of length <em>N_B</em>; you need a different adapter.</p>
+
+    <p>The pattern should be familiar from our <a href="07-subject-agnostic-transformer.html">subject-agnostic transformer</a>. Stop treating the input as a fixed-shape vector. Treat it as a <em>set</em>. Each voxel is a token, each token has a positional embedding (MNI coordinates + ROI identity), the transformer eats sets natively, and a single shared model handles everyone.</p>
+
+    <div class="widget-lab reveal">
+      <div class="lab-title">Interactive · fewer subjects ≠ worse retrieval</div>
+      <div class="lab-canvas">
+        <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" id="lab8svg">
+          <g transform="translate(40,30)">
+            <line x1="0" y1="180" x2="560" y2="180" stroke="#1b1b1a"/>
+            <line x1="0" y1="0" x2="0" y2="180" stroke="#1b1b1a"/>
+            <text x="0" y="-10" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">top-1 retrieval accuracy →</text>
+            <text x="460" y="198" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">scan hours per subject →</text>
+
+            <!-- axes labels -->
+            <g font-family="IBM Plex Mono, monospace" font-size="9" fill="#5a564e">
+              <text x="-5" y="185">0</text><text x="-10" y="100">0.5</text><text x="-10" y="15">1.0</text>
+              <text x="-8" y="195">1h</text><text x="130" y="195">8h</text><text x="260" y="195">16h</text><text x="390" y="195">24h</text><text x="520" y="195">30h</text>
+            </g>
+
+            <!-- curves -->
+            <path id="adpCurve" d="" stroke="#234e70" stroke-width="2" fill="none"/>
+            <path id="vfCurve" d="" stroke="#b43a2a" stroke-width="2" fill="none"/>
+
+            <!-- cursor -->
+            <line id="hCursor" x1="130" y1="0" x2="130" y2="180" stroke="#1b1b1a" stroke-dasharray="3 3" opacity=".5"/>
+
+            <!-- legend -->
+            <g transform="translate(380,10)" font-family="IBM Plex Mono, monospace" font-size="9">
+              <rect x="0" y="0" width="10" height="3" fill="#234e70"/><text x="14" y="5" fill="#234e70">per-subject adapter</text>
+              <rect x="0" y="14" width="10" height="3" fill="#b43a2a"/><text x="14" y="19" fill="#b43a2a">VoxelFormer (shared)</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="lab-controls">
+        <div id="slHours" data-widget="slider" data-min="1" data-max="30" data-step="1" data-value="8" data-label="scan hours per subject" data-unit="h"></div>
+      </div>
+      <div class="lab-readout" id="lab8read">Move the slider. Note where the red curve stabilises — that is the regime where pooling pays the most.</div>
+      <div class="lab-caption">Simulated retrieval performance · shape matches paper's Tab. 2</div>
+    </div>
+
+    <h2>Why this is a real gain, not a smaller-model stunt</h2>
+
+    <p>The headline number in the paper — competitive retrieval, ~30× fewer parameters — could easily sound like a compression result. It isn't. The interesting property is not that the model is small; it's that the model is <em>shared</em>. Three consequences follow that compression alone would not buy:</p>
+
+    <ol>
+      <li><strong>Data from subject A helps subject B.</strong> A pooled model internalises generalities — visual cortex organisation, retinotopy, category-selective regions — that no single-subject adapter can learn. Adding more subjects improves everyone's decode.</li>
+      <li><strong>New subjects need less calibration.</strong> With 1–2 hours of scan, a new subject's retrieval is already usable. The per-subject pipeline would need 10× that.</li>
+      <li><strong>The model is portable across scanners.</strong> Because coordinates are an explicit input, a subject scanned in a different protocol with different TR and slightly different coverage is still in-distribution.</li>
+    </ol>
+
+    <blockquote>Pooling is not a compression trick. It is the thing that makes visual decoding feasible for people who have access to one hour of 7T time, not one month. That is most labs, most patients, most of the future.</blockquote>
+
+    <h2>What we had to be careful about</h2>
+
+    <p>The cross-subject generalisation is not free. Three failure modes we had to engineer around:</p>
+
+    <p><strong>Category bias.</strong> The NSD dataset, like most fMRI visual datasets, is unevenly distributed across image categories. A pooled model will happily overfit the categories that dominate — faces, indoor scenes — and underperform on the rare ones. We added a class-balanced contrastive loss; it cost a little absolute accuracy and bought a lot of calibration.</p>
+
+    <p><strong>Subject leakage.</strong> A transformer trained on many subjects can, in principle, learn a subject-recognition shortcut from voxel statistics alone. We tested for this carefully: a classifier trained to predict subject identity from VoxelFormer's internal representations only reaches chance+3%, which is reassuring. We didn't expect it to reach chance; a shared voxel-space model that is completely subject-invariant is probably not decoding anything useful.</p>
+
+    <p><strong>Anatomical variability.</strong> MNI coordinates are a shared space in principle, but individual cortex is folded differently. We projected each subject's voxels onto a common surface mesh before tokenising. That cost a week of preprocessing and paid for itself several times over.</p>
+
+    <h2>What I wish we had done differently</h2>
+
+    <p>We did not, in this paper, do the obvious thing: train VoxelFormer on <em>all</em> the public fMRI visual datasets at once. We trained on NSD. The "pooling across datasets" experiment is in the roadmap and, if it works, I expect the next paper after this one to dissolve the last major single-dataset assumption in fMRI visual decoding. If you are reading this in 2026 and someone has done it, they probably did a better job than we would have.</p>
+
+    <p>I did not lead this work — Chenqian did, and did it beautifully. What I contributed was the transformer-of-sets framing, inherited from the ECoG paper, and the dogged insistence that "parameter-efficient" is not a headline on its own; it has to change what experiments are possible. That insistence got the paper written, I think, in a usefully different shape than it otherwise might have been.</p>
+
+  </article>
+
+  <div class="article-foot">
+    <span><a href="index.html">← all fun papers</a></span>
+    <span>Next: <a href="09-speech-arrest.html">09 Speech Arrest →</a></span>
+  </div>
+</div>
+
+<script src="paper.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const adpCurve = document.getElementById('adpCurve');
+  const vfCurve = document.getElementById('vfCurve');
+  const cursor = document.getElementById('hCursor');
+  const read = document.getElementById('lab8read');
+
+  const W = 560, H = 180;
+  // adapter: sigmoid saturating at ~0.85 only around 24h
+  // voxelformer: sigmoid saturating at ~0.80 but by 4h
+  function buildCurve(fn){
+    const pts = [];
+    for(let i=0;i<=120;i++){
+      const h = 1 + i/120*29;
+      const y = fn(h);
+      const x = (h-1)/29 * W;
+      pts.push([x, H - y*H]);
+    }
+    return 'M' + pts.map(p=>p.join(' ')).join(' L ');
+  }
+  adpCurve.setAttribute('d', buildCurve(h => Math.max(0, 0.85/(1+Math.exp(-(h-14)/3.5)))));
+  vfCurve.setAttribute('d', buildCurve(h => 0.82/(1+Math.exp(-(h-2)/0.8))));
+
+  FP.bindSlider('slHours', h=>{
+    const x = (h-1)/29*W;
+    cursor.setAttribute('x1', x);
+    cursor.setAttribute('x2', x);
+    const adp = Math.max(0, 0.85/(1+Math.exp(-(h-14)/3.5)));
+    const vf = 0.82/(1+Math.exp(-(h-2)/0.8));
+    let msg;
+    if(h < 4){
+      msg = `<strong>At ${h}h per subject,</strong> the per-subject adapter gets ${adp.toFixed(2)} retrieval — basically not working. VoxelFormer reaches ${vf.toFixed(2)}. This is the regime pooling was built for.`;
+    } else if(h > 20){
+      msg = `<strong>At ${h}h per subject,</strong> both approaches are close (adapter ${adp.toFixed(2)}, VoxelFormer ${vf.toFixed(2)}). If you have unlimited scanner time, per-subject still wins slightly. But who has unlimited scanner time.`;
+    } else {
+      msg = `<strong>At ${h}h per subject,</strong> VoxelFormer (${vf.toFixed(2)}) outperforms the per-subject adapter (${adp.toFixed(2)}) with ~30× fewer parameters. This is the realistic lab regime.`;
+    }
+    read.innerHTML = msg;
+  });
+});
+</script>
+</body>
+</html>

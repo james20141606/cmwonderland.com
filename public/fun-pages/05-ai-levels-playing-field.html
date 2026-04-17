@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>When AI Levels the Playing Field · Fun Papers 05</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<div class="wrap">
+  <nav class="crumb">
+    <a href="index.html">← Fun Papers</a>
+    <span>Paper 05 of 12</span>
+  </nav>
+
+  <header class="head">
+    <div class="kicker"><span>arXiv · cs.LG · 2603.05565</span><span class="bar"></span><span>11 min read</span></div>
+    <h1>When AI levels the playing field, <em>and then tilts it the other way.</em></h1>
+    <div class="dek">Skill homogenization compresses what labor can charge for. Asset concentration does the opposite. Between those two forces there are exactly two stable regimes, and we live in one of them, and the regime you land in depends on who owns the compute.</div>
+    <div class="byline">
+      <span>Chen · Meng</span>
+      <span>NYU · March 2026</span>
+    </div>
+  </header>
+
+  <figure class="hero-fig">
+    <svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="skillA" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#234e70" stop-opacity=".5"/><stop offset="1" stop-color="#234e70" stop-opacity=".05"/></linearGradient>
+        <linearGradient id="skillB" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#b43a2a" stop-opacity=".85"/><stop offset="1" stop-color="#b43a2a" stop-opacity=".05"/></linearGradient>
+      </defs>
+
+      <g transform="translate(60,40)">
+        <!-- axes -->
+        <line x1="0" y1="240" x2="680" y2="240" stroke="#1b1b1a"/>
+        <line x1="0" y1="0" x2="0" y2="240" stroke="#1b1b1a"/>
+        <text x="0" y="-10" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">density of workers at each skill level →</text>
+        <text x="540" y="258" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">skill level (low → high) →</text>
+
+        <!-- before curve: wide distribution -->
+        <path d="M10 240 C 120 240, 180 80, 340 80 C 500 80, 560 240, 670 240 Z" fill="url(#skillA)"/>
+        <path class="svg-trace" d="M10 240 C 120 240, 180 80, 340 80 C 500 80, 560 240, 670 240" stroke="#234e70" stroke-width="1.6" fill="none" opacity=".7"/>
+
+        <!-- after curve: narrow and tall -->
+        <path d="M10 240 C 260 240, 300 20, 340 20 C 380 20, 420 240, 670 240 Z" fill="url(#skillB)"/>
+        <path class="svg-trace" d="M10 240 C 260 240, 300 20, 340 20 C 380 20, 420 240, 670 240" stroke="#b43a2a" stroke-width="2" fill="none"/>
+
+        <!-- capital vertical bar -->
+        <g>
+          <line x1="620" y1="60" x2="620" y2="240" stroke="#6b6a2e" stroke-dasharray="4 3" stroke-width="1.2"/>
+          <text x="560" y="52" font-family="Fraunces, serif" font-style="italic" font-size="13" fill="#6b6a2e">capital takes it all →</text>
+        </g>
+
+        <!-- legend -->
+        <g transform="translate(400,10)" font-family="IBM Plex Mono, monospace" font-size="10">
+          <rect x="0" y="0" width="14" height="3" fill="#234e70" opacity=".5"/>
+          <text x="18" y="5" fill="#234e70">before AI · wide skill dispersion</text>
+          <rect x="0" y="18" width="14" height="3" fill="#b43a2a"/>
+          <text x="18" y="23" fill="#b43a2a">after AI · homogenised around competence</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption>Fig. 1 — Two distributions. Two very different Gini coefficients. Same economy.</figcaption>
+  </figure>
+
+  <article class="prose">
+
+    <p>There is a story the optimists tell about AI that I <em>want</em> to believe. It goes like this: a model you can talk to in plain English closes the gap between the median worker and the expert. The bookkeeper becomes a controller. The junior lawyer becomes a senior-ish associate. Skill differentials compress, competence spreads, and the labor market gets kinder.</p>
+
+    <p>This paper is Shuchen's and my attempt to be honest about why that story, although not wrong, is not the story.</p>
+
+    <h2>The two regimes</h2>
+
+    <p>The argument has two moving parts, and they point in opposite directions.</p>
+
+    <p><strong>Skill homogenization is real and deflationary.</strong> When a model can turn anyone into a passable whatever-you-need, the wage premium a senior whatever could charge last year shrinks. We can write this as a compression of the labor-return distribution. It looks, on a histogram, like the old wide bell crunching into a tall narrow one. That is the part the optimists see.</p>
+
+    <p><strong>Asset concentration is also real and the other direction.</strong> The compute that runs those models, the datasets that feed them, the infrastructure that serves them — these are not skills; they are <em>assets</em>. They accrue to whoever already owns them, at a rate set by how productive the AI layer gets. That is the part the optimists don't like to stare at.</p>
+
+    <blockquote>The question is not whether AI equalises people. The question is whether the equalisation of <em>people</em> is outpaced by the concentration of <em>things</em>. If yes, inequality rises despite labor compressing. If no, inequality falls.</blockquote>
+
+    <div class="widget-lab reveal">
+      <div class="lab-title">Interactive · try both regimes</div>
+      <div class="lab-canvas">
+        <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" id="lab5svg">
+          <g transform="translate(40,30)">
+            <line x1="0" y1="180" x2="560" y2="180" stroke="#1b1b1a"/>
+            <line x1="0" y1="0" x2="0" y2="180" stroke="#1b1b1a"/>
+            <text x="0" y="-10" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">share of income →</text>
+            <text x="420" y="198" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">population percentile →</text>
+
+            <!-- Lorenz curve (interactive) -->
+            <path id="lorenz" d="M0 180 L 560 180" stroke="#b43a2a" stroke-width="2" fill="none"/>
+            <!-- diagonal = perfect equality -->
+            <line x1="0" y1="180" x2="560" y2="0" stroke="#1b1b1a" stroke-dasharray="3 3" opacity=".4"/>
+            <!-- fill -->
+            <path id="lorenzFill" d="M0 180 L 560 180 L 560 0 Z" fill="#b43a2a" opacity=".08"/>
+            <text x="220" y="40" font-family="Fraunces, serif" font-style="italic" font-size="14" fill="#234e70">equality</text>
+            <text x="420" y="165" id="giniLabel" font-family="IBM Plex Mono, monospace" font-size="11" fill="#b43a2a">Gini = 0.40</text>
+          </g>
+        </svg>
+      </div>
+      <div class="lab-controls">
+        <div id="slSkill" data-widget="slider" data-min="0" data-max="1" data-step="0.01" data-value="0.2" data-label="skill homogenization (s)" data-unit=""></div>
+        <div id="slAsset" data-widget="slider" data-min="0" data-max="1" data-step="0.01" data-value="0.4" data-label="asset concentration (α)" data-unit=""></div>
+      </div>
+      <div class="lab-readout" id="lab5read">Drag the two sliders. The Lorenz curve — and the Gini with it — will move. Which regime wins depends on whose effect you make larger.</div>
+      <div class="lab-caption">Lorenz curve model · G ≈ α − 0.45s · a crude but directionally correct sketch</div>
+    </div>
+
+    <h2>A small theorem</h2>
+
+    <p>We formalise both channels in a simple model of a two-sided economy — labor on one side, assets on the other, with AI as a productivity parameter that affects both. The model has two fixed points. In one, labor has bargaining power and the skill-compression channel dominates. In the other, asset returns swamp labor returns and capital-holders capture the surplus.</p>
+
+    <p>The result we are most proud of is an <em>analytic</em> condition for which fixed point wins. It depends on three things: the pre-AI skill dispersion, the elasticity of the AI-complement assets, and the speed at which professions retool. When retooling is fast and assets are substitutable, the pleasant regime holds. When retooling is slow and assets are scarce, it doesn't.</p>
+
+    <div class="stats">
+      <div><div class="num">s ≈ 0.6</div><div class="lbl">Labor compression</div></div>
+      <div><div class="num">α ≈ 0.75</div><div class="lbl">Asset concentration</div></div>
+      <div><div class="num">2</div><div class="lbl">Stable regimes</div></div>
+    </div>
+
+    <h2>What the data says, carefully</h2>
+
+    <p>We fit the model to occupation-level wage data from 2018–2025, and the patterns are legible but not dramatic: white-collar occupations with high AI exposure show compression in the 70-to-90th percentile; occupations with low exposure show the old dispersion; and across the whole economy, the asset side has already moved much faster than the labor side. We are not claiming a headline number. We are claiming a direction, and the direction is not the optimistic one.</p>
+
+    <figure class="fig">
+      <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(50,30)">
+          <text x="0" y="0" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">GINI CHANGE BY SECTOR · 2018 vs 2025</text>
+          <g font-family="Fraunces, serif" font-size="12">
+            <g transform="translate(0,20)">
+              <text x="0" y="14" fill="#1b1b1a">Legal services</text>
+              <rect x="140" y="4" width="300" height="12" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
+              <rect x="290" y="4" width="40" height="12" fill="#b43a2a"/>
+              <text x="480" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#b43a2a">+0.032</text>
+            </g>
+            <g transform="translate(0,40)">
+              <text x="0" y="14" fill="#1b1b1a">Finance (front-office)</text>
+              <rect x="140" y="4" width="300" height="12" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
+              <rect x="290" y="4" width="80" height="12" fill="#b43a2a"/>
+              <text x="480" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#b43a2a">+0.061</text>
+            </g>
+            <g transform="translate(0,60)">
+              <text x="0" y="14" fill="#1b1b1a">Software eng. (IC)</text>
+              <rect x="140" y="4" width="300" height="12" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
+              <rect x="210" y="4" width="80" height="12" fill="#234e70" opacity=".6"/>
+              <text x="480" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#234e70">−0.028</text>
+            </g>
+            <g transform="translate(0,80)">
+              <text x="0" y="14" fill="#1b1b1a">Graphic design</text>
+              <rect x="140" y="4" width="300" height="12" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
+              <rect x="220" y="4" width="70" height="12" fill="#234e70" opacity=".6"/>
+              <text x="480" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#234e70">−0.043</text>
+            </g>
+            <g transform="translate(0,100)">
+              <text x="0" y="14" fill="#1b1b1a">Compute-holding firms</text>
+              <rect x="140" y="4" width="300" height="12" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
+              <rect x="290" y="4" width="140" height="12" fill="#b43a2a"/>
+              <text x="480" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#b43a2a">+0.108</text>
+            </g>
+          </g>
+          <line x1="290" y1="14" x2="290" y2="120" stroke="#1b1b1a" stroke-dasharray="2 2" opacity=".4"/>
+          <text x="250" y="135" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5a564e">← compression │ concentration →</text>
+        </g>
+      </svg>
+      <div class="cap"><strong>Fig. 2 —</strong> Labor-side sectors compress. Asset-side sectors concentrate. Net direction depends on aggregation weights.</div>
+    </figure>
+
+    <h2>What I want this paper to <em>not</em> become</h2>
+
+    <p>Two unhelpful readings I want to head off.</p>
+
+    <p><strong>"So AI is bad."</strong> We don't argue that. We argue that the question "does AI reduce inequality?" is underspecified in a way that gives you the wrong answer in both directions. The right question is always a two-channel question, with regime-dependent sign.</p>
+
+    <p><strong>"So we need to tax compute."</strong> Maybe. That is one of several policies that moves the model toward the pleasant regime. Others include faster retraining credits, portable professional identities, and the thing nobody wants to say out loud — a slower deployment cadence so the labor side has time to move its feet. The paper gives tools, not recommendations. Recommendations are a different kind of writing.</p>
+
+    <blockquote>The best use of the paper, in my private and possibly grandiose hope, is as a conversation-starter you can hand a policymaker who insists on a single-channel story. "Here is the other channel. Model both. Pick regime."</blockquote>
+
+    <h2>Personal note</h2>
+
+    <p>I spent most of 2025 reading macroeconomics. I am not a macroeconomist. I found it strange how politely and patiently that field has been waiting, for a very long time, for someone to ask about a shock exactly the size and shape of this one. The model we wrote is small and careful; the question it asks is neither small nor careful, and I don't know how this story ends. What I can tell you is that the regime is bistable, and the thing that picks the regime is not the technology. It is the institutions around the technology. That is, on net, a hopeful thing to have proven.</p>
+
+  </article>
+
+  <div class="article-foot">
+    <span><a href="index.html">← all fun papers</a></span>
+    <span>Next: <a href="06-distributed-cortical.html">06 Distributed Cortical →</a></span>
+  </div>
+</div>
+
+<script src="paper.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  // Lorenz curve model:
+  //   G = clamp(0.1 + α - 0.45*s, 0, 0.9)
+  //   Lorenz(x) = x^(1/(1-G))
+  const svg = document.getElementById('lab5svg');
+  const path = document.getElementById('lorenz');
+  const fill = document.getElementById('lorenzFill');
+  const lbl = document.getElementById('giniLabel');
+  const read = document.getElementById('lab5read');
+  const W = 560, H = 180;
+  let s = 0.2, a = 0.4;
+
+  function render(){
+    const G = Math.min(0.9, Math.max(0.02, 0.1 + a - 0.45*s));
+    const p = 1/(1-G);
+    // build curve
+    const pts = [];
+    for(let i=0;i<=60;i++){
+      const x = i/60;
+      const y = Math.pow(x, p);
+      pts.push([x*W, H - y*H]);
+    }
+    const d = 'M' + pts.map(p=>p.join(' ')).join(' L ');
+    path.setAttribute('d', d);
+    fill.setAttribute('d', d + ` L ${W} 0 L 0 0 Z`);
+    lbl.textContent = 'Gini = ' + G.toFixed(2);
+
+    // readout
+    let msg;
+    if(G > 0.55){
+      msg = `<strong>Concentration wins.</strong> With high asset share (α=${a.toFixed(2)}) and moderate labor compression (s=${s.toFixed(2)}), inequality rises even as individual workers look more alike. You are in the tilted regime.`;
+    } else if(G < 0.35){
+      msg = `<strong>Compression wins.</strong> Skill homogenization (s=${s.toFixed(2)}) is outpacing asset returns (α=${a.toFixed(2)}). The optimists' story holds. This regime is real; it is also historically rare without policy.`;
+    } else {
+      msg = `<strong>The margin.</strong> At Gini=${G.toFixed(2)} neither channel dominates. Small shocks — a tax, a cost drop, a productivity jump — can flip the regime. This is where institutions do their work.`;
+    }
+    read.innerHTML = msg;
+  }
+  FP.bindSlider('slSkill', v=>{ s=v; render(); });
+  FP.bindSlider('slAsset', v=>{ a=v; render(); });
+  render();
+});
+</script>
+</body>
+</html>

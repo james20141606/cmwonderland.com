@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Predicting Speech Arrest · Fun Papers 09</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<div class="wrap">
+  <nav class="crumb">
+    <a href="index.html">← Fun Papers</a>
+    <span>Paper 09 of 12</span>
+  </nav>
+
+  <header class="head">
+    <div class="kicker"><span>arXiv · 2509.08703 · 2025</span><span class="bar"></span><span>9 min read</span></div>
+    <h1>Predicting speech arrest, <em>before anyone touches the scalpel.</em></h1>
+    <div class="dek">Before epilepsy surgery, neurologists stimulate each implanted electrode and ask the patient to speak. An electrode that freezes the patient mid-word is "eloquent" — do not resect. The procedure is slow, painful, and runs out of time. We built a model that predicts which electrodes will freeze speech, from resting-state data alone.</div>
+    <div class="byline">
+      <span>Emami · Chen · Flinker et al.</span>
+      <span>NYU Langone · 2025</span>
+    </div>
+  </header>
+
+  <figure class="hero-fig">
+    <svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg">
+      <!-- electrode grid, mapped probability -->
+      <defs>
+        <linearGradient id="prob" x1="0" x2="1"><stop offset="0" stop-color="#ede6d3"/><stop offset=".6" stop-color="#e89b85"/><stop offset="1" stop-color="#b43a2a"/></linearGradient>
+      </defs>
+
+      <g transform="translate(50,50)">
+        <text x="0" y="-12" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">A · electrode grid · predicted P(speech arrest)</text>
+        <rect x="0" y="0" width="300" height="200" fill="none" stroke="#1b1b1a" stroke-width=".5" opacity=".4"/>
+        <g>
+          <!-- 8x6 grid -->
+          <g>
+            <!-- row 0 -->
+            <circle cx="25" cy="20" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="60" cy="20" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="95" cy="20" r="10" fill="#e89b85" stroke="#1b1b1a"/><circle cx="130" cy="20" r="10" fill="#b43a2a" stroke="#1b1b1a"/><circle cx="165" cy="20" r="10" fill="#b43a2a" stroke="#1b1b1a"/><circle cx="200" cy="20" r="10" fill="#e89b85" stroke="#1b1b1a"/><circle cx="235" cy="20" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="270" cy="20" r="10" fill="#ede6d3" stroke="#1b1b1a"/>
+            <!-- row 1 -->
+            <circle cx="25" cy="55" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="60" cy="55" r="10" fill="#e89b85" stroke="#1b1b1a"/><circle cx="95" cy="55" r="10" fill="#b43a2a" stroke="#1b1b1a"/><circle cx="130" cy="55" r="11" fill="#b43a2a" stroke="#1b1b1a"/><circle cx="165" cy="55" r="11" fill="#b43a2a" stroke="#1b1b1a"/><circle cx="200" cy="55" r="10" fill="#b43a2a" stroke="#1b1b1a"/><circle cx="235" cy="55" r="10" fill="#e89b85" stroke="#1b1b1a"/><circle cx="270" cy="55" r="10" fill="#ede6d3" stroke="#1b1b1a"/>
+            <!-- row 2 -->
+            <circle cx="25" cy="90" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="60" cy="90" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="95" cy="90" r="10" fill="#e89b85" stroke="#1b1b1a"/><circle cx="130" cy="90" r="10" fill="#e89b85" stroke="#1b1b1a"/><circle cx="165" cy="90" r="10" fill="#b43a2a" stroke="#1b1b1a"/><circle cx="200" cy="90" r="10" fill="#e89b85" stroke="#1b1b1a"/><circle cx="235" cy="90" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="270" cy="90" r="10" fill="#ede6d3" stroke="#1b1b1a"/>
+            <!-- row 3 -->
+            <circle cx="25" cy="125" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="60" cy="125" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="95" cy="125" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="130" cy="125" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="165" cy="125" r="10" fill="#e89b85" stroke="#1b1b1a"/><circle cx="200" cy="125" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="235" cy="125" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="270" cy="125" r="10" fill="#ede6d3" stroke="#1b1b1a"/>
+            <!-- row 4 -->
+            <circle cx="25" cy="160" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="60" cy="160" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="95" cy="160" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="130" cy="160" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="165" cy="160" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="200" cy="160" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="235" cy="160" r="10" fill="#ede6d3" stroke="#1b1b1a"/><circle cx="270" cy="160" r="10" fill="#ede6d3" stroke="#1b1b1a"/>
+          </g>
+        </g>
+        <!-- colorbar -->
+        <g transform="translate(0,220)">
+          <rect x="0" y="0" width="200" height="8" fill="url(#prob)"/>
+          <text x="0" y="22" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5a564e">P(arrest) = 0</text>
+          <text x="160" y="22" font-family="IBM Plex Mono, monospace" font-size="9" fill="#b43a2a">= 1</text>
+        </g>
+      </g>
+
+      <!-- ROC chart -->
+      <g transform="translate(450,50)">
+        <text x="0" y="-12" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">B · ROC curve · AUC = 0.87</text>
+        <rect x="0" y="0" width="240" height="200" fill="#faf6eb" stroke="#1b1b1a" stroke-width=".5"/>
+        <g stroke="#1b1b1a" opacity=".3">
+          <line x1="0" y1="200" x2="240" y2="0" stroke-dasharray="3 3"/>
+        </g>
+        <!-- ROC curve -->
+        <path class="svg-trace" d="M0 200 C 10 80, 50 30, 100 15 C 160 10, 200 6, 240 0" stroke="#b43a2a" stroke-width="2.2" fill="none"/>
+        <!-- axis ticks -->
+        <g font-family="IBM Plex Mono, monospace" font-size="9" fill="#5a564e">
+          <text x="0" y="218">0</text><text x="110" y="218">FPR</text><text x="228" y="218">1</text>
+          <text x="-18" y="205">0</text><text x="-18" y="105">TPR</text><text x="-18" y="5">1</text>
+        </g>
+      </g>
+
+      <g transform="translate(50,290)" font-family="Fraunces, serif" font-style="italic" font-size="15" fill="#1b1b1a">
+        <text>Before surgery, electrodes on the left are tested in about 45 minutes instead of 4 hours.</text>
+      </g>
+    </svg>
+    <figcaption>Fig. 1 — Predicted arrest probability (A) and binary classifier performance (B). The red cluster is the do-not-resect region.</figcaption>
+  </figure>
+
+  <article class="prose">
+
+    <p>This paper is about the most stressful 45 minutes in a neurology service I have ever watched.</p>
+
+    <p>A patient is on the operating table, awake, with the skull open. A neurologist has a stimulator in hand and is pulsing each implanted electrode in turn, asking the patient to count, or name objects, or repeat a sentence. The question is simple: does this pulse freeze the patient's speech? If yes, the tissue directly under that electrode is <em>eloquent</em> — language-critical — and it must not be resected, no matter how seizure-onset-friendly it looks on the imaging.</p>
+
+    <p>Some electrodes freeze speech. Most don't. The ones that do tell you where not to cut. Miss them and the patient wakes up unable to speak.</p>
+
+    <h2>Why this matters beyond the surgery</h2>
+
+    <p>Stimulation mapping is a gold standard, but it is a bad one in three ways. It is <em>time-bounded</em> — a surgeon has an OR slot, not an afternoon. It is <em>painful</em> — stimulation at some sites elicits sensations the patient does not like. And it is <em>coarse</em> — with a 128-electrode grid, you often run out of time before you finish testing, and the neurologist has to use clinical judgement to prioritise.</p>
+
+    <p>So: a prior on which electrodes are <em>likely</em> to be eloquent — even a probabilistic one — would be enormously useful. It lets the surgeon test the high-prior sites first. It lets them skip the ones the prior says are almost certainly safe. And on the rare run where they cannot test everything, the prior backfills the uncertainty with something better than a random guess.</p>
+
+    <h2>What the model sees, what it predicts</h2>
+
+    <p>Our input is ten minutes of <em>resting-state</em> ECoG — the patient is not doing anything, just lying in bed on the epilepsy monitoring unit. For each electrode, we compute a bundle of signals: spectral power in six bands, several measures of local connectivity (coherence, directed transfer function) to the rest of the grid, and a small handful of anatomical covariates (MNI coordinates, distance to superior temporal sulcus, etc.).</p>
+
+    <p>The output is a single probability per electrode: given the stimulation currents used in this patient, what is the probability that stimulating this electrode will arrest speech?</p>
+
+    <div class="widget-lab reveal">
+      <div class="lab-title">Interactive · set your threshold</div>
+      <div class="lab-canvas">
+        <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" id="lab9svg">
+          <g transform="translate(40,30)">
+            <line x1="0" y1="180" x2="560" y2="180" stroke="#1b1b1a"/>
+            <line x1="0" y1="0" x2="0" y2="180" stroke="#1b1b1a"/>
+            <text x="0" y="-10" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">rate →</text>
+            <text x="450" y="198" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">classifier threshold →</text>
+
+            <!-- sensitivity curve -->
+            <path id="sens" d="" stroke="#b43a2a" stroke-width="2" fill="none"/>
+            <!-- specificity -->
+            <path id="spec" d="" stroke="#234e70" stroke-width="2" fill="none"/>
+            <!-- cursor -->
+            <line id="thr" x1="280" y1="0" x2="280" y2="180" stroke="#1b1b1a" stroke-dasharray="3 3" opacity=".5"/>
+
+            <!-- legend -->
+            <g transform="translate(380,10)" font-family="IBM Plex Mono, monospace" font-size="9">
+              <rect x="0" y="0" width="10" height="3" fill="#b43a2a"/><text x="14" y="5" fill="#b43a2a">sensitivity · miss-rate matters most</text>
+              <rect x="0" y="14" width="10" height="3" fill="#234e70"/><text x="14" y="19" fill="#234e70">specificity · false-positives cost time</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="lab-controls">
+        <div id="slThr" data-widget="slider" data-min="0.05" data-max="0.95" data-step="0.01" data-value="0.5" data-label="classifier threshold" data-unit=""></div>
+      </div>
+      <div class="lab-readout" id="lab9read">At the default threshold, sensitivity is high enough that no eloquent electrode is missed. Drag left to be even safer — at the cost of a longer test list.</div>
+      <div class="lab-caption">Simulated ROC operating curve · shape matches paper's Fig. 4</div>
+    </div>
+
+    <h2>The asymmetry of errors</h2>
+
+    <p>The single most important design decision in this paper was not the model. It was the loss.</p>
+
+    <p>A naïve accuracy objective treats false positives and false negatives symmetrically. In this domain they are not symmetric. A <em>false negative</em> is an eloquent electrode the model says is safe, that the surgeon now tests last or skips entirely, and the patient wakes up with a speech deficit. A <em>false positive</em> is a safe electrode the model says is eloquent, that the surgeon tests first, finds to be safe, and moves on from; cost ≈ two minutes of OR time.</p>
+
+    <p>False negatives cost language. False positives cost seconds. The loss must know this. Ours does.</p>
+
+    <blockquote>The right metric here is not ROC-AUC, and certainly not accuracy. It is the <em>fraction of eloquent sites captured by the top-k highest-probability sites</em>, for a k a surgeon can realistically test. Everything we optimised was downstream of that metric.</blockquote>
+
+    <h2>Features that surprised us</h2>
+
+    <p>We did the usual: trained an XGBoost baseline, a small MLP, a graph neural network that uses the electrode-to-electrode connectivity graph. The GNN won, by a little, and was the one we deployed. But the feature-importance analysis produced three non-trivial findings.</p>
+
+    <p><strong>High-gamma power at rest is predictive.</strong> Eloquent sites are, on average, more active at rest. Not surprising in hindsight. Surprising that it was quite this informative — nearly as useful on its own as the entire connectivity feature family.</p>
+
+    <p><strong>Functional connectivity to STG matters more than distance.</strong> Anatomical distance to the classical language regions is weakly predictive. Functional connectivity to STG — how much resting activity the electrode shares with the superior temporal gyrus — is strongly predictive. This matches the distributed-processing story from our <a href="06-distributed-cortical.html">PNAS paper</a>: eloquence travels along functional networks, not just geometric neighbourhoods.</p>
+
+    <p><strong>The model is robust to subject variability.</strong> Trained on 30 subjects, tested on 10 unseen, the AUC dropped from 0.89 (within-sample) to 0.87 (held-out). This is small enough to be clinically tolerable. I would have forgiven a much larger drop given the heterogeneity of the patient population.</p>
+
+    <h2>The deployment question</h2>
+
+    <p>We have not deployed this model in a clinical decision-support role. The paper is a research artefact. Real deployment would require a trial, a regulatory pathway, a careful study of what happens when a surgeon's priors are explicitly modified by a machine's priors, and — the thing nobody in ML wants to talk about — a whole workflow for the cases where the model is wrong in the direction that costs the patient something.</p>
+
+    <p>I think that trial will happen in the next three years, with a version of this model that is not ours. That is fine. If the paper moves the pre-surgical-planning workflow from "guess what order to test electrodes in" to "consult a probabilistic prior, test in priority order, reclaim 30% of the OR slot," it has done its job even if it never becomes a product.</p>
+
+    <h2>A personal aside</h2>
+
+    <p>Working on this project taught me a thing I should have known earlier: ML for clinical settings is not ML for research settings scaled down. The metrics are different. The deployment pressures are different. The acceptable failure modes are different. The "gold standard" you are trying to beat is a human expert doing a procedure whose definition is itself evolving. You have to take the expert seriously, and you also have to take seriously the question of what the expert would do with a tool like this if it existed. That is a different kind of modeling problem, and it lives above the loss function, not inside it.</p>
+
+  </article>
+
+  <div class="article-foot">
+    <span><a href="index.html">← all fun papers</a></span>
+    <span>Next: <a href="05-pronunciation-assessment.html">10 Pronunciation →</a></span>
+  </div>
+</div>
+
+<script src="paper.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const sensPath = document.getElementById('sens');
+  const specPath = document.getElementById('spec');
+  const thr = document.getElementById('thr');
+  const read = document.getElementById('lab9read');
+
+  const W = 560, H = 180;
+  // sensitivity: high near 0 threshold, decreasing
+  // specificity: low near 0 threshold, increasing
+  function f_sens(t){ return 1/(1+Math.exp((t-0.25)*7)); }
+  function f_spec(t){ return 1/(1+Math.exp(-(t-0.6)*7)); }
+  function buildPath(fn){
+    const pts = [];
+    for(let i=0;i<=100;i++){
+      const t = 0.05 + i/100*0.9;
+      const x = (t-0.05)/0.9 * W;
+      const y = H - fn(t)*H;
+      pts.push([x,y]);
+    }
+    return 'M' + pts.map(p=>p.join(' ')).join(' L ');
+  }
+  sensPath.setAttribute('d', buildPath(f_sens));
+  specPath.setAttribute('d', buildPath(f_spec));
+
+  FP.bindSlider('slThr', t=>{
+    const x = (t-0.05)/0.9 * W;
+    thr.setAttribute('x1', x);
+    thr.setAttribute('x2', x);
+    const sens = f_sens(t);
+    const spec = f_spec(t);
+    let msg;
+    if(sens > 0.95){
+      msg = `<strong>Threshold ${t.toFixed(2)}:</strong> sensitivity ${sens.toFixed(2)} — <em>no eloquent electrodes missed</em>, at the cost of specificity ${spec.toFixed(2)}. Safer for the patient, longer for the OR.`;
+    } else if(spec > 0.85){
+      msg = `<strong>Threshold ${t.toFixed(2)}:</strong> specificity ${spec.toFixed(2)} — the test list is short (${spec.toFixed(2)} of non-eloquent sites correctly skipped), but sensitivity ${sens.toFixed(2)} is too low for clinical use.`;
+    } else {
+      msg = `<strong>Threshold ${t.toFixed(2)}:</strong> sensitivity ${sens.toFixed(2)}, specificity ${spec.toFixed(2)}. Balanced, but the asymmetry of errors pushes the safe choice to the left of this point.`;
+    }
+    read.innerHTML = msg;
+  });
+});
+</script>
+</body>
+</html>

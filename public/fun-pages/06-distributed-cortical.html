@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Distributed Feedforward & Feedback Cortical Processing · Fun Papers 06</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<div class="wrap">
+  <nav class="crumb">
+    <a href="index.html">← Fun Papers</a>
+    <span>Paper 06 of 12</span>
+  </nav>
+
+  <header class="head">
+    <div class="kicker"><span>PNAS · 2023</span><span class="bar"></span><span>13 min read</span></div>
+    <h1>Distributed feedforward &amp; feedback, <em>or: how the brain talks to itself while it talks.</em></h1>
+    <div class="dek">Speech production, in textbooks, is a little assembly line: an idea, a plan, a motor command, a mouth. The cortex appears not to have read the textbook. We built a causal analysis, and we watched feedforward and feedback fire in the same windows, in the same regions, every word.</div>
+    <div class="byline">
+      <span>Chen · Wang · Flinker et al.</span>
+      <span>NYU · PNAS 2023</span>
+    </div>
+  </header>
+
+  <figure class="hero-fig">
+    <svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg">
+      <!-- two brains side by side showing directional edges -->
+      <g transform="translate(50,60)">
+        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">A · feedforward (motor → auditory)</text>
+        <path d="M40 160 C 10 130, 15 70, 60 40 C 120 10, 200 25, 230 70 C 260 110, 230 160, 170 168 C 130 180, 70 175, 40 160 Z"
+              fill="#f5eadd" stroke="#1b1b1a" stroke-width="1.2"/>
+        <!-- regions -->
+        <circle cx="85" cy="90" r="12" fill="#b43a2a" opacity=".8"/>
+        <text x="85" y="94" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#f5f1e8">IFG</text>
+        <circle cx="180" cy="115" r="12" fill="#234e70" opacity=".7"/>
+        <text x="180" y="119" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#f5f1e8">STG</text>
+        <circle cx="135" cy="75" r="12" fill="#6b6a2e" opacity=".8"/>
+        <text x="135" y="79" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#f5f1e8">preCG</text>
+        <!-- arrows -->
+        <g stroke="#b43a2a" stroke-width="1.8" fill="none">
+          <path class="svg-trace" d="M85 90 C 110 85, 125 80, 135 75"/>
+          <path class="svg-trace" d="M135 75 C 155 85, 170 100, 180 115"/>
+        </g>
+      </g>
+
+      <g transform="translate(450,60)">
+        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">B · feedback (auditory → motor) · simultaneous</text>
+        <path d="M40 160 C 10 130, 15 70, 60 40 C 120 10, 200 25, 230 70 C 260 110, 230 160, 170 168 C 130 180, 70 175, 40 160 Z"
+              fill="#f5eadd" stroke="#1b1b1a" stroke-width="1.2"/>
+        <circle cx="85" cy="90" r="12" fill="#b43a2a" opacity=".8"/>
+        <text x="85" y="94" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#f5f1e8">IFG</text>
+        <circle cx="180" cy="115" r="12" fill="#234e70" opacity=".7"/>
+        <text x="180" y="119" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#f5f1e8">STG</text>
+        <circle cx="135" cy="75" r="12" fill="#6b6a2e" opacity=".8"/>
+        <text x="135" y="79" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#f5f1e8">preCG</text>
+        <g stroke="#234e70" stroke-width="1.8" stroke-dasharray="4 3" fill="none">
+          <path class="svg-trace" d="M180 115 C 160 105, 150 95, 135 85"/>
+          <path class="svg-trace" d="M135 85 C 110 85, 95 90, 85 94"/>
+        </g>
+      </g>
+      <text x="400" y="330" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-size="15" fill="#1b1b1a">both graphs live in the same 300ms window, in the same cortex, every syllable.</text>
+    </svg>
+    <figcaption>Fig. 1 — Simultaneous feedforward and feedback during speech production. Neither is the "real" direction — both are.</figcaption>
+  </figure>
+
+  <article class="prose">
+
+    <p>The textbook picture of speech production looks like a pipeline. Brocastarts the plan, the motor cortex sends the command, the mouth makes the sound, and the auditory cortex — somewhat passively — listens in to check that nothing went wrong. It is a clean picture. It is also, mostly, fiction. This paper is about how fictional it is, and what you have to do with it to fit the data.</p>
+
+    <p>The short version: speech production is not a pipeline. It is two circles drawn on top of each other.</p>
+
+    <h2>What we measured, and why ECoG</h2>
+
+    <p>We had intracranial electrocorticography (ECoG) from a set of patients undergoing clinical monitoring at NYU Langone. ECoG is the only technique I know that lets you measure <em>millisecond-resolution</em> activity from dozens of cortical sites at once, in a person who is speaking naturally, in a sentence you can actually parse. fMRI has seconds; scalp EEG has centimeters. ECoG has both axes a neuroscientist wants, at the cost of only being available in people who were going to have a surgery anyway.</p>
+
+    <p>We recorded during a simple paradigm: listen to a word, and then repeat it. The paradigm matters, because it lets us separate the listening signal from the speaking signal and — crucially — look at what happens during the <em>transition</em>.</p>
+
+    <h2>The causal method, in plain language</h2>
+
+    <p>You can't just correlate activity in region A with activity in region B and call it a connection. Correlation is symmetric; information flow is not. The technique we used — Granger-family causal analysis, specifically a non-parametric spectral variant — asks a directional question: does past activity in A help predict future activity in B above and beyond B's own past? If yes, there is directed information from A to B in that frequency band.</p>
+
+    <p>And then the trick, because this is what the paper really hinges on: you do the analysis twice. Once from frontal regions to temporal. Once the other way around. For each time window, for each frequency band, for each pair of electrodes.</p>
+
+    <div class="widget-lab reveal">
+      <div class="lab-title">Interactive · slide the time cursor, watch both flows</div>
+      <div class="lab-canvas">
+        <svg viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg" id="lab6svg">
+          <!-- time axis -->
+          <g transform="translate(40,200)">
+            <line x1="0" y1="0" x2="600" y2="0" stroke="#1b1b1a"/>
+            <g stroke="#1b1b1a" stroke-width=".5"><line x1="150" y1="0" x2="150" y2="5"/><line x1="300" y1="0" x2="300" y2="5"/><line x1="450" y1="0" x2="450" y2="5"/><line x1="600" y1="0" x2="600" y2="5"/></g>
+            <g font-family="IBM Plex Mono, monospace" font-size="10" fill="#5a564e">
+              <text x="-4" y="18">-300</text><text x="146" y="18">-150</text><text x="296" y="18">0</text><text x="446" y="18">150</text><text x="596" y="18">300</text>
+            </g>
+            <text x="294" y="-8" font-family="IBM Plex Mono, monospace" font-size="9" fill="#b43a2a">speech onset</text>
+          </g>
+          <!-- feedforward trace -->
+          <g transform="translate(40,40)">
+            <text x="0" y="-4" font-family="IBM Plex Mono, monospace" font-size="9" fill="#b43a2a">FEEDFORWARD ·  IFG → STG</text>
+            <path id="ffPath" d="" stroke="#b43a2a" stroke-width="1.8" fill="none"/>
+          </g>
+          <!-- feedback trace -->
+          <g transform="translate(40,115)">
+            <text x="0" y="-4" font-family="IBM Plex Mono, monospace" font-size="9" fill="#234e70">FEEDBACK ·  STG → IFG</text>
+            <path id="fbPath" d="" stroke="#234e70" stroke-width="1.8" fill="none"/>
+          </g>
+          <!-- cursor -->
+          <line id="cursor" x1="340" y1="30" x2="340" y2="200" stroke="#1b1b1a" stroke-dasharray="3 3" opacity=".6"/>
+          <!-- readouts -->
+          <g transform="translate(500,40)" font-family="IBM Plex Mono, monospace" font-size="10">
+            <text id="rdFF" x="0" y="0" fill="#b43a2a">FF: 0.00</text>
+            <text id="rdFB" x="0" y="18" fill="#234e70">FB: 0.00</text>
+          </g>
+        </svg>
+      </div>
+      <div class="lab-controls">
+        <div id="slTime" data-widget="slider" data-min="-300" data-max="300" data-step="10" data-value="0" data-label="time relative to speech onset" data-unit="ms"></div>
+      </div>
+      <div class="lab-readout" id="lab6read">Slide the cursor. Both traces are nonzero almost everywhere. That is the whole point of the paper.</div>
+      <div class="lab-caption">Simulated traces · matches Fig. 3 of the PNAS paper in shape, not in magnitude</div>
+    </div>
+
+    <h2>The result, stated as carefully as I can</h2>
+
+    <p>We expected to find feedforward dominance around speech onset, and feedback dominance a few hundred milliseconds later when the auditory cortex "heard" the output and corrected. That is the cartoon.</p>
+
+    <p>What we found instead: feedforward and feedback flows <strong>coexist</strong> through the entire speech-production window. At 100ms before onset, both are nonzero. At 0ms, both are nonzero and both are <em>larger</em>. At 200ms after onset, both are still nonzero. The timing of peaks differs, the frequency bands differ, but neither ever goes to baseline while the other is active.</p>
+
+    <blockquote>Speech production is not a hand-off. It is a duet. Frontal regions are singing to temporal regions while temporal regions are singing back. If you cut either flow, the whole thing falls apart.</blockquote>
+
+    <h2>Why this matters for BCI</h2>
+
+    <p>If speech production were pipelined, a brain-computer interface could sample at the "output" end — motor cortex, say — and reconstruct speech from commands. That model is common, and it works, sort of. But it underuses the signal.</p>
+
+    <p>If production is a duet, the <em>posterior</em> regions carry usable speech information during production, not just during perception. That is part of why our decoders in <a href="01-neural-speech-decoding.html">the speech decoding paper</a> work as well as they do with temporal electrodes and no motor coverage. This paper is, in a sense, the mechanistic explanation for why the decoding paper's numbers are even possible.</p>
+
+    <figure class="fig">
+      <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(40,40)">
+          <text x="0" y="0" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">GRANGER-F · MEAN ACROSS PATIENTS (n=12)</text>
+          <g transform="translate(0,30)">
+            <text x="0" y="14" font-family="Fraunces, serif" font-size="12">IFG → preCG</text>
+            <rect x="160" y="4" width="400" height="12" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
+            <rect x="160" y="4" width="180" height="12" fill="#b43a2a"/>
+            <text x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#b43a2a">0.45</text>
+          </g>
+          <g transform="translate(0,56)">
+            <text x="0" y="14" font-family="Fraunces, serif" font-size="12">preCG → STG</text>
+            <rect x="160" y="4" width="400" height="12" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
+            <rect x="160" y="4" width="220" height="12" fill="#b43a2a"/>
+            <text x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#b43a2a">0.55</text>
+          </g>
+          <g transform="translate(0,82)">
+            <text x="0" y="14" font-family="Fraunces, serif" font-size="12">STG → preCG</text>
+            <rect x="160" y="4" width="400" height="12" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
+            <rect x="160" y="4" width="170" height="12" fill="#234e70"/>
+            <text x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#234e70">0.42</text>
+          </g>
+          <g transform="translate(0,108)">
+            <text x="0" y="14" font-family="Fraunces, serif" font-size="12">STG → IFG</text>
+            <rect x="160" y="4" width="400" height="12" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
+            <rect x="160" y="4" width="150" height="12" fill="#234e70"/>
+            <text x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#234e70">0.38</text>
+          </g>
+          <g transform="translate(0,140)" font-family="IBM Plex Mono, monospace" font-size="9">
+            <rect x="0" y="0" width="10" height="8" fill="#b43a2a"/><text x="14" y="8" fill="#5a564e">feedforward</text>
+            <rect x="120" y="0" width="10" height="8" fill="#234e70"/><text x="134" y="8" fill="#5a564e">feedback</text>
+          </g>
+        </g>
+      </svg>
+      <div class="cap"><strong>Fig. 2 —</strong> All four edges are nonzero. The feedback edges are a little smaller on average, but they are never zero.</div>
+    </figure>
+
+    <h2>The harder story</h2>
+
+    <p>A reviewer once pushed back with the reasonable objection that distinguishing "speech-production feedback" from "speech-perception of your own voice" is, in principle, a confound. How do you know the feedback flow isn't just the hearing of your own output, echoing back?</p>
+
+    <p>We answered it with a series of controls I am proud of: latency-matched listening conditions, anticipation trials where the subject was about to speak but didn't, and a frequency-band decomposition where feedback in production lives in a band the auditory-perception signal doesn't occupy. The reviewer was satisfied. I was satisfied. I will be the first to say the controls are not perfect. This kind of paper never is.</p>
+
+    <h2>Personal note</h2>
+
+    <p>This was the first paper where I felt like the field gave something back. We showed the figures to a group of speech neuroscientists early, and instead of the usual polite nodding, half the room had an anecdote. Someone had seen hints of this in a case study in 2011. Someone else had seen an inconsistent follow-up that they now, in hindsight, understood. A duet model unifies a lot of little loose ends. That was the moment I understood what people mean when they say a paper "lands."</p>
+
+  </article>
+
+  <div class="article-foot">
+    <span><a href="index.html">← all fun papers</a></span>
+    <span>Next: <a href="07-subject-agnostic-transformer.html">07 Subject-Agnostic Transformer →</a></span>
+  </div>
+</div>
+
+<script src="paper.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const ffPath = document.getElementById('ffPath');
+  const fbPath = document.getElementById('fbPath');
+  const cursor = document.getElementById('cursor');
+  const rdFF = document.getElementById('rdFF');
+  const rdFB = document.getElementById('rdFB');
+  const read = document.getElementById('lab6read');
+
+  // build two traces across -300..300
+  const W = 600, H = 50;
+  function buildPath(kind){
+    const pts = [];
+    for(let i=0;i<=60;i++){
+      const t = -300 + i*10;
+      let v;
+      if(kind === 'ff'){
+        // feedforward peaks slightly before onset
+        v = Math.exp(-Math.pow((t+40)/150,2))*0.9 + Math.exp(-Math.pow((t-120)/90,2))*0.5;
+      } else {
+        // feedback peaks right at onset and again later
+        v = Math.exp(-Math.pow((t-10)/120,2))*0.75 + Math.exp(-Math.pow((t-180)/80,2))*0.6;
+      }
+      const x = (i/60)*W;
+      const y = H - v*H;
+      pts.push([x,y]);
+    }
+    return pts;
+  }
+  const ffPts = buildPath('ff');
+  const fbPts = buildPath('fb');
+  ffPath.setAttribute('d', 'M' + ffPts.map(p=>p.join(' ')).join(' L '));
+  fbPath.setAttribute('d', 'M' + fbPts.map(p=>p.join(' ')).join(' L '));
+
+  function sample(arr, t){
+    const idx = Math.round((t+300)/10);
+    const clamped = Math.min(60, Math.max(0, idx));
+    const y = arr[clamped][1];
+    return 1 - y/H;
+  }
+
+  FP.bindSlider('slTime', t=>{
+    const x = 40 + (t+300)/600 * 600;
+    cursor.setAttribute('x1', x);
+    cursor.setAttribute('x2', x);
+    const ff = sample(ffPts, t);
+    const fb = sample(fbPts, t);
+    rdFF.textContent = 'FF: ' + ff.toFixed(2);
+    rdFB.textContent = 'FB: ' + fb.toFixed(2);
+
+    let msg;
+    if(ff > 0.3 && fb > 0.3){
+      msg = `<strong>Both channels active.</strong> At t=${t}ms, feedforward (${ff.toFixed(2)}) and feedback (${fb.toFixed(2)}) are both substantial. This is the duet the paper is about — the cortex is talking to itself <em>while</em> it talks.`;
+    } else if(ff > fb+0.25){
+      msg = `<strong>Feedforward dominant.</strong> The motor plan is driving auditory regions at t=${t}ms. Textbook story — but notice feedback is still nonzero (${fb.toFixed(2)}).`;
+    } else if(fb > ff+0.25){
+      msg = `<strong>Feedback dominant.</strong> Auditory regions are sending corrective signals back at t=${t}ms. The canonical "hearing your own voice" window.`;
+    } else {
+      msg = `<strong>Quiet window.</strong> Both flows low at t=${t}ms — nothing much to coordinate. This happens only briefly, at the edges of the utterance.`;
+    }
+    read.innerHTML = msg;
+  });
+});
+</script>
+</body>
+</html>
