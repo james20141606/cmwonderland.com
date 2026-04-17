@@ -1,0 +1,388 @@
+---
+// Landing page — Cyberpunk CRT Glitchwave (B) with Fluid Neon name gradient (A)
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>WonderLand — Xupeng Chen</title>
+<link rel="shortcut icon" type="image/x-icon" href="/landing/favicon.ico" />
+<meta name="keywords" content="Xupeng Chen, WonderLand, CMwonderland, Biology, AI, Finance" />
+<meta name="description" content="Brain & AI in Future" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --cyan: #05d9e8;
+    --magenta: #ff2a6d;
+    --yellow: #ffe066;
+    --green: #d1fff0;
+    --bg: #05050b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%; background: var(--bg); color: var(--green);
+    font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+
+  /* ——— synthwave grid floor ——— */
+  .grid-floor {
+    position: fixed; left: 0; right: 0; bottom: 0; height: 55%;
+    perspective: 600px; pointer-events: none; z-index: 0;
+  }
+  .grid-inner {
+    position: absolute; left: -20%; right: -20%; top: 0; bottom: 0;
+    background-image:
+      linear-gradient(var(--magenta) 1px, transparent 1px),
+      linear-gradient(90deg, var(--cyan) 1px, transparent 1px);
+    background-size: 80px 80px;
+    transform: rotateX(62deg);
+    opacity: .6;
+    mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 90%, transparent 100%);
+  }
+
+  /* ——— glow sun ——— */
+  .sun {
+    position: fixed; left: 50%; top: 42%;
+    width: 360px; height: 360px; border-radius: 50%;
+    background: radial-gradient(circle, #ffe066 0%, #ff6d2a 25%, #ff2a6d 50%, transparent 70%);
+    filter: blur(4px); opacity: .85; pointer-events: none;
+    transition: transform .22s ease-out; z-index: 0;
+  }
+  .sun-slits {
+    position: fixed; left: 50%; top: 42%;
+    width: 360px; height: 360px; border-radius: 50%;
+    background: repeating-linear-gradient(0deg, var(--bg) 0 3px, transparent 3px 14px);
+    opacity: .55; pointer-events: none; mix-blend-mode: multiply;
+    mask-image: linear-gradient(0deg, #000 30%, transparent 100%);
+    -webkit-mask-image: linear-gradient(0deg, #000 30%, transparent 100%);
+    transition: transform .22s ease-out; z-index: 0;
+  }
+
+  /* ——— CRT scanlines + vignette ——— */
+  .scanlines {
+    position: fixed; inset: 0; pointer-events: none; z-index: 1;
+    background-image: repeating-linear-gradient(0deg, rgba(5,217,232,.06) 0 1px, transparent 1px 3px);
+  }
+  .vignette {
+    position: fixed; inset: 0; pointer-events: none; z-index: 1;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.8) 100%);
+  }
+
+  /* ——— cursor glow ——— */
+  .cursor-glow {
+    position: fixed; width: 220px; height: 220px; border-radius: 50%;
+    pointer-events: none; mix-blend-mode: screen; filter: blur(10px);
+    background: radial-gradient(circle, rgba(5,217,232,.3), transparent 60%);
+    opacity: 0; transition: opacity .2s; z-index: 1;
+  }
+  .cursor-glow.active { opacity: 1; }
+
+  /* ——— top bar ——— */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    padding: 14px 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid rgba(5,217,232,.2);
+    font-size: 10px; letter-spacing: .25em; color: var(--cyan);
+  }
+  .topbar .rec { color: var(--magenta); }
+
+  /* ——— terminal frame ——— */
+  .terminal {
+    position: fixed; left: 50%; top: 50%; transform: translate(-50%,-52%);
+    width: min(620px, 88%); z-index: 10;
+    border: 1px solid rgba(5,217,232,.4);
+    background: rgba(5,5,11,.55);
+    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    box-shadow: 0 0 0 1px rgba(255,42,109,.25), 0 0 60px rgba(5,217,232,.25);
+  }
+  .terminal-head {
+    padding: 8px 12px; border-bottom: 1px solid rgba(5,217,232,.2);
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: var(--cyan); letter-spacing: .2em;
+  }
+  .terminal-body { padding: 28px 28px 22px; text-align: center; }
+
+  /* ——— avatar ——— */
+  .avatar {
+    width: 92px; height: 92px; border-radius: 50%; margin: 0 auto 18px;
+    border: 2px solid var(--cyan); overflow: hidden;
+    box-shadow: 0 0 0 4px var(--bg), 0 0 24px rgba(5,217,232,.7);
+  }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .avatar.ph {
+    background: linear-gradient(135deg, #00ffd0, #ff00a8 60%, #ffe066);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 30px; color: #000;
+  }
+  .avatar.ph img { display: none; }
+  .avatar.ph::after { content: 'XC'; }
+
+  /* ——— name with A's gradient (fluid neon) ——— */
+  .name {
+    margin: 0 0 8px; font-size: clamp(36px, 6vw, 48px); font-weight: 700;
+    letter-spacing: .04em; color: #f7f7f0; line-height: 1;
+    font-family: 'JetBrains Mono', monospace;
+    background: linear-gradient(90deg, #ff2bd6 0%, #ffea3a 25%, #4dc5ff 50%, #9effb2 75%, #ff2bd6 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% 100%;
+    animation: slideGrad 6s linear infinite;
+  }
+  @keyframes slideGrad { 0%{background-position:0% 0%} 100%{background-position:200% 0%} }
+
+  /* ——— tagline ——— */
+  .tagline {
+    font-size: 12px; color: #9ef5e5; letter-spacing: .15em; min-height: 18px;
+  }
+  .tagline .prompt { color: var(--magenta); }
+  .tagline .cursor { animation: blink 1s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ——— Fun Pages ——— */
+  .fun { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 14px; width: 100%; }
+  .fun-head {
+    font-size: 10px; letter-spacing: .28em; text-transform: uppercase;
+    color: rgba(5,217,232,.6); display: flex; align-items: center; gap: 10px;
+    cursor: pointer; user-select: none; padding: 4px 8px; transition: .2s;
+  }
+  .fun-head:hover { color: var(--cyan); }
+  .fun-head .bar { width: 30px; height: 1px; background: rgba(5,217,232,.3); }
+  .fun-head .chev { transition: .3s; display: inline-block; }
+  .fun.open .fun-head .chev { transform: rotate(180deg); }
+  .fun-list {
+    display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; width: 100%;
+    max-height: 0; overflow: hidden; opacity: 0; transition: .35s ease;
+  }
+  .fun.open .fun-list { max-height: 260px; opacity: 1; margin-top: 2px; }
+  .fun-list a {
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 10px 12px; text-decoration: none; color: var(--green);
+    border: 1px solid rgba(5,217,232,.25); background: rgba(5,5,11,.5);
+    font-size: 10px; transition: .2s;
+  }
+  .fun-list a:hover { border-color: var(--cyan); background: rgba(5,217,232,.1); transform: translateY(-1px); }
+  .fun-list .k { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: rgba(5,217,232,.6); }
+  .fun-list .t { font-size: 14px; font-weight: 500; }
+  .fun-list .t em { color: var(--cyan); font-style: normal; }
+
+  /* ——— nav grid ——— */
+  .nav-grid {
+    position: fixed; left: 50%; bottom: 9%; transform: translateX(-50%); z-index: 10;
+    display: grid; grid-template-columns: repeat(3, minmax(140px, 1fr));
+    gap: 8px; width: min(620px, 88%);
+  }
+  .nav-grid a {
+    position: relative; padding: 12px 14px; text-decoration: none;
+    color: var(--green); background: rgba(5,5,11,.6);
+    border: 1px solid rgba(5,217,232,.3);
+    font-size: 11px; letter-spacing: .18em; transition: all .12s;
+  }
+  .nav-grid a:hover {
+    color: var(--bg); background: var(--cyan);
+    border-color: var(--cyan);
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--magenta);
+  }
+  .nav-grid a .lbl { display: flex; justify-content: space-between; }
+  .nav-grid a .lbl span:first-child { font-weight: 600; }
+  .nav-grid a .sub { font-size: 9px; opacity: .8; margin-top: 4px; letter-spacing: .12em; }
+
+  /* ——— footer ——— */
+  .footer {
+    position: fixed; bottom: 14px; left: 0; right: 0; text-align: center;
+    font-size: 9px; letter-spacing: .32em; color: rgba(5,217,232,.5); z-index: 10;
+  }
+
+  /* ——— responsive ——— */
+  @media (max-width: 720px) {
+    .nav-grid { grid-template-columns: repeat(2, 1fr); bottom: 6%; }
+    .fun-list { grid-template-columns: 1fr; }
+    .topbar { display: none; }
+    .footer { display: none; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- synthwave grid -->
+  <div class="grid-floor"><div class="grid-inner" id="gridInner"></div></div>
+
+  <!-- sun -->
+  <div class="sun" id="sun" style="transform:translate(-50%,-50%)"></div>
+  <div class="sun-slits" id="sunSlits" style="transform:translate(-50%,-50%)"></div>
+
+  <!-- overlays -->
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- top bar -->
+  <div class="topbar">
+    <span>[WONDERLAND.EXE] // TTY0 READY</span>
+    <span class="rec">● REC <span id="recCounter">0000</span></span>
+  </div>
+
+  <!-- terminal window -->
+  <div class="terminal">
+    <div class="terminal-head">
+      <span>~/XUPENG — zsh</span>
+      <span>▢ ▢ ◯</span>
+    </div>
+    <div class="terminal-body">
+      <div class="avatar">
+        <img id="portrait" alt="Xupeng Chen" onerror="this.parentElement.classList.add('ph')" />
+      </div>
+      <h1 class="name">XUPENG CHEN</h1>
+      <div class="tagline">
+        <span class="prompt">$</span> <span id="typed"></span><span class="cursor">█</span>
+      </div>
+
+      <div class="fun" id="fun">
+        <div class="fun-head" onclick="document.getElementById('fun').classList.toggle('open')">
+          <span class="bar"></span>
+          <span>Fun Pages</span>
+          <span class="chev">▾</span>
+          <span class="bar"></span>
+        </div>
+        <div class="fun-list">
+          <a href="/quantum/">
+            <span class="k">01 · Interactive</span>
+            <span class="t">Quantum <em>Entanglement</em></span>
+          </a>
+          <a href="/anniversary/">
+            <span class="k">02 · Personal</span>
+            <span class="t">Anniversary <em>Clock</em></span>
+          </a>
+          <a href="/fun-pages/">
+            <span class="k">03 · Papers</span>
+            <span class="t">Fun <em>&</em> Curious Papers</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- nav grid -->
+  <div class="nav-grid">
+    <a href="/blog/"><div class="lbl"><span>BLOG</span><span>✎</span></div><div class="sub">/blog</div></a>
+    <a href="/about/"><div class="lbl"><span>CV</span><span>◉</span></div><div class="sub">/about</div></a>
+    <a href="/categories/projects/"><div class="lbl"><span>PROJECT</span><span>▤</span></div><div class="sub">/projects</div></a>
+    <a href="https://github.com/james20141606"><div class="lbl"><span>GITHUB</span><span>⎔</span></div><div class="sub">@james20141606</div></a>
+    <a href="/categories/book/"><div class="lbl"><span>BOOK</span><span>❈</span></div><div class="sub">/book</div></a>
+    <a href="/news/"><div class="lbl"><span>NEWS</span><span>⌁</span></div><div class="sub">/news</div></a>
+  </div>
+
+  <div class="footer">░ POWERED BY XUPENG CHEN · CMWONDERLAND/NULL_SECTOR ░</div>
+
+<script>
+// ——— Portrait fallback ———
+(function(){
+  const img = document.getElementById('portrait');
+  if(!img) return;
+  const paths = ['/landing/css/images/portrait.jpg','landing/css/images/portrait.jpg'];
+  let i = 0;
+  img.addEventListener('error', () => {
+    i++;
+    if(i < paths.length) img.src = paths[i];
+    else img.parentElement.classList.add('ph');
+  });
+  img.src = paths[0];
+})();
+
+// ——— Nav-link fallback for preview ———
+(function(){
+  const isProd = /(^|\.)cmwonderland\.com$/i.test(location.hostname);
+  if(isProd) return;
+  const BASE = 'https://www.cmwonderland.com';
+  document.querySelectorAll('.nav-grid a[href^="/"], .fun-list a[href^="/"]').forEach(a=>{
+    a.href = BASE + a.getAttribute('href');
+    a.target = '_blank'; a.rel = 'noopener';
+  });
+})();
+
+// ——— Typewriter ———
+(function(){
+  const full = 'Brain & AI in Future';
+  const el = document.getElementById('typed');
+  let i = 0;
+  const iv = setInterval(()=>{
+    i++; el.textContent = full.slice(0, i);
+    if(i >= full.length) clearInterval(iv);
+  }, 55);
+})();
+
+// ——— Counter + grid animation + mouse tracking ———
+(function(){
+  let t = 0;
+  const counter = document.getElementById('recCounter');
+  const grid = document.getElementById('gridInner');
+  const sun = document.getElementById('sun');
+  const sunSlits = document.getElementById('sunSlits');
+  const glow = document.getElementById('cursorGlow');
+  let mx = 0.5, my = 0.5, active = false;
+
+  document.addEventListener('pointermove', e => {
+    mx = e.clientX / innerWidth;
+    my = e.clientY / innerHeight;
+    active = true;
+
+    // cursor glow
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+    glow.style.transform = 'translate(-50%,-50%)';
+    glow.classList.add('active');
+
+    // sun parallax
+    const ox = (mx - 0.5) * -30;
+    const oy = (my - 0.5) * -20;
+    const sunT = `translate(calc(-50% + ${ox}px), calc(-50% + ${oy}px))`;
+    sun.style.transform = sunT;
+    sunSlits.style.transform = sunT;
+  });
+
+  document.addEventListener('pointerleave', () => {
+    active = false;
+    glow.classList.remove('active');
+  });
+
+  // Nav hover glitch
+  const glitchChars = '█▓▒░╳╱╲╫╬▙▟';
+  document.querySelectorAll('.nav-grid a').forEach(a => {
+    const lblEl = a.querySelector('.lbl span:first-child');
+    const subEl = a.querySelector('.sub');
+    const origLabel = lblEl.textContent;
+    const origSub = subEl.textContent;
+    let gInt;
+    a.addEventListener('mouseenter', () => {
+      subEl.textContent = '> exec ' + origSub;
+      gInt = setInterval(() => {
+        lblEl.textContent = origLabel.split('').map((c,i) =>
+          Math.random() < 0.25 ? glitchChars[Math.floor(Math.random()*glitchChars.length)] : c
+        ).join('');
+      }, 70);
+    });
+    a.addEventListener('mouseleave', () => {
+      clearInterval(gInt);
+      lblEl.textContent = origLabel;
+      subEl.textContent = origSub;
+    });
+  });
+
+  // Tick
+  setInterval(() => {
+    t++;
+    counter.textContent = String(t % 10000).padStart(4, '0');
+    // scroll grid
+    grid.style.backgroundPosition = `0 ${t % 80}px, 0 0`;
+  }, 70);
+})();
+</script>
+</body>
+</html>
