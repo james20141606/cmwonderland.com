@@ -1,0 +1,702 @@
+---
+// Landing page — interactive shader wallpapers (WonderLand OS)
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>WonderLand — Xupeng Chen</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/landing/favicon.ico" />
+	<meta name="keywords" content="Xupeng Chen, WonderLand, CMwonderland, Biology, AI, Finance" />
+	<meta name="description" content="Brain & AI in Future" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#eaf1ff;
+    --ink-dim:#9fb0c7;
+    --glass:rgba(12,16,26,.42);
+    --glass-stroke:rgba(255,255,255,.09);
+    --accent:#a6ffe9;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#05070c;color:var(--ink);font-family:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+  canvas#gl{position:fixed;inset:0;width:100vw;height:100vh;display:block;z-index:0;cursor:crosshair}
+
+  /* ——— top-left brand ——— */
+  .brand{
+    position:fixed;top:24px;left:28px;z-index:10;
+    display:flex;align-items:center;gap:10px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ink-dim);
+  }
+  .brand .dot{width:7px;height:7px;border-radius:999px;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+  .brand b{color:var(--ink);font-weight:500;letter-spacing:.22em}
+
+  /* ——— top-right meta ——— */
+  .meta{
+    position:fixed;top:24px;right:28px;z-index:10;
+    display:flex;gap:18px;align-items:center;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--ink-dim);text-transform:uppercase;
+  }
+  .meta .chip{padding:6px 10px;border:1px solid var(--glass-stroke);border-radius:999px;background:rgba(8,10,16,.35);backdrop-filter:blur(10px)}
+  .meta .chip b{color:var(--ink);font-weight:500}
+
+  /* ——— centered identity card ——— */
+  .card{
+    position:fixed;z-index:10;left:50%;top:50%;transform:translate(-50%,-50%);
+    display:flex;flex-direction:column;align-items:center;gap:22px;
+    padding:36px 44px 30px;border-radius:22px;
+    background:var(--glass);
+    border:1px solid var(--glass-stroke);
+    backdrop-filter:blur(14px) saturate(120%);
+    -webkit-backdrop-filter:blur(14px) saturate(120%);
+    box-shadow:0 30px 80px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.05);
+    min-width:420px;
+  }
+  .avatar{
+    width:84px;height:84px;border-radius:50%;overflow:hidden;
+    border:1px solid rgba(255,255,255,.2);
+    box-shadow:0 6px 30px rgba(0,0,0,.5), 0 0 0 6px rgba(255,255,255,.03);
+  }
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .avatar.ph{background:linear-gradient(135deg,#1a2238,#3a1a4a);display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:32px;color:var(--accent)}
+  .avatar.ph::after{content:'XC'}
+  .avatar.ph img{display:none}
+  .name{font-family:'Instrument Serif',serif;font-size:44px;letter-spacing:.01em;line-height:1;margin:0;color:var(--ink)}
+  .name em{font-style:italic;color:var(--accent);font-family:'Instrument Serif',serif}
+  .tagline{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-dim);margin:-8px 0 4px;text-align:center}
+
+  nav.links{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+  nav.links a{
+    font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+    color:var(--ink);text-decoration:none;
+    padding:12px 20px;border-radius:999px;
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.04);
+    transition:.25s ease;
+  }
+  nav.links a:hover{color:#05070c;background:var(--accent);border-color:transparent;box-shadow:0 8px 28px rgba(166,255,233,.4);transform:translateY(-1px)}
+
+  /* Fun pages */
+  .fun{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:6px;width:100%}
+  .fun-head{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--ink-dim);display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;
+    padding:4px 8px;border-radius:999px;transition:.2s;
+  }
+  .fun-head:hover{color:var(--ink)}
+  .fun-head .bar{width:30px;height:1px;background:rgba(255,255,255,.18)}
+  .fun-head .chev{transition:.3s;display:inline-block}
+  .fun.open .fun-head .chev{transform:rotate(180deg)}
+  .fun-list{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%;
+    max-height:0;overflow:hidden;opacity:0;transition:.35s ease;
+  }
+  .fun.open .fun-list{max-height:260px;opacity:1;margin-top:2px}
+  .fun-list a{
+    display:flex;flex-direction:column;gap:4px;
+    padding:12px 14px;border-radius:12px;
+    border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.03);
+    text-decoration:none;color:var(--ink);transition:.2s;
+  }
+  .fun-list a:hover{border-color:var(--accent);background:rgba(166,255,233,.08);transform:translateY(-1px)}
+  .fun-list .k{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-dim)}
+  .fun-list .t{font-family:'Instrument Serif',serif;font-size:18px;line-height:1.15}
+  .fun-list .t em{color:var(--accent);font-style:italic}
+
+  /* ——— bottom shader switcher ——— */
+  .dock{
+    position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:10;
+    display:flex;gap:8px;padding:8px;border-radius:16px;
+    background:var(--glass);border:1px solid var(--glass-stroke);
+    backdrop-filter:blur(14px) saturate(120%);-webkit-backdrop-filter:blur(14px) saturate(120%);
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+  }
+  .dock button{
+    width:64px;height:48px;border-radius:10px;border:1px solid rgba(255,255,255,.06);
+    background:rgba(255,255,255,.02);color:var(--ink-dim);cursor:pointer;
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    transition:.2s ease;position:relative;overflow:hidden;
+  }
+  .dock button:hover{color:var(--ink);border-color:rgba(255,255,255,.18)}
+  .dock button.active{color:#05070c;background:var(--accent);border-color:transparent;box-shadow:0 0 24px rgba(166,255,233,.35)}
+  .dock button .idx{font-size:9px;opacity:.6}
+  .dock button .nm{font-weight:500}
+
+  /* bottom-left current shader label */
+  .readout{
+    position:fixed;bottom:32px;left:28px;z-index:10;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-dim);display:flex;flex-direction:column;gap:6px;
+  }
+  .readout b{color:var(--ink);font-weight:500;letter-spacing:.22em}
+  .readout span{opacity:.6}
+
+  /* bottom-right hint */
+  .hint{
+    position:fixed;bottom:32px;right:28px;z-index:10;
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim);
+    display:flex;gap:14px;align-items:center;
+  }
+  .hint kbd{
+    font-family:'JetBrains Mono',monospace;font-size:10px;
+    padding:3px 7px;border-radius:5px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--ink)
+  }
+
+  /* blink cursor */
+  .blink{display:inline-block;width:8px;height:11px;background:var(--accent);margin-left:6px;vertical-align:-1px;animation:b 1s steps(2) infinite}
+  @keyframes b{50%{opacity:0}}
+
+  /* responsive */
+  @media (max-width:720px){
+    .card{min-width:unset;width:calc(100vw - 48px);padding:28px 22px}
+    .name{font-size:34px}
+    .meta{display:none}
+    .dock button{width:52px;height:44px}
+    .hint{display:none}
+  }
+</style>
+</head>
+<body>
+  <canvas id="gl"></canvas>
+
+  <div class="brand">
+    <span class="dot"></span><b>WonderLand OS</b><span>/ v2.6</span>
+  </div>
+  <div class="meta">
+    <span class="chip">SHADER <b id="shaderName">PLASMA</b></span>
+    <span class="chip">FPS <b id="fps">—</b></span>
+    <span class="chip" id="clock">00:00:00</span>
+  </div>
+
+  <div class="card">
+    <div class="avatar"><img id="portrait" alt="Xupeng Chen" onerror="this.parentElement.classList.add('ph')"/></div>
+    <h1 class="name">Xupeng <em>Chen</em></h1>
+    <div class="tagline">Brain &amp; AI in Future<span class="blink"></span></div>
+    <nav class="links">
+      <a href="/blog/">Blog</a>
+      <a href="/about/">CV</a>
+      <a href="/categories/projects/">Projects</a>
+      <a href="https://github.com/james20141606">GitHub</a>
+      <a href="/categories/book/">Book</a>
+      <a href="/news/">News</a>
+    </nav>
+
+    <div class="fun" id="fun">
+      <div class="fun-head" onclick="document.getElementById('fun').classList.toggle('open')">
+        <span class="bar"></span>
+        <span>Fun Pages</span>
+        <span class="chev">▾</span>
+        <span class="bar"></span>
+      </div>
+      <div class="fun-list">
+        <a href="/quantum/">
+          <span class="k">01 · Interactive</span>
+          <span class="t">Quantum <em>Entanglement</em></span>
+        </a>
+        <a href="/anniversary/">
+          <span class="k">02 · Personal</span>
+          <span class="t">Anniversary <em>Clock</em></span>
+        </a>
+        <a href="/fun-pages/">
+          <span class="k">03 · Papers</span>
+          <span class="t">Fun <em>&amp; Curious</em> Papers</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="readout">
+    <b id="readoutName">02 · PLASMA FIELD</b>
+    <span id="readoutDesc">Gravitational plasma bends around cursor · click for shockwave</span>
+  </div>
+
+  <div class="hint">
+    <span>MOVE · <kbd>CURSOR</kbd></span>
+    <span>BURST · <kbd>CLICK</kbd></span>
+    <span>SWITCH · <kbd>1</kbd>–<kbd>5</kbd></span>
+  </div>
+
+  <div class="dock" id="dock">
+    <button data-i="0"><span class="idx">01</span><span class="nm">Liquid</span></button>
+    <button data-i="1" class="active"><span class="idx">02</span><span class="nm">Plasma</span></button>
+    <button data-i="2"><span class="idx">03</span><span class="nm">Warp</span></button>
+    <button data-i="3"><span class="idx">04</span><span class="nm">Grid</span></button>
+    <button data-i="4"><span class="idx">05</span><span class="nm">Aurora</span></button>
+  </div>
+
+<script>
+/* =========================================================
+   Shader Wallpapers — 5 interactive WebGL fragment shaders
+   Uniforms exposed to every shader:
+     u_time (sec), u_res (vec2), u_mouse (vec2 px), u_mouseN (vec2 0-1),
+     u_click (vec4 x,y,startTime,intensity)
+   ========================================================= */
+
+// Nav-link fallback: when previewing on a non-production host, rewrite root-relative
+// internal links so they jump to the live site instead of 404-ing the sandbox.
+(function(){
+  const isProd = /(^|\.)cmwonderland\.com$/i.test(location.hostname);
+  if(isProd) return;
+  const BASE = 'https://www.cmwonderland.com';
+  document.querySelectorAll('nav.links a[href^="/"], .fun-list a[href^="/"]').forEach(a=>{
+    a.href = BASE + a.getAttribute('href');
+    a.target = '_blank';
+    a.rel = 'noopener';
+  });
+})();
+
+// Portrait: try relative path first (standalone preview), then absolute (Astro public/)
+(function(){
+  const img = document.getElementById('portrait');
+  if(!img) return;
+  const tryPaths = ['/landing/css/images/portrait.jpg','landing/css/images/portrait.jpg'];
+  let i = 0;
+  img.addEventListener('error', () => {
+    i++;
+    if(i < tryPaths.length) img.src = tryPaths[i];
+    else img.parentElement.classList.add('ph');
+  });
+  img.src = tryPaths[0];
+})();
+
+const canvas = document.getElementById('gl');
+const gl = canvas.getContext('webgl', {antialias:false, premultipliedAlpha:false});
+if(!gl){ document.body.innerHTML = '<div style="padding:40px;font-family:monospace">WebGL not supported in this browser.</div>'; throw new Error('no webgl'); }
+
+const VS = `
+attribute vec2 a_pos;
+void main(){ gl_Position = vec4(a_pos, 0.0, 1.0); }
+`;
+
+/* ---------- Shader 1 · Liquid Metal ---------- */
+const F1 = `
+precision highp float;
+uniform vec2 u_res; uniform float u_time; uniform vec2 u_mouseN; uniform vec4 u_click;
+
+// hsv helper
+vec3 hsv(float h,float s,float v){
+  vec3 k = vec3(5.,3.,1.)/6.;
+  vec3 p = abs(fract(h+k)*6.-3.);
+  return v*mix(vec3(1.), clamp(p-1.,0.,1.), s);
+}
+
+void main(){
+  vec2 uv = (gl_FragCoord.xy - 0.5*u_res)/min(u_res.x,u_res.y);
+  vec2 m  = (u_mouseN - 0.5) * vec2(u_res.x/min(u_res.x,u_res.y), u_res.y/min(u_res.x,u_res.y));
+
+  vec2 p = uv;
+  float t = u_time*0.35;
+
+  // pull toward mouse
+  vec2 d = m - p;
+  float pull = 0.35 / (0.15 + dot(d,d)*2.5);
+  p += d * pull * 0.25;
+
+  // click shockwave
+  float ct = max(0.0, u_time - u_click.z);
+  vec2 cp = (u_click.xy/u_res - 0.5) * vec2(u_res.x/min(u_res.x,u_res.y), u_res.y/min(u_res.x,u_res.y));
+  float ring = exp(-ct*2.5) * sin((length(p-cp)-ct*1.2)*18.0) * 0.08;
+
+  // domain warping
+  for(int i=0;i<4;i++){
+    float fi = float(i);
+    p += 0.45*vec2(
+      sin(p.y*2.2 + t*1.3 + fi),
+      cos(p.x*2.0 - t*1.1 + fi*1.3)
+    ) * (0.5/(fi+1.0));
+  }
+
+  float v = sin(p.x*3.0 + t) + sin(p.y*2.6 - t*0.8) + sin(length(p)*5.0 + t*1.7);
+  v = v/3.0 + ring;
+
+  // metallic caustic bands
+  float band = abs(sin(v*4.0 + t*0.5));
+  float mm = smoothstep(0.0, 0.6, 1.0 - length(m - uv)*0.9);
+
+  vec3 base = hsv(0.55 + 0.12*sin(v*2.0 + t*0.3), 0.55, 0.35 + 0.25*band);
+  vec3 hi = hsv(0.08 + 0.06*v, 0.9, 1.0);
+  vec3 col = mix(base, hi, pow(band, 6.0)*0.85);
+  col += mm * vec3(0.25,0.45,0.55) * 0.35;
+
+  // vignette
+  col *= 1.0 - 0.35*length(uv);
+
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
+
+/* ---------- Shader 2 · Plasma Field ---------- */
+const F2 = `
+precision highp float;
+uniform vec2 u_res; uniform float u_time; uniform vec2 u_mouseN; uniform vec4 u_click;
+
+void main(){
+  vec2 uv = gl_FragCoord.xy / u_res;
+  vec2 p  = (uv - 0.5) * vec2(u_res.x/u_res.y, 1.0);
+  vec2 m  = (u_mouseN - 0.5) * vec2(u_res.x/u_res.y, 1.0);
+
+  float t = u_time*0.6;
+  float dm = length(p - m);
+
+  // bend space around the mouse (gravitational lens)
+  float bend = 0.35/(0.08 + dm*dm*3.0);
+  p += (m - p)*bend*0.25;
+
+  // click shock
+  float ct = max(0.0, u_time - u_click.z);
+  vec2 cp = (u_click.xy/u_res - 0.5)*vec2(u_res.x/u_res.y, 1.0);
+  float cd = length(p - cp);
+  float shock = exp(-ct*2.0) * sin(cd*24.0 - ct*8.0) * 0.25 * u_click.w;
+
+  float v = 0.0;
+  v += sin(p.x*6.0 + t*1.3);
+  v += sin(p.y*5.0 - t*1.1);
+  v += sin((p.x+p.y)*4.0 + t*0.8);
+  v += sin(length(p)*10.0 - t*1.6);
+  v = v/4.0 + shock;
+
+  vec3 c1 = vec3(0.92,0.22,0.62);   // magenta
+  vec3 c2 = vec3(0.14,0.88,0.98);   // cyan
+  vec3 c3 = vec3(0.55,0.25,0.95);   // violet
+  vec3 col = mix(c1, c2, 0.5+0.5*sin(v*3.14+t));
+  col = mix(col, c3, 0.5+0.5*cos(v*3.14-t*0.5));
+
+  // halo around cursor
+  col += exp(-dm*6.0) * vec3(0.6,0.7,1.0) * 0.35;
+
+  // darker toward edges
+  col *= smoothstep(1.2, 0.1, length(p));
+
+  // subtle film grain
+  float g = fract(sin(dot(gl_FragCoord.xy, vec2(12.98, 78.23)))*43758.5453);
+  col += (g - 0.5)*0.03;
+
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
+
+/* ---------- Shader 3 · Starfield Warp ---------- */
+const F3 = `
+precision highp float;
+uniform vec2 u_res; uniform float u_time; uniform vec2 u_mouseN; uniform vec4 u_click;
+
+float hash(vec2 p){ return fract(sin(dot(p, vec2(41.3, 289.1)))*43758.5453); }
+
+vec2 rot(vec2 p, float a){ float c=cos(a), s=sin(a); return mat2(c,-s,s,c)*p; }
+
+void main(){
+  vec2 uv = (gl_FragCoord.xy - 0.5*u_res)/u_res.y;
+  vec2 m  = (u_mouseN - 0.5) * vec2(u_res.x/u_res.y, 1.0);
+
+  // click = extra warp boost
+  float ct = max(0.0, u_time - u_click.z);
+  float boost = exp(-ct*1.5) * u_click.w;
+
+  // camera orient toward mouse
+  vec2 center = m*0.6;
+  vec2 d = uv - center;
+  float ang = atan(d.y, d.x);
+  float r = length(d);
+
+  vec3 col = vec3(0.012, 0.018, 0.04);
+  // nebula glow
+  col += pow(exp(-r*2.0), 1.5) * vec3(0.12, 0.22, 0.45) * (0.6 + 0.4*sin(u_time*0.3));
+
+  // layers of streaking stars
+  for(int i=0;i<5;i++){
+    float fi = float(i)+1.0;
+    float speed = 0.35 + fi*0.15 + boost*0.8;
+    float z = fract(u_time*speed + fi*0.37);
+    float rr = r * (z*6.0 + 0.2);
+    float ang2 = ang + (fi-3.0)*0.06;
+    vec2 sp = rot(vec2(rr, ang2*3.0), fi*0.5);
+    vec2 cell = floor(sp*12.0);
+    vec2 f = fract(sp*12.0)-0.5;
+    float h = hash(cell + fi*13.0);
+    float size = 0.015 + h*0.02;
+    float streakLen = 0.12 + 0.35*boost;
+    // streak aligned radially
+    float streak = smoothstep(size, 0.0, abs(f.y))
+                 * smoothstep(streakLen, -streakLen, f.x)
+                 * (1.0 - z);
+    float tw = 0.5 + 0.5*sin(u_time*3.0 + h*30.0);
+    col += streak * mix(vec3(0.7,0.85,1.0), vec3(1.0,0.8,0.6), h) * tw * (0.4+fi*0.18);
+  }
+
+  // cursor halo
+  float dm = length(uv - m);
+  col += exp(-dm*8.0) * vec3(0.5,0.8,1.0) * 0.45;
+
+  // subtle vignette
+  col *= 1.0 - 0.4*length(uv);
+
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
+
+/* ---------- Shader 4 · Grid Dissolve ---------- */
+const F4 = `
+precision highp float;
+uniform vec2 u_res; uniform float u_time; uniform vec2 u_mouseN; uniform vec4 u_click;
+
+float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7)))*43758.5453); }
+
+void main(){
+  vec2 uv = gl_FragCoord.xy / u_res;
+  float ar = u_res.x/u_res.y;
+  vec2 p = (uv - 0.5) * vec2(ar, 1.0);
+  vec2 m = (u_mouseN - 0.5) * vec2(ar, 1.0);
+
+  // space warp toward mouse (fish-eye pull)
+  float dm = length(p - m);
+  float pull = 0.45 / (0.12 + dm*dm*4.0);
+  p -= (m - p)*pull*0.1;
+
+  // click ripple pushes grid outward
+  float ct = max(0.0, u_time - u_click.z);
+  vec2 cp = (u_click.xy/u_res - 0.5)*vec2(ar,1.0);
+  float cd = length(p - cp);
+  float ripple = exp(-ct*1.8) * sin(cd*30.0 - ct*10.0) * 0.04 * u_click.w;
+  p += normalize(p-cp + 1e-5) * ripple;
+
+  // grid
+  float gridScale = 18.0;
+  vec2 gp = p * gridScale;
+  vec2 id = floor(gp);
+  vec2 f  = fract(gp) - 0.5;
+
+  // per-cell displacement based on distance to mouse
+  float cellD = length((id+0.5)/gridScale - m);
+  float influence = smoothstep(0.8, 0.0, cellD);
+  float h = hash(id);
+
+  // each cell oscillates + lifts near cursor
+  float lift = influence * (0.5 + 0.5*sin(u_time*3.0 + h*10.0));
+  float size = 0.42 - influence*0.18;          // shrink near cursor (dissolve)
+  float rot = influence * (h - 0.5) * 3.1415;
+  // rotate
+  float cr = cos(rot), sr = sin(rot);
+  vec2 fr = mat2(cr,-sr,sr,cr)*f;
+
+  // cell mask: rounded square
+  float q = max(abs(fr.x), abs(fr.y));
+  float cell = smoothstep(size, size-0.04, q);
+
+  // palette
+  vec3 bg = mix(vec3(0.02,0.04,0.08), vec3(0.04,0.02,0.10), uv.y);
+  vec3 on = mix(vec3(0.2,0.85,0.95), vec3(0.9,0.35,0.95), h);
+  vec3 col = bg;
+  col = mix(col, on*(0.5+lift), cell);
+
+  // glow line near cursor
+  col += exp(-dm*6.0) * vec3(0.35,0.9,1.0) * 0.25;
+
+  // scanline subtle
+  col *= 0.92 + 0.08*sin(gl_FragCoord.y*1.8);
+
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
+
+/* ---------- Shader 5 · Aurora Ribbons ---------- */
+const F5 = `
+precision highp float;
+uniform vec2 u_res; uniform float u_time; uniform vec2 u_mouseN; uniform vec4 u_click;
+
+float ribbon(vec2 p, float o, float amp, float freq, float thick){
+  float y = sin(p.x*freq + u_time*0.6 + o)*amp
+          + sin(p.x*freq*0.5 - u_time*0.3 + o*1.3)*amp*0.6;
+  float d = abs(p.y - y);
+  return smoothstep(thick, 0.0, d);
+}
+
+void main(){
+  vec2 uv = gl_FragCoord.xy / u_res;
+  float ar = u_res.x/u_res.y;
+  vec2 p = (uv - 0.5) * vec2(ar, 1.0);
+  vec2 m = (u_mouseN - 0.5) * vec2(ar, 1.0);
+
+  // click = pulse brightness
+  float ct = max(0.0, u_time - u_click.z);
+  float pulse = exp(-ct*2.0) * u_click.w;
+
+  // mouse tilts ribbons
+  p.y += (m.x)*0.2;
+  p.y -= m.y*0.6;
+
+  vec3 col = vec3(0.02, 0.03, 0.07);
+  // starry haze
+  float haze = smoothstep(1.2, 0.1, length(p - m));
+  col += haze * vec3(0.04,0.08,0.14);
+
+  // 5 ribbons, different colors, follow mouse y with lag
+  vec3 c1 = vec3(0.25,0.9,0.6);
+  vec3 c2 = vec3(0.35,0.5,1.0);
+  vec3 c3 = vec3(0.95,0.3,0.75);
+  vec3 c4 = vec3(0.2,0.95,0.95);
+  vec3 c5 = vec3(1.0,0.7,0.35);
+
+  float baseY = m.y*0.4;
+  col += ribbon(p - vec2(0.0, baseY+0.00), 0.0, 0.18, 1.8, 0.05) * c1 * (0.9+pulse);
+  col += ribbon(p - vec2(0.0, baseY-0.10), 1.7, 0.14, 2.2, 0.04) * c2 * (0.9+pulse);
+  col += ribbon(p - vec2(0.0, baseY+0.12), 3.1, 0.20, 1.4, 0.06) * c3 * (0.9+pulse);
+  col += ribbon(p - vec2(0.0, baseY-0.22), 4.3, 0.12, 2.8, 0.03) * c4 * (0.9+pulse);
+  col += ribbon(p - vec2(0.0, baseY+0.25), 5.9, 0.16, 1.2, 0.05) * c5 * (0.9+pulse);
+
+  // soft glow around cursor
+  float dm = length(p - m);
+  col += exp(-dm*5.0) * vec3(0.7,0.9,1.0) * (0.2 + 0.4*pulse);
+
+  // vignette
+  col *= 1.0 - 0.45*length(uv-0.5);
+
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
+
+const SHADERS = [
+  { name:'01 · LIQUID METAL', label:'LIQUID', desc:'Chromatic caustics pool toward cursor · click to disturb', src:F1 },
+  { name:'02 · PLASMA FIELD', label:'PLASMA', desc:'Gravitational plasma bends around cursor · click for shockwave', src:F2 },
+  { name:'03 · STARFIELD WARP', label:'WARP',  desc:'Streaks radiate from cursor · click for warp boost', src:F3 },
+  { name:'04 · GRID DISSOLVE', label:'GRID',   desc:'Pixel grid lifts and dissolves · click sends ripple', src:F4 },
+  { name:'05 · AURORA RIBBONS',label:'AURORA', desc:'Silken ribbons follow cursor · click to brighten', src:F5 }
+];
+
+function compile(type, src){
+  const s = gl.createShader(type);
+  gl.shaderSource(s, src); gl.compileShader(s);
+  if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)){
+    console.error(gl.getShaderInfoLog(s), src);
+  }
+  return s;
+}
+function program(fsSrc){
+  const vs = compile(gl.VERTEX_SHADER, VS);
+  const fs = compile(gl.FRAGMENT_SHADER, fsSrc);
+  const p = gl.createProgram();
+  gl.attachShader(p, vs); gl.attachShader(p, fs); gl.linkProgram(p);
+  if(!gl.getProgramParameter(p, gl.LINK_STATUS)){ console.error(gl.getProgramInfoLog(p)); }
+  return p;
+}
+
+// fullscreen triangle
+const buf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1, 3]), gl.STATIC_DRAW);
+
+const progs = SHADERS.map(s => {
+  const p = program(s.src);
+  const loc = gl.getAttribLocation(p, 'a_pos');
+  return {
+    program: p,
+    a_pos: loc,
+    u_res: gl.getUniformLocation(p, 'u_res'),
+    u_time: gl.getUniformLocation(p, 'u_time'),
+    u_mouseN: gl.getUniformLocation(p, 'u_mouseN'),
+    u_click: gl.getUniformLocation(p, 'u_click')
+  };
+});
+
+// state
+let current = parseInt(localStorage.getItem('shader_idx')||'1',10);
+if(isNaN(current)||current<0||current>4) current=1;
+
+const mouse = { x: innerWidth/2, y: innerHeight/2, nx: 0.5, ny: 0.5, tx:0.5, ty:0.5 };
+const click = { x:0, y:0, t:-999, intensity:0 };
+
+function resize(){
+  const dpr = Math.min(window.devicePixelRatio||1, 2);
+  canvas.width  = Math.floor(innerWidth*dpr);
+  canvas.height = Math.floor(innerHeight*dpr);
+  gl.viewport(0,0,canvas.width, canvas.height);
+}
+resize();
+addEventListener('resize', resize);
+
+addEventListener('pointermove', e => {
+  mouse.tx = e.clientX / innerWidth;
+  mouse.ty = 1.0 - e.clientY / innerHeight;
+}, {passive:true});
+
+addEventListener('pointerdown', e => {
+  const dpr = Math.min(window.devicePixelRatio||1, 2);
+  click.x = e.clientX*dpr;
+  click.y = (innerHeight - e.clientY)*dpr;
+  click.t = performance.now()/1000;
+  click.intensity = 1.0;
+});
+
+function setShader(i, fromKey){
+  current = i;
+  localStorage.setItem('shader_idx', String(i));
+  document.querySelectorAll('#dock button').forEach((b,ix)=> b.classList.toggle('active', ix===i));
+  document.getElementById('readoutName').textContent = SHADERS[i].name;
+  document.getElementById('readoutDesc').textContent = SHADERS[i].desc;
+  document.getElementById('shaderName').textContent  = SHADERS[i].label;
+  if(!fromKey){ /* pulse click to feel responsive */
+    click.x = innerWidth/2; click.y = innerHeight/2; click.t = performance.now()/1000; click.intensity = 0.6;
+  }
+}
+document.querySelectorAll('#dock button').forEach(b=>{
+  b.addEventListener('click', ()=> setShader(parseInt(b.dataset.i,10), true));
+});
+addEventListener('keydown', e=>{
+  const k = e.key;
+  if(k>='1' && k<='5') setShader(parseInt(k,10)-1, true);
+  if(k==='ArrowRight') setShader((current+1)%5, true);
+  if(k==='ArrowLeft')  setShader((current+4)%5, true);
+});
+setShader(current, true);
+
+// clock
+function clock(){
+  const d = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  document.getElementById('clock').textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+setInterval(clock, 500); clock();
+
+// fps
+let last = performance.now(), fAcc = 0, fCnt = 0;
+
+const start = performance.now();
+function frame(){
+  const now = performance.now();
+  const dt = (now - last)/1000; last = now;
+  fAcc += dt; fCnt++;
+  if(fAcc>0.5){ document.getElementById('fps').textContent = Math.round(fCnt/fAcc); fAcc=0; fCnt=0; }
+
+  // smooth mouse
+  mouse.nx += (mouse.tx - mouse.nx)*0.12;
+  mouse.ny += (mouse.ty - mouse.ny)*0.12;
+  mouse.x = mouse.nx*innerWidth;
+  mouse.y = mouse.ny*innerHeight;
+
+  const p = progs[current];
+  gl.useProgram(p.program);
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.enableVertexAttribArray(p.a_pos);
+  gl.vertexAttribPointer(p.a_pos, 2, gl.FLOAT, false, 0, 0);
+
+  gl.uniform2f(p.u_res, canvas.width, canvas.height);
+  gl.uniform1f(p.u_time, (now - start)/1000);
+  gl.uniform2f(p.u_mouseN, mouse.nx, mouse.ny);
+  gl.uniform4f(p.u_click, click.x, click.y, click.t, click.intensity);
+
+  // decay click intensity for smooth fades
+  click.intensity *= 0.985;
+
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
+
