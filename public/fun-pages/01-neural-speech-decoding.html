@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>A Neural Speech Decoding Framework · Fun Papers 01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<div class="wrap">
+  <nav class="crumb">
+    <a href="index.html">← Fun Papers</a>
+    <span>Paper 01 of 05</span>
+  </nav>
+
+  <header class="head">
+    <div class="kicker"><span>Nature Machine Intelligence · 2024</span><span class="bar"></span><span>12 min read</span></div>
+    <h1>A neural speech decoding framework, <em>or: how to listen to a brain talk.</em></h1>
+    <div class="dek">We built an ECoG-to-speech pipeline with a differentiable synthesizer — it turns cortical signals into a voice that still sounds like the person who owns the cortex.</div>
+    <div class="byline">
+      <span>Chen · Wang · Flinker et al.</span>
+      <span>NYU · 48 participants</span>
+    </div>
+  </header>
+
+  <figure class="hero-fig">
+    <svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="spec" x1="0" x2="1">
+          <stop offset="0" stop-color="#b43a2a" stop-opacity=".08"/>
+          <stop offset=".5" stop-color="#b43a2a" stop-opacity=".5"/>
+          <stop offset="1" stop-color="#234e70" stop-opacity=".25"/>
+        </linearGradient>
+      </defs>
+      <!-- brain silhouette -->
+      <g transform="translate(60,70)">
+        <path d="M20 120 C -5 90, 0 40, 40 20 C 80 0, 140 5, 175 25 C 210 45, 210 90, 195 115 C 180 140, 140 155, 100 150 C 80 165, 40 160, 20 140 Z"
+              fill="#f5eadd" stroke="#1b1b1a" stroke-width="1.4"/>
+        <!-- sulci -->
+        <path d="M40 70 C 70 55, 100 65, 130 50" stroke="#1b1b1a" stroke-width=".8" fill="none" opacity=".5"/>
+        <path d="M40 100 C 80 90, 120 95, 160 85" stroke="#1b1b1a" stroke-width=".8" fill="none" opacity=".5"/>
+        <!-- ECoG grid patch -->
+        <g transform="translate(70,55)">
+          <rect x="0" y="0" width="90" height="50" fill="none" stroke="#b43a2a" stroke-width="1.2"/>
+          <g fill="#b43a2a">
+            <circle cx="10" cy="10" r="2.5"/><circle cx="30" cy="10" r="2.5"/><circle cx="50" cy="10" r="2.5"/><circle cx="70" cy="10" r="2.5"/>
+            <circle cx="10" cy="25" r="2.5"/><circle cx="30" cy="25" r="3"/><circle cx="50" cy="25" r="3"/><circle cx="70" cy="25" r="2.5"/>
+            <circle cx="10" cy="40" r="2.5"/><circle cx="30" cy="40" r="2.5"/><circle cx="50" cy="40" r="3"/><circle cx="70" cy="40" r="2.5"/>
+          </g>
+        </g>
+        <text x="0" y="195" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">1 · ECoG cortex</text>
+      </g>
+
+      <!-- arrows -->
+      <g stroke="#1b1b1a" fill="none" stroke-width="1.2">
+        <line x1="280" y1="180" x2="340" y2="180"/>
+        <polyline points="332,174 340,180 332,186"/>
+      </g>
+
+      <!-- neural net box -->
+      <g transform="translate(350,100)">
+        <rect x="0" y="0" width="120" height="160" fill="#ede6d3" stroke="#1b1b1a"/>
+        <g stroke="#234e70" fill="#234e70" opacity=".6">
+          <circle cx="25" cy="30" r="4"/><circle cx="25" cy="60" r="4"/><circle cx="25" cy="90" r="4"/><circle cx="25" cy="120" r="4"/>
+          <circle cx="60" cy="45" r="4"/><circle cx="60" cy="75" r="4"/><circle cx="60" cy="105" r="4"/>
+          <circle cx="95" cy="60" r="4"/><circle cx="95" cy="90" r="4"/>
+        </g>
+        <g stroke="#1b1b1a" stroke-width=".4" opacity=".3">
+          <line x1="25" y1="30" x2="60" y2="45"/><line x1="25" y1="30" x2="60" y2="75"/>
+          <line x1="25" y1="60" x2="60" y2="45"/><line x1="25" y1="60" x2="60" y2="75"/><line x1="25" y1="60" x2="60" y2="105"/>
+          <line x1="25" y1="90" x2="60" y2="75"/><line x1="25" y1="90" x2="60" y2="105"/>
+          <line x1="25" y1="120" x2="60" y2="105"/>
+          <line x1="60" y1="45" x2="95" y2="60"/><line x1="60" y1="75" x2="95" y2="60"/><line x1="60" y1="75" x2="95" y2="90"/>
+          <line x1="60" y1="105" x2="95" y2="90"/>
+        </g>
+        <text x="0" y="180" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">2 · ECoG decoder</text>
+      </g>
+
+      <g stroke="#1b1b1a" fill="none" stroke-width="1.2">
+        <line x1="480" y1="180" x2="540" y2="180"/>
+        <polyline points="532,174 540,180 532,186"/>
+      </g>
+
+      <!-- differentiable synthesizer -->
+      <g transform="translate(550,100)">
+        <rect x="0" y="0" width="200" height="160" fill="url(#spec)" stroke="#1b1b1a"/>
+        <!-- formants -->
+        <path d="M0 130 Q 30 100 60 110 T 120 90 T 180 105 T 200 100" stroke="#b43a2a" stroke-width="1.8" fill="none"/>
+        <path d="M0 90 Q 30 70 60 65 T 120 50 T 180 58 T 200 54" stroke="#234e70" stroke-width="1.4" fill="none"/>
+        <path d="M0 55 Q 30 45 60 38 T 120 30 T 180 34 T 200 32" stroke="#6b6a2e" stroke-width="1" fill="none"/>
+        <text x="0" y="180" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">3 · Speech spectrogram</text>
+      </g>
+
+      <!-- waveform at bottom -->
+      <g transform="translate(60,300)">
+        <path d="M0 15 Q 10 5, 20 15 T 40 15 T 60 15 T 80 15 T 100 15 T 120 5 T 140 25 T 160 10 T 180 20 T 200 10 T 220 25 T 240 5 T 260 20 T 280 15 T 300 15 T 320 10 T 340 20 T 360 15 T 380 10 T 400 25 T 420 10 T 440 15 T 460 20 T 480 5 T 500 15 T 520 15 T 540 15 T 560 15 T 580 15 T 600 15 T 620 15 T 640 15 T 660 15 T 680 15"
+              fill="none" stroke="#b43a2a" stroke-width="1.2"/>
+        <text x="-10" y="-8" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5a564e">→ "It's time to stop"</text>
+      </g>
+    </svg>
+    <figcaption>Fig. 1 — From 64 electrodes on the cortex, to a voice that still recognizably yours.</figcaption>
+  </figure>
+
+  <article class="prose">
+
+    <p>The first time I heard a reconstructed sentence come out of our model, I was sitting in the hospital cafeteria eating a slightly disappointing sandwich. The participant had silently thought about the phrase "it's time to stop" — and a voice that sounded unmistakably like theirs said it back, through my laptop speakers, two hundred feet down the hall from their bed. I stopped eating. The sandwich went cold. I forgot about it for about thirty minutes.</p>
+
+    <p>This paper is about that thirty minutes.</p>
+
+    <h2>What we actually did</h2>
+
+    <p>Decoding speech from the cortex is an old dream with a lot of failed mornings. You can read neurons, you can read muscles, you can read airflow — but gluing them into a voice that <em>sounds like a person</em> is a different problem, because voices are not classifier outputs. They are trajectories through a space that includes pitch, formants, breathiness, onset, coarticulation, and — this is the inconvenient part — <strong>the identity of the speaker.</strong></p>
+
+    <p>So we made a pipeline with two halves, trained end-to-end:</p>
+
+    <ol>
+      <li>An <strong>ECoG decoder</strong> that reads the high-gamma power from a grid of cortical electrodes and predicts a small set of interpretable speech parameters — things like pitch contours, voicing, and formant frequencies.</li>
+      <li>A <strong>differentiable speech synthesizer</strong> that takes those parameters and produces a waveform. Crucially, gradients flow back through it, so the decoder learns to predict parameters that sound right, not just parameters that match a teacher.</li>
+    </ol>
+
+    <p>That second piece is what made the project work. Prior frameworks used a fixed synthesizer or a black-box vocoder, which meant the decoder was optimizing for something mechanical rather than something audible. Once the synthesizer is differentiable, "loss" becomes a perceptual quantity.</p>
+
+    <div class="stats">
+      <div><div class="num">48</div><div class="lbl">Participants</div></div>
+      <div><div class="num">0.806</div><div class="lbl">Peak PCC (spectrogram)</div></div>
+      <div><div class="num">&lt;50ms</div><div class="lbl">Causal latency</div></div>
+    </div>
+
+    <h2>Three things we didn't expect</h2>
+
+    <p><strong>One — it worked on the right hemisphere.</strong> Speech is canonically a left-hemisphere story. But 8 of our participants had right-hemisphere grids, and the model decoded them almost as well. This isn't a new finding exactly — the right hemisphere has long been suspected of carrying prosody and spectral detail — but it's the first time I'd seen it decoded into intelligible speech.</p>
+
+    <p><strong>Two — low-density grids were enough.</strong> Much of the prior literature uses high-density research grids (128+ channels). Ours work on clinical-grade low-density grids too, which matters because those are the grids a patient might actually receive as part of ordinary epilepsy care. You don't need a research implant. You need the implant they already have.</p>
+
+    <p><strong>Three — the voice kept its owner.</strong> Because the synthesizer parameters include speaker-specific pitch and formant ranges, the reconstructed speech carries identity. It doesn't sound like <em>a</em> voice; it sounds like <em>this person's</em> voice. That is either a beautiful property or a small ethical horror, depending on which way you look at it, and I think about that a lot.</p>
+
+    <blockquote>A BCI that sounds like you is a different kind of prosthesis. It isn't restoring a function; it's returning a possession.</blockquote>
+
+    <figure class="fig">
+      <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
+        <!-- comparison bar chart -->
+        <g font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">
+          <text x="20" y="30">PCC by region (higher = better)</text>
+        </g>
+        <g transform="translate(20,50)">
+          <g>
+            <text x="0" y="15" font-size="11">Left STG</text>
+            <rect x="100" y="4" width="380" height="14" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".5"/>
+            <rect x="100" y="4" width="322" height="14" fill="#b43a2a"/>
+            <text x="490" y="15" font-size="11">0.806</text>
+          </g>
+          <g transform="translate(0,30)">
+            <text x="0" y="15" font-size="11">Left pre-motor</text>
+            <rect x="100" y="4" width="380" height="14" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".5"/>
+            <rect x="100" y="4" width="290" height="14" fill="#b43a2a"/>
+            <text x="490" y="15" font-size="11">0.724</text>
+          </g>
+          <g transform="translate(0,60)">
+            <text x="0" y="15" font-size="11">Right STG</text>
+            <rect x="100" y="4" width="380" height="14" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".5"/>
+            <rect x="100" y="4" width="262" height="14" fill="#234e70"/>
+            <text x="490" y="15" font-size="11">0.652</text>
+          </g>
+          <g transform="translate(0,90)">
+            <text x="0" y="15" font-size="11">Right motor</text>
+            <rect x="100" y="4" width="380" height="14" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".5"/>
+            <rect x="100" y="4" width="208" height="14" fill="#234e70"/>
+            <text x="490" y="15" font-size="11">0.521</text>
+          </g>
+          <g transform="translate(0,120)">
+            <text x="0" y="15" font-size="11">Low-density</text>
+            <rect x="100" y="4" width="380" height="14" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".5"/>
+            <rect x="100" y="4" width="240" height="14" fill="#6b6a2e"/>
+            <text x="490" y="15" font-size="11">0.602</text>
+          </g>
+        </g>
+      </svg>
+      <div class="cap"><strong>Fig. 2 —</strong> Spectrogram-level correlation by electrode region. Even the right hemisphere carries enough signal to talk.</div>
+    </figure>
+
+    <h2>The honest limits</h2>
+
+    <p>We trained on overt speech — people actually saying words, not just imagining them. Generalizing to <em>attempted</em> or <em>imagined</em> speech is a harder problem, and one we can't claim to have solved. Dataset size matters more than architecture, and we're still at the stage where every new participant is a small blessing and a large annotation cost.</p>
+
+    <p>And there is the dual-use question I refuse to pretend isn't in the room. A system this good at making cortex into voice is, on paper, a system that could be pointed at a cortex that doesn't want it. I don't have a tidy answer. I have a preference — that the technology stays in clinical hands long enough for the norms to catch up — and a small hope that the work will mostly be used to give people back a thing they loved and lost.</p>
+
+    <h2>Why I think this matters</h2>
+
+    <p>Most BCI papers frame their result as a restoration. This one quietly makes a harder claim: that speech is shallow enough in the brain that you can read it off the pial surface with consumer-grade grids and hear the person behind it. If that's true, a lot of what we assumed about where language "lives" is going to get re-sorted in the next five years, and the sorting will be messy and beautiful.</p>
+
+    <p>Also I have never been happier about a disappointing sandwich.</p>
+
+  </article>
+
+  <div class="article-foot">
+    <span><a href="index.html">← all fun papers</a></span>
+    <span>Next: <a href="02-ai-systemic-risk.html">02 Systemic Risk →</a></span>
+  </div>
+</div>
+</body>
+</html>

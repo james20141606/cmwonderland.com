@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Pronunciation Assessment · Fun Papers 05</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<div class="wrap">
+  <nav class="crumb">
+    <a href="index.html">← Fun Papers</a>
+    <span>Paper 05 of 05</span>
+  </nav>
+
+  <header class="head">
+    <div class="kicker"><span>ICASSP · 2024</span><span class="bar"></span><span>7 min read</span></div>
+    <h1>Pronunciation assessment, <em>a small paper about a small problem I loved.</em></h1>
+    <div class="dek">How do you grade the way someone said a word? Not whether the word is right — whether the mouth that said it is getting better. A surprisingly hard problem, solved with a surprisingly small model.</div>
+    <div class="byline">
+      <span>Chen · undergraduate work</span>
+      <span>2024 · pre-PhD</span>
+    </div>
+  </header>
+
+  <figure class="hero-fig">
+    <svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg">
+      <!-- waveform with phoneme segmentation -->
+      <g transform="translate(60,50)">
+        <rect x="0" y="0" width="680" height="180" fill="#ede6d3" stroke="#1b1b1a"/>
+        <!-- waveform -->
+        <path d="M0 90 Q 10 80 20 90 T 40 90 T 60 90 T 80 90 T 100 90 T 120 80 T 140 100 T 160 70 T 180 110 T 200 75 T 220 105 T 240 80 T 260 95 T 280 85 T 300 95 T 320 90 T 340 90 T 360 70 T 380 110 T 400 60 T 420 120 T 440 70 T 460 105 T 480 85 T 500 95 T 520 85 T 540 95 T 560 90 T 580 90 T 600 85 T 620 95 T 640 90 T 660 90 T 680 90"
+              fill="none" stroke="#b43a2a" stroke-width="1.4"/>
+        <!-- phoneme boundaries -->
+        <g stroke="#1b1b1a" stroke-width=".8" stroke-dasharray="3 2">
+          <line x1="110" y1="0" x2="110" y2="180"/>
+          <line x1="240" y1="0" x2="240" y2="180"/>
+          <line x1="360" y1="0" x2="360" y2="180"/>
+          <line x1="500" y1="0" x2="500" y2="180"/>
+        </g>
+        <!-- phoneme labels + scores -->
+        <g font-family="IBM Plex Mono, monospace" font-size="11" fill="#1b1b1a" text-anchor="middle">
+          <text x="55" y="160">/θ/</text>
+          <text x="175" y="160">/ɹ/</text>
+          <text x="300" y="160">/u/</text>
+          <text x="430" y="160">/ʃ/</text>
+          <text x="590" y="160">/t/</text>
+        </g>
+        <!-- score bars -->
+        <g>
+          <rect x="20" y="15" width="70" height="6" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
+          <rect x="20" y="15" width="28" height="6" fill="#b43a2a"/>
+          <text x="55" y="12" font-family="IBM Plex Mono, monospace" font-size="9" fill="#b43a2a" text-anchor="middle">0.4</text>
+
+          <rect x="140" y="15" width="70" height="6" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
+          <rect x="140" y="15" width="45" height="6" fill="#c89740"/>
+          <text x="175" y="12" font-family="IBM Plex Mono, monospace" font-size="9" fill="#c89740" text-anchor="middle">0.65</text>
+
+          <rect x="265" y="15" width="70" height="6" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
+          <rect x="265" y="15" width="60" height="6" fill="#6b6a2e"/>
+          <text x="300" y="12" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6b6a2e" text-anchor="middle">0.86</text>
+
+          <rect x="395" y="15" width="70" height="6" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
+          <rect x="395" y="15" width="20" height="6" fill="#b43a2a"/>
+          <text x="430" y="12" font-family="IBM Plex Mono, monospace" font-size="9" fill="#b43a2a" text-anchor="middle">0.28</text>
+
+          <rect x="555" y="15" width="70" height="6" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
+          <rect x="555" y="15" width="65" height="6" fill="#6b6a2e"/>
+          <text x="590" y="12" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6b6a2e" text-anchor="middle">0.93</text>
+        </g>
+        <text x="0" y="200" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">utterance · "through it"</text>
+      </g>
+    </svg>
+    <figcaption>Fig. 1 — Per-phoneme scores: the /θ/ and /ʃ/ are struggling, the /u/ and /t/ are fine.</figcaption>
+  </figure>
+
+  <article class="prose">
+
+    <p>This was my first real paper. I have a soft spot for it the way you have a soft spot for the first bike you rode without training wheels. It is not my most important work. It might still be the one where I learned the most per unit of suffering.</p>
+
+    <h2>The problem</h2>
+
+    <p>A language learner says a word. You want to tell them — honestly, usefully, in a way that helps them improve next time — <em>what was good and what wasn't</em>. Not a single score. A breakdown. Which phoneme was off. Whether the rhythm was off. Whether they were clear but fast, or slow but mumbling.</p>
+
+    <p>The naïve approach is to run an ASR, check if the transcription matches, and score accordingly. This is terrible, for a reason that took me embarrassingly long to articulate: <strong>a good ASR is trained to understand learners.</strong> That is its job. Which means a good ASR will <em>correct</em> the learner's pronunciation in its output and report everything was fine. The tool that is best at the adjacent task is structurally the worst tool for this task.</p>
+
+    <h2>What worked</h2>
+
+    <p>We ditched the ASR and built a small model that scored phonemes directly, against forced-aligned reference audio from native speakers. Three moves mattered:</p>
+
+    <h3>01 · A lightweight encoder</h3>
+    <p>A small wav2vec-style encoder, fine-tuned on learner speech, gave per-frame embeddings that didn't collapse onto the "nearest correct phoneme." The encoder was small enough to run on a phone, which mattered more than any accuracy point.</p>
+
+    <h3>02 · A contrastive head</h3>
+    <p>Instead of classifying phonemes, we scored each frame against the reference distribution for that phoneme. A frame is "good" if it looks like frames native speakers produce for that same phoneme in similar contexts. This is a different objective from "is this the right phoneme," and it produces much better feedback because it doesn't reward learners for being close to <em>any</em> English sound — only the intended one.</p>
+
+    <h3>03 · Honest ground truth</h3>
+    <p>We paid phoneticians, per phoneme, to score a held-out set. This was the expensive part. It was also the part without which nothing else would have worked. You cannot build a pronunciation scorer on aggregate human judgments; the resolution is wrong.</p>
+
+    <blockquote>If the model and the phonetician disagree, the phonetician is not always right. But they are right often enough that you should be nervous when they're not, and in this kind of work, nervousness is most of the method.</blockquote>
+
+    <figure class="fig">
+      <svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(40,30)">
+          <text x="0" y="0" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">AGREEMENT WITH PHONETICIAN · PEARSON r</text>
+          <!-- bars -->
+          <g transform="translate(0,20)">
+            <text x="0" y="15" font-family="Fraunces, serif" font-size="12">ASR baseline</text>
+            <rect x="160" y="4" width="360" height="14" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".5"/>
+            <rect x="160" y="4" width="162" height="14" fill="#234e70" opacity=".55"/>
+            <text x="530" y="15" font-family="IBM Plex Mono, monospace" font-size="10">0.45</text>
+          </g>
+          <g transform="translate(0,50)">
+            <text x="0" y="15" font-family="Fraunces, serif" font-size="12">GOP (classic)</text>
+            <rect x="160" y="4" width="360" height="14" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".5"/>
+            <rect x="160" y="4" width="230" height="14" fill="#234e70" opacity=".55"/>
+            <text x="530" y="15" font-family="IBM Plex Mono, monospace" font-size="10">0.64</text>
+          </g>
+          <g transform="translate(0,80)">
+            <text x="0" y="15" font-family="Fraunces, serif" font-size="12">Ours (contrastive)</text>
+            <rect x="160" y="4" width="360" height="14" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".5"/>
+            <rect x="160" y="4" width="302" height="14" fill="#b43a2a"/>
+            <text x="530" y="15" font-family="IBM Plex Mono, monospace" font-size="10">0.84</text>
+          </g>
+          <g transform="translate(0,110)">
+            <text x="0" y="15" font-family="Fraunces, serif" font-size="12">Inter-annotator</text>
+            <rect x="160" y="4" width="360" height="14" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".5"/>
+            <rect x="160" y="4" width="324" height="14" fill="#6b6a2e"/>
+            <text x="530" y="15" font-family="IBM Plex Mono, monospace" font-size="10">0.90</text>
+          </g>
+          <text x="0" y="150" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5a564e">
+            the ceiling isn't 1.0 · human phoneticians disagree too
+          </text>
+        </g>
+      </svg>
+      <div class="cap"><strong>Fig. 2 —</strong> We got close to the human-agreement ceiling, which is the right benchmark, not 1.0.</div>
+    </figure>
+
+    <h2>What I learned</h2>
+
+    <p>Three things, in order of usefulness to future-me:</p>
+
+    <ol>
+      <li><strong>Pick a loss that rewards the thing your user actually wants.</strong> Accuracy on phoneme classification was not the thing. Agreement with phoneticians on a continuous score was the thing. Those are different objectives, and picking the second one took about three months of me picking the first one and being confused.</li>
+      <li><strong>Ceilings are data.</strong> "Our model got 0.84" is boring. "Humans get 0.90 and our model gets 0.84" is a paper. Always report the ceiling, even when it makes your gain look smaller.</li>
+      <li><strong>Small projects are the ones where you learn methodology.</strong> Big projects teach you collaboration. Small, loved projects teach you taste. I wouldn't trade this one for a better-cited one.</li>
+    </ol>
+
+    <p>I don't work on pronunciation anymore. But the shape of the method — a small targeted model, a carefully chosen loss, an honest ceiling — is the shape I try to reach for whenever I'm starting something new, and I'm grateful to past-me for stumbling into it early.</p>
+
+  </article>
+
+  <div class="article-foot">
+    <span><a href="index.html">← all fun papers</a></span>
+    <span>You reached the end. <a href="index.html">Back to the index →</a></span>
+  </div>
+</div>
+</body>
+</html>

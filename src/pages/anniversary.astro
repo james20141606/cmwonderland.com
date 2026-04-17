@@ -1,0 +1,830 @@
+---
+// Anniversary page — creative love watch (3 rings + classical face)
+---
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>致孟孟 · 时光里的每一秒</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Caveat:wght@400;500&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --cream:#fff6ee;
+    --rose:#d88aa3;
+    --rose-deep:#b65a78;
+    --rose-soft:#eab5c4;
+    --ink:#5a3b47;
+    --ink-dim:#9d7b87;
+    --gold:#c89774;
+    --gold-deep:#9c6a48;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:var(--cream);color:var(--ink);font-family:'Noto Serif SC','Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+  .backdrop{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+  .backdrop::before{
+    content:'';position:absolute;inset:-10%;
+    background:
+      radial-gradient(40% 30% at 20% 20%, #ffd4dc 0%, transparent 60%),
+      radial-gradient(50% 40% at 85% 30%, #ffe5cf 0%, transparent 60%),
+      radial-gradient(60% 50% at 60% 85%, #f5d0dc 0%, transparent 60%),
+      linear-gradient(180deg, #fff6ee 0%, #fde4e0 100%);
+  }
+  canvas#petals{position:absolute;inset:0;width:100%;height:100%}
+
+  .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:64px 28px 100px}
+
+  .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:44px;font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:.14em;color:var(--ink-dim);font-style:italic}
+  .top a{color:var(--ink-dim);text-decoration:none;transition:.25s}
+  .top a:hover{color:var(--rose-deep)}
+  .top .heart{color:var(--rose);display:inline-block;animation:beat 2.4s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}30%{transform:scale(1.18)}60%{transform:scale(.95)}}
+
+  .hero{text-align:center;margin-bottom:38px}
+  .hero .sig{font-family:'Caveat',cursive;font-size:26px;color:var(--rose-deep);margin-bottom:6px}
+  .hero h1{
+    font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;
+    font-size:clamp(48px,7vw,86px);line-height:1.02;margin:0;color:var(--ink);letter-spacing:-.01em;
+  }
+  .hero h1 .amp{color:var(--rose);margin:0 .1em}
+  .hero .zh{font-family:'Ma Shan Zheng','Noto Serif SC',serif;font-size:clamp(18px,2.2vw,22px);color:var(--rose-deep);margin-top:10px;letter-spacing:.08em}
+
+  .section-h{
+    text-align:center;margin:56px 0 26px;
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-size:28px;color:var(--ink);font-weight:300;
+  }
+  .section-h .sub{display:block;font-family:'Noto Serif SC',serif;font-style:normal;font-size:12px;color:var(--ink-dim);letter-spacing:.3em;margin-top:6px}
+
+  /* ========== shared card chrome ========== */
+  .kard{
+    background:linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,246,242,.6));
+    border:1px solid rgba(216,138,163,.16);
+    border-radius:22px;
+    box-shadow:0 18px 42px rgba(180,120,140,.10), inset 0 1px 0 rgba(255,255,255,.9);
+    padding:26px 26px 24px;
+    display:flex;flex-direction:column;gap:14px;
+    transition:.3s;
+    position:relative;overflow:hidden;
+  }
+  .kard:hover{transform:translateY(-3px);box-shadow:0 26px 56px rgba(180,90,120,.18);border-color:rgba(216,138,163,.35)}
+  .kard .top-row{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+  .kard .lbl{font-family:'Caveat',cursive;font-size:20px;color:var(--rose-deep)}
+  .kard .date{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--ink-dim);text-transform:uppercase}
+  .kard .title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:26px;line-height:1.05;color:var(--ink)}
+  .kard .title .zh{font-family:'Noto Serif SC',serif;font-style:normal;color:var(--ink);font-size:20px;display:block;margin-top:2px}
+  .kard .whisper{font-family:'Caveat',cursive;font-size:19px;color:var(--rose-deep);line-height:1.35;padding-top:10px;border-top:1px dashed rgba(216,138,163,.22)}
+
+  /* ========== hero · LOVE WATCH ========== */
+  .together{
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.9), rgba(255,246,242,.7) 60%, rgba(253,228,224,.55) 100%);
+    border:1px solid rgba(216,138,163,.28);
+    border-radius:28px;box-shadow:0 30px 80px rgba(180,100,120,.14), inset 0 1px 0 #fff;
+    padding:52px 40px 44px;margin:28px auto 0;max-width:900px;
+    position:relative;text-align:center;
+  }
+  .together::before,.together::after{content:'❦';position:absolute;left:50%;transform:translateX(-50%);color:var(--rose-soft);font-size:22px}
+  .together::before{top:-14px}.together::after{bottom:-14px}
+  .together .cap-sm{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--ink-dim);letter-spacing:.24em;text-transform:uppercase;margin-bottom:6px}
+  .together .brand{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:30px;color:var(--rose-deep);letter-spacing:.04em;font-weight:400}
+  .together .brand-sub{font-family:'Ma Shan Zheng','Noto Serif SC',serif;font-size:14px;color:var(--ink-dim);letter-spacing:.3em;margin-top:2px}
+
+  .love-watch{
+    position:relative;width:min(440px,86%);aspect-ratio:1;margin:36px auto 18px;
+    filter:drop-shadow(0 24px 48px rgba(180,90,120,.22));
+  }
+  .love-watch svg{width:100%;height:100%;display:block}
+  .love-watch .hand{transform-origin:250px 250px;transform-box:view-box;transition:none}
+  .love-watch .crown{position:absolute;top:50%;right:-3%;transform:translateY(-50%);width:5%;height:6%;background:linear-gradient(90deg,#b4895f,#d7a55a 40%,#9c6a48);border-radius:3px 6px 6px 3px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15), 0 2px 4px rgba(0,0,0,.15)}
+  .love-watch .lug-top, .love-watch .lug-bot{position:absolute;left:50%;transform:translateX(-50%);width:18%;height:8%;background:linear-gradient(180deg,#e6b683,#b4895f);border-radius:8px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}
+  .love-watch .lug-top{top:-6%}
+  .love-watch .lug-bot{bottom:-6%;background:linear-gradient(0deg,#e6b683,#b4895f)}
+
+  .watch-legend{
+    display:grid;grid-template-columns:repeat(6,auto);gap:22px;justify-content:center;
+    margin-top:8px;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.18em;
+    color:var(--ink-dim);text-transform:uppercase;flex-wrap:wrap;
+  }
+  .watch-legend span b{color:var(--ink);font-weight:500;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;letter-spacing:0;text-transform:none;display:block;margin-bottom:2px}
+  .watch-legend span i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+  .watch-legend .l-y i{background:#b65a78}
+  .watch-legend .l-mo i{background:#d7a55a}
+  .watch-legend .l-d i{background:#6a4ea0}
+  .watch-legend .l-h i{background:#5a3b47}
+  .watch-legend .l-mi i{background:#c89774}
+  .watch-legend .l-s i{background:#d88aa3}
+
+  .together .script{font-family:'Caveat',cursive;font-size:22px;color:var(--rose-deep);margin-top:18px}
+  .together .since{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--ink-dim);letter-spacing:.1em;margin-top:6px}
+
+  /* base flip cell (used by mini-flip) */
+  .flip-cell{
+    background:linear-gradient(180deg, #2a1820 0%, #3a1f2c 48%, #1f1018 52%, #301820 100%);
+    color:#ffe6ea;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Cormorant Garamond',serif;font-weight:300;line-height:1;
+    box-shadow:0 10px 20px rgba(90,30,60,.28), inset 0 0 0 1px rgba(255,255,255,.05);
+    position:relative;overflow:hidden;font-variant-numeric:tabular-nums;
+  }
+  .flip-cell::after{
+    content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.45);box-shadow:0 1px 0 rgba(255,255,255,.04);
+  }
+  .flip-cell.flipping{animation: flipTop .5s ease;}
+  @keyframes flipTop{0%{transform:rotateX(0)}50%{transform:rotateX(-90deg);background:#1a0d14}100%{transform:rotateX(0)}}
+
+  @media (max-width:720px){
+    .together{padding:36px 18px 30px}
+    .love-watch{width:92%}
+    .watch-legend{grid-template-columns:repeat(3,auto);gap:14px 22px}
+  }
+
+  /* ========== grid of memory clocks ========== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+
+  /* ---------- analog clock shared ---------- */
+  .analog{
+    width:100%;aspect-ratio:1;max-width:260px;margin:6px auto 0;position:relative;border-radius:50%;
+  }
+  .analog svg{width:100%;height:100%;display:block}
+  .ticker{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.16em;color:var(--ink-dim);text-align:center;font-variant-numeric:tabular-nums}
+  .ticker b{color:var(--ink);font-weight:500}
+
+  /* variant · dayday (morning 9am pocket watch, warm gold) */
+  .kard.v-dayday{background:linear-gradient(180deg,#fffaf3,#fbecd8)}
+  .kard.v-dayday .date{color:var(--gold-deep)}
+  .kard.v-dayday .lbl{color:var(--gold-deep)}
+
+  /* variant · mengmeng (midnight starlit) */
+  .kard.v-meng{background:linear-gradient(180deg,#1a1130 0%, #2a1942 100%);color:#e8dcff;border-color:rgba(255,255,255,.08)}
+  .kard.v-meng .title,.kard.v-meng .title .zh{color:#fff6ff}
+  .kard.v-meng .date,.kard.v-meng .lbl{color:#d3bdf3}
+  .kard.v-meng .whisper{color:#f0cfe8;border-top-color:rgba(255,255,255,.18)}
+  .kard.v-meng .ticker{color:#bfa9d9}
+  .kard.v-meng .ticker b{color:#fff}
+
+  /* variant · engaged (rose ring) */
+  .kard.v-engaged{background:linear-gradient(180deg,#fff3f6,#fddee9)}
+
+  /* variant · married (golden sunburst, cream) */
+  .kard.v-married{background:linear-gradient(180deg,#fffaf0,#fcecc7)}
+  .kard.v-married .lbl,.kard.v-married .date{color:var(--gold-deep)}
+  .kard.v-married .whisper{color:var(--gold-deep)}
+
+  /* variant · countdown (digital seven-seg) */
+  .kard.v-count{background:linear-gradient(180deg,#fff 0%, #ffe6ea 100%);border-color:rgba(182,90,120,.3)}
+  .seg-wrap{display:flex;justify-content:center;gap:10px;margin:8px 0 6px;flex-wrap:wrap}
+  .seg{
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    padding:10px 14px 8px;border-radius:12px;
+    background:linear-gradient(180deg,#2a1820,#3a1f2c 48%,#1f1018 52%,#301820);
+    color:#ffd6df;min-width:62px;
+    box-shadow:0 8px 18px rgba(100,30,55,.22), inset 0 0 0 1px rgba(255,255,255,.05);
+  }
+  .seg .v{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+  .seg .u{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.3em;opacity:.75;text-transform:uppercase}
+  .seg::after{content:'';display:block;height:1px;background:rgba(0,0,0,.35);width:100%;position:relative;top:-16px}
+
+  /* variant · started (flip mini) */
+  .kard.v-start{background:linear-gradient(180deg,#fff,#ffe0d6)}
+  .mini-flip{display:flex;justify-content:center;gap:8px;margin:4px 0 4px}
+  .mini-flip .flip-cell{width:52px;height:70px;font-size:46px;border-radius:8px}
+  @media (max-width:520px){ .mini-flip .flip-cell{width:40px;height:56px;font-size:36px} }
+  .mini-flip .sep{color:var(--ink-dim);align-self:center;font-family:'Cormorant Garamond',serif;font-size:36px;line-height:1}
+
+  /* "at time" caption */
+  .atTime{
+    font-family:'Caveat',cursive;font-size:18px;color:var(--rose-deep);text-align:center;margin-top:2px
+  }
+  .kard.v-dayday .atTime{color:var(--gold-deep)}
+  .kard.v-meng .atTime{color:#f0cfe8}
+  .kard.v-married .atTime{color:var(--gold-deep)}
+
+  /* closing */
+  .closing{margin-top:80px;text-align:center}
+  .closing .big-heart{font-size:38px;color:var(--rose);display:inline-block;animation:beat 2.4s ease-in-out infinite}
+  .closing p{font-family:'Ma Shan Zheng','Noto Serif SC',serif;font-size:22px;color:var(--rose-deep);margin:18px 0 6px;letter-spacing:.08em}
+  .closing .en{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--ink-dim);letter-spacing:.03em}
+  .closing .signed{margin-top:22px;font-family:'Caveat',cursive;font-size:26px;color:var(--rose-deep)}
+
+  @media (max-width:600px){
+    .wrap{padding:40px 16px 70px}
+    .hero h1{font-size:44px}
+    .analog{max-width:200px}
+  }
+</style>
+</head>
+<body>
+
+<div class="backdrop"><canvas id="petals"></canvas></div>
+
+<div class="wrap">
+  <div class="top">
+    <a href="/">← 回家</a>
+    <span><span class="heart">♥</span> &nbsp; a love letter, in clocks</span>
+  </div>
+
+  <div class="hero">
+    <div class="sig">for my dearest Mengmeng,</div>
+    <h1>Xupeng <span class="amp">&amp;</span> Mengmeng</h1>
+    <div class="zh">呆呆 与 朵朵</div>
+  </div>
+
+  <!-- HERO · LOVE WATCH -->
+  <div class="together">
+    <div class="cap-sm">— maison d'amour · est. 14 · 02 · 2013 —</div>
+    <div class="brand">L'Horloge de Nous</div>
+    <div class="brand-sub">我们的时光手表</div>
+
+    <div class="love-watch" id="loveWatch">
+      <div class="lug-top"></div>
+      <div class="lug-bot"></div>
+      <div class="crown"></div>
+      <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <radialGradient id="lw-bezel" cx="50%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="#f3d9bb"/>
+            <stop offset="55%" stop-color="#d7a55a"/>
+            <stop offset="100%" stop-color="#8c5c36"/>
+          </radialGradient>
+          <radialGradient id="lw-face" cx="50%" cy="40%" r="70%">
+            <stop offset="0%" stop-color="#fffaf3"/>
+            <stop offset="65%" stop-color="#fff1ea"/>
+            <stop offset="100%" stop-color="#f9dcd4"/>
+          </radialGradient>
+          <linearGradient id="lw-bezel-inner" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#8c5c36"/>
+            <stop offset="1" stop-color="#d7a55a"/>
+          </linearGradient>
+        </defs>
+
+        <!-- case / bezel -->
+        <circle cx="250" cy="250" r="246" fill="url(#lw-bezel)"/>
+        <circle cx="250" cy="250" r="232" fill="url(#lw-bezel-inner)"/>
+        <circle cx="250" cy="250" r="222" fill="url(#lw-face)"/>
+
+        <!-- ring guides (subtle) -->
+        <circle cx="250" cy="250" r="200" fill="none" stroke="#b65a7815" stroke-width="1"/>
+        <circle cx="250" cy="250" r="160" fill="none" stroke="#d7a55a15" stroke-width="1"/>
+        <circle cx="250" cy="250" r="124" fill="none" stroke="#6a4ea018" stroke-width="1"/>
+
+        <!-- RING 1 (outermost) · YEAR — 12 large markers 1..12 -->
+        <g id="ring-year-labels"></g>
+
+        <!-- RING 2 · MONTH — 12 Chinese month markers -->
+        <g id="ring-month-labels"></g>
+
+        <!-- RING 3 · DAY — 24 hour clockwork -->
+        <g id="ring-day-labels"></g>
+
+        <!-- central face -->
+        <circle cx="250" cy="250" r="100" fill="#fff7ef" stroke="#c89774" stroke-width="1.5"/>
+        <g id="face-ticks"></g>
+        <g id="face-roman"></g>
+
+        <!-- brand engraving — small, below center -->
+        <text x="250" y="332" text-anchor="middle" font-family="Cormorant Garamond, serif" font-style="italic" font-size="9" fill="#b65a78" letter-spacing="4" opacity=".6">L'HORLOGE · DE · NOUS</text>
+
+        <!-- HANDS — rendered last so they sit above all ticks -->
+        <!-- YEAR hand (outer, r≈210) -->
+        <g id="hand-year" class="hand">
+          <line x1="250" y1="258" x2="250" y2="48" stroke="#b65a78" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="250" cy="48" r="5" fill="#b65a78"/>
+          <circle cx="250" cy="48" r="2" fill="#fff"/>
+        </g>
+        <!-- MONTH hand (r≈170) -->
+        <g id="hand-month" class="hand">
+          <line x1="250" y1="256" x2="250" y2="82" stroke="#d7a55a" stroke-width="2.6" stroke-linecap="round"/>
+          <polygon points="250,70 244,84 256,84" fill="#d7a55a"/>
+        </g>
+        <!-- DAY hand (r≈130) -->
+        <g id="hand-day" class="hand">
+          <line x1="250" y1="254" x2="250" y2="124" stroke="#6a4ea0" stroke-width="2.6" stroke-linecap="round"/>
+          <circle cx="250" cy="124" r="4" fill="#6a4ea0"/>
+        </g>
+
+        <!-- HOUR / MINUTE / SECOND (inside r=100 face) -->
+        <g id="hand-hour" class="hand">
+          <line x1="250" y1="262" x2="250" y2="178" stroke="#5a3b47" stroke-width="5.5" stroke-linecap="round"/>
+        </g>
+        <g id="hand-minute" class="hand">
+          <line x1="250" y1="266" x2="250" y2="162" stroke="#c89774" stroke-width="3.5" stroke-linecap="round"/>
+        </g>
+        <g id="hand-second" class="hand">
+          <line x1="250" y1="272" x2="250" y2="156" stroke="#d88aa3" stroke-width="1.4" stroke-linecap="round"/>
+        </g>
+
+        <!-- center cap (over all hands) -->
+        <circle cx="250" cy="250" r="7" fill="#b65a78"/>
+        <circle cx="250" cy="250" r="2.6" fill="#fff"/>
+
+        <!-- tiny heart at 6 o'clock between face & day ring -->
+        <path d="M250 370 C 243 363, 233 363, 233 373 C 233 381, 243 388, 250 394 C 257 388, 267 381, 267 373 C 267 363, 257 363, 250 370 Z"
+          fill="#d88aa3" opacity=".5"/>
+      </svg>
+    </div>
+
+    <div class="watch-legend">
+      <span class="l-y"><i></i><b id="lw-y">—</b>YEARS</span>
+      <span class="l-mo"><i></i><b id="lw-mo">—</b>MONTHS</span>
+      <span class="l-d"><i></i><b id="lw-d">—</b>DAYS</span>
+      <span class="l-h"><i></i><b id="lw-h">—</b>HOURS</span>
+      <span class="l-mi"><i></i><b id="lw-mi">—</b>MINS</span>
+      <span class="l-s"><i></i><b id="lw-s">—</b>SECS</span>
+    </div>
+
+    <div class="script">every hand on this watch turns only because of you ♥</div>
+    <div class="since">since 14 · 02 · 2013 · 19:00</div>
+  </div>
+
+  <div class="section-h">
+    moments, remembered
+    <span class="sub">时光里的每一个日子</span>
+  </div>
+
+  <div class="grid">
+
+    <!-- 呆呆出生 · 9:00 · warm pocket watch -->
+    <div class="kard v-dayday" id="c-dayday">
+      <div class="top-row"><span class="lbl">my own beginning</span><span class="date">1995 · 09 · 19 · 09:00</span></div>
+      <div class="title">Xupeng was <em>born</em><span class="zh">呆呆出生了</span></div>
+      <div class="analog" data-clock="dayday"></div>
+      <div class="atTime">九点钟的晨光，一个小呆呆来了</div>
+      <div class="ticker"><b id="t-dayday-d">—</b> 天 · <span id="t-dayday-t">—</span></div>
+      <div class="whisper">出生那天的我，大概已经悄悄开始在等你了。</div>
+    </div>
+
+    <!-- 朵朵出生 · 0:00 · midnight starlit -->
+    <div class="kard v-meng" id="c-meng">
+      <div class="top-row"><span class="lbl">the world met you</span><span class="date">1996 · 08 · 06 · 00:00</span></div>
+      <div class="title">Mengmeng was <em>born</em><span class="zh">朵朵出生了</span></div>
+      <div class="analog" data-clock="meng"></div>
+      <div class="atTime">子时零点的星光里，朵朵来了</div>
+      <div class="ticker"><b id="t-meng-d">—</b> 天 · <span id="t-meng-t">—</span></div>
+      <div class="whisper">谢谢你，来到这个世界，又绕了这么多路来找我。</div>
+    </div>
+
+    <!-- 订婚 · ring dial -->
+    <div class="kard v-engaged" id="c-engaged">
+      <div class="top-row"><span class="lbl">a promise</span><span class="date">2025 · 01 · 19</span></div>
+      <div class="title">We got <em>engaged</em><span class="zh">订婚纪念日</span></div>
+      <div class="analog" data-clock="engaged"></div>
+      <div class="atTime">一枚戒指，一个从此不分开的承诺</div>
+      <div class="ticker"><b id="t-engaged-d">—</b> 天 · <span id="t-engaged-t">—</span></div>
+      <div class="whisper">这一天之后，每一次戴上戒指，都是想你。</div>
+    </div>
+
+    <!-- 结婚 · 12:00 · golden sunburst -->
+    <div class="kard v-married" id="c-married">
+      <div class="top-row"><span class="lbl">the day we married</span><span class="date">2025 · 05 · 25 · 12:00</span></div>
+      <div class="title">We said <em>I do</em><span class="zh">我们结婚啦</span></div>
+      <div class="analog" data-clock="married"></div>
+      <div class="atTime">正午十二点，阳光把你的笑都染成金色</div>
+      <div class="ticker"><b id="t-married-d">—</b> 天 · <span id="t-married-t">—</span></div>
+      <div class="whisper">那天的阳光特别好，你笑起来比花还要好看。</div>
+    </div>
+
+    <!-- 结婚纪念日倒计时 · digital seven-seg -->
+    <div class="kard v-count" id="c-count">
+      <div class="top-row"><span class="lbl">counting down</span><span class="date">next · 05 · 25 · 12:00</span></div>
+      <div class="title">Our <em>anniversary</em><span class="zh">结婚纪念日</span></div>
+      <div class="seg-wrap">
+        <div class="seg"><div class="v" id="cd-d">—</div><div class="u">Days</div></div>
+        <div class="seg"><div class="v" id="cd-h">—</div><div class="u">Hours</div></div>
+        <div class="seg"><div class="v" id="cd-m">—</div><div class="u">Mins</div></div>
+        <div class="seg"><div class="v" id="cd-s">—</div><div class="u">Secs</div></div>
+      </div>
+      <div class="atTime" id="cd-label">直到我们的下一次周年</div>
+      <div class="whisper">每一年的这一天，我都想再向你说一次 "我愿意"。</div>
+    </div>
+
+    <!-- 在一起 · mini flip -->
+    <div class="kard v-start" id="c-start">
+      <div class="top-row"><span class="lbl">where it all began</span><span class="date">2013 · 02 · 14 · 19:00</span></div>
+      <div class="title">We <em>fell in love</em><span class="zh">我们在一起</span></div>
+      <div class="mini-flip">
+        <div class="flip-cell" id="s-h1">—</div>
+        <div class="flip-cell" id="s-h2">—</div>
+        <div class="sep">:</div>
+        <div class="flip-cell" id="s-m1">—</div>
+        <div class="flip-cell" id="s-m2">—</div>
+        <div class="sep">:</div>
+        <div class="flip-cell" id="s-s1">—</div>
+        <div class="flip-cell" id="s-s2">—</div>
+      </div>
+      <div class="atTime">晚上七点，那个说好"在一起"的情人节</div>
+      <div class="ticker"><b id="t-start-d">—</b> 天 · 从 Valentine's 2013 开始</div>
+      <div class="whisper">一个情人节，一个决定，从此再也不想和你分开。</div>
+    </div>
+
+  </div>
+
+  <div class="closing">
+    <div class="big-heart">♥</div>
+    <p>愿我们的下一个春天，依然有你</p>
+    <div class="en">and every spring, and every second, after that.</div>
+    <div class="signed">— 呆呆</div>
+  </div>
+</div>
+
+<script>
+// ============ data (with times) ============
+const TOGETHER = new Date('2013-02-14T19:00:00');
+const DAYDAY   = new Date('1995-09-19T09:00:00'); // Xupeng 9am
+const MENG     = new Date('1996-08-06T00:00:00'); // Mengmeng midnight
+const ENGAGED  = new Date('2025-01-19T12:00:00');
+const MARRIED  = new Date('2025-05-25T12:00:00');
+
+function pad(n,w=2){return String(n).padStart(w,'0')}
+function diffParts(a,b){
+  const ms = Math.max(0, b - a);
+  const s = Math.floor(ms/1000);
+  return { d: Math.floor(s/86400), h: Math.floor((s%86400)/3600), m: Math.floor((s%3600)/60), s: s%60, total:s };
+}
+
+// ============ FLIP CELL BUILDERS (mini only) ============
+function updateCells(el, n, width){
+  const str = String(n).padStart(width,'0');
+  const cells = el.children;
+  if(cells.length !== str.length) return;
+  for(let i=0;i<str.length;i++){
+    if(cells[i].textContent !== str[i]){
+      cells[i].textContent = str[i];
+      cells[i].classList.remove('flipping'); void cells[i].offsetWidth;
+      cells[i].classList.add('flipping');
+    }
+  }
+}
+
+// ============ LOVE WATCH — build ring labels & ticks ============
+(function buildWatch(){
+  const ringYear  = document.getElementById('ring-year-labels');
+  const ringMonth = document.getElementById('ring-month-labels');
+  const ringDay   = document.getElementById('ring-day-labels');
+  const roman     = document.getElementById('face-roman');
+  const faceTicks = document.getElementById('face-ticks');
+  const cx=250, cy=250;
+  const polar = (r,deg)=>{ const a=(deg-90)*Math.PI/180; return [cx+Math.cos(a)*r, cy+Math.sin(a)*r]; };
+
+  // RING 1 · YEAR — 12 numerals at r=210 (outermost)
+  for(let i=0;i<12;i++){
+    const deg = i*30;
+    const [tx,ty] = polar(210, deg);
+    const label = i===0 ? '12' : i;
+    ringYear.innerHTML += `<text x="${tx}" y="${ty+4.5}" text-anchor="middle" font-family="Cormorant Garamond, serif" font-style="italic" font-weight="500" font-size="14" fill="#b65a78">${label}</text>`;
+  }
+
+  // RING 2 · MONTH — 12 Chinese month markers at r=170
+  const monthsCN = ['一','二','三','四','五','六','七','八','九','十','十一','十二'];
+  for(let i=0;i<12;i++){
+    const deg = i*30;
+    const [tx,ty] = polar(170, deg);
+    const fs = (monthsCN[i].length>1) ? 10 : 12;
+    ringMonth.innerHTML += `<text x="${tx}" y="${ty+4}" text-anchor="middle" font-family="Noto Serif SC, serif" font-weight="500" font-size="${fs}" fill="#9c6a48">${monthsCN[i]}</text>`;
+  }
+
+  // RING 3 · DAY — 12 hour markers at r=130 (only 6 major numerals)
+  const dayMajors = {0:'24',3:'6',6:'12',9:'18'};
+  for(let i=0;i<12;i++){
+    const deg = i*30;
+    if(dayMajors[i]!==undefined){
+      const [tx,ty] = polar(130, deg);
+      ringDay.innerHTML += `<text x="${tx}" y="${ty+3.5}" text-anchor="middle" font-family="Cormorant Garamond, serif" font-style="italic" font-size="10" fill="#6a4ea0">${dayMajors[i]}</text>`;
+    } else {
+      const [tx,ty] = polar(130, deg);
+      ringDay.innerHTML += `<circle cx="${tx}" cy="${ty}" r="1.4" fill="#6a4ea0" opacity=".6"/>`;
+    }
+  }
+
+  // Central face — roman numerals at r=82
+  const rn = ['XII','I','II','III','IV','V','VI','VII','VIII','IX','X','XI'];
+  for(let i=0;i<12;i++){
+    const deg = i*30;
+    const [tx,ty] = polar(82, deg);
+    roman.innerHTML += `<text x="${tx}" y="${ty+4.5}" text-anchor="middle" font-family="Cormorant Garamond, serif" font-style="italic" font-weight="500" font-size="13" fill="#5a3b47">${rn[i]}</text>`;
+  }
+  // minute ticks inside central face at r=94
+  for(let i=0;i<60;i++){
+    const deg=i*6;
+    if(i%5===0) continue; // skip where numerals are
+    const [t1x,t1y]=polar(92,deg);
+    const [t2x,t2y]=polar(96,deg);
+    faceTicks.innerHTML += `<line x1="${t1x}" y1="${t1y}" x2="${t2x}" y2="${t2y}" stroke="#9d7b87" stroke-width="0.6" stroke-linecap="round"/>`;
+  }
+})();
+
+// compute elapsed Y/M/D/h/m/s since TOGETHER, accounting for calendar
+function elapsedYMDHMS(from, to){
+  let y = to.getFullYear() - from.getFullYear();
+  let mo = to.getMonth() - from.getMonth();
+  let d = to.getDate() - from.getDate();
+  let h = to.getHours() - from.getHours();
+  let mi = to.getMinutes() - from.getMinutes();
+  let s = to.getSeconds() - from.getSeconds();
+  if(s<0){ s+=60; mi--; }
+  if(mi<0){ mi+=60; h--; }
+  if(h<0){ h+=24; d--; }
+  if(d<0){
+    const prev = new Date(to.getFullYear(), to.getMonth(), 0).getDate();
+    d += prev; mo--;
+  }
+  if(mo<0){ mo+=12; y--; }
+  return {y,mo,d,h,mi,s};
+}
+
+function rotate(elId, deg){
+  const el = document.getElementById(elId);
+  if(el) el.setAttribute('transform', `rotate(${deg} 250 250)`);
+}
+
+function updateLoveWatch(){
+  const now = new Date();
+  const e = elapsedYMDHMS(TOGETHER, now);
+
+  // legend numbers
+  document.getElementById('lw-y').textContent  = e.y;
+  document.getElementById('lw-mo').textContent = e.mo;
+  document.getElementById('lw-d').textContent  = e.d;
+  document.getElementById('lw-h').textContent  = e.h;
+  document.getElementById('lw-mi').textContent = e.mi;
+  document.getElementById('lw-s').textContent  = e.s;
+
+  // hands — each rotates within its ring's full cycle
+  // year hand: index = (years % 12) + progress through current year-worth of months
+  const yFrac = (e.y % 12) + (e.mo / 12);
+  rotate('hand-year',  (yFrac/12)*360);
+  // month hand: 0..11 months + day fraction
+  const monthDays = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+  const moFrac = e.mo + (e.d / monthDays);
+  rotate('hand-month', (moFrac/12)*360);
+  // day hand: rotates through 24h (represents "time of day") — nicer visual tie
+  const hourFrac = now.getHours() + now.getMinutes()/60;
+  rotate('hand-day',   (hourFrac/24)*360);
+  // classical hour/min/sec (current local time — feels alive)
+  const hh = now.getHours()%12 + now.getMinutes()/60;
+  rotate('hand-hour',   (hh/12)*360);
+  rotate('hand-minute', ((now.getMinutes() + now.getSeconds()/60)/60)*360);
+  rotate('hand-second', ((now.getSeconds() + now.getMilliseconds()/1000)/60)*360);
+
+  // date/weekday windows (removed) — no-op if absent
+  const dw = document.getElementById('dateWinNum');
+  if(dw) dw.textContent = String(now.getDate()).padStart(2,'0');
+  const wk = ['SUN','MON','TUE','WED','THU','FRI','SAT'][now.getDay()];
+  const wkEl = document.getElementById('weekdayText');
+  if(wkEl) wkEl.textContent = wk;
+}
+
+
+// ============ ANALOG CLOCKS ============
+/**
+ * Analog clock styles per variant. Uses target time of day for fixed hands
+ * (birthdays, engagements, marriage are celebrated at their specific HH:MM).
+ * For the "together" and countdown cards, hands are live; here hands show
+ * the FIXED meaningful time.
+ */
+function analogSVG(variant){
+  const styles = {
+    dayday: {
+      face:'#fff7ea', rim:'#c89774', rim2:'#9c6a48', ink:'#6b452c',
+      accent:'#c89774', sub:'#b39274', numeral:'#9c6a48', tickMajor:'#9c6a48',
+      ringExtra:'',
+      // no star
+    },
+    meng: {
+      face:'#1a1130', rim:'#6a4ea0', rim2:'#b89cff', ink:'#f0e5ff',
+      accent:'#ffd5ef', sub:'#b39cd7', numeral:'#e8dcff', tickMajor:'#d6c0ff',
+      stars:true
+    },
+    engaged: {
+      face:'#fff6f9', rim:'#d88aa3', rim2:'#b65a78', ink:'#6d3a52',
+      accent:'#b65a78', sub:'#c98aa1', numeral:'#9c4a68', tickMajor:'#b65a78',
+      ring:true
+    },
+    married: {
+      face:'#fff9e8', rim:'#d7a55a', rim2:'#9c6a48', ink:'#6b452c',
+      accent:'#b87230', sub:'#c89774', numeral:'#9c6a48', tickMajor:'#9c6a48',
+      sunburst:true
+    }
+  };
+  const st = styles[variant];
+
+  // ticks + numerals
+  let ticks = '';
+  for(let i=0;i<60;i++){
+    const a = i*6;
+    const major = i%5===0;
+    const r1 = major ? 86 : 91;
+    const r2 = 96;
+    ticks += `<line x1="100" y1="${100-r1}" x2="100" y2="${100-r2}" stroke="${major?st.tickMajor:st.sub}" stroke-width="${major?1.6:0.8}" transform="rotate(${a} 100 100)" stroke-linecap="round"/>`;
+  }
+  const numerals = ['XII','I','II','III','IV','V','VI','VII','VIII','IX','X','XI'].map((n,i)=>{
+    const a = (i*30) * Math.PI/180;
+    const r = 72;
+    const x = 100 + Math.sin(a)*r;
+    const y = 100 - Math.cos(a)*r + 4.5;
+    return `<text x="${x}" y="${y}" text-anchor="middle" fill="${st.numeral}" font-family="Cormorant Garamond, serif" font-size="11" font-style="italic">${n}</text>`;
+  }).join('');
+
+  let extras = '';
+  if(st.stars){
+    // random starfield
+    const seed = 31;
+    let stars = '';
+    for(let i=0;i<22;i++){
+      const a = (seed*i*7.1)%360;
+      const rr = 18 + ((i*19)%55);
+      const x = 100 + Math.cos(a*Math.PI/180)*rr;
+      const y = 100 + Math.sin(a*Math.PI/180)*rr;
+      const s = 0.5 + ((i*3)%4)*0.25;
+      stars += `<circle cx="${x}" cy="${y}" r="${s}" fill="#fff" opacity="${0.5+((i*7)%5)*0.1}"/>`;
+    }
+    // moon crescent upper right
+    extras += `<defs><clipPath id="moonclip"><circle cx="120" cy="74" r="10"/></clipPath></defs>
+      <circle cx="120" cy="74" r="10" fill="#ffd5ef" opacity=".8"/>
+      <circle cx="124" cy="72" r="9" fill="${st.face}" clip-path="url(#moonclip)"/>`;
+    extras += stars;
+  }
+  if(st.ring){
+    extras += `<circle cx="100" cy="60" r="8" fill="none" stroke="#b65a78" stroke-width="1.5" opacity=".6"/>
+               <circle cx="100" cy="60" r="5" fill="#fdd" opacity=".85"/>
+               <path d="M100 52 L102 56 L106 56 L103 59 L104 63 L100 61 L96 63 L97 59 L94 56 L98 56 Z" fill="#fff" opacity=".9"/>`;
+  }
+  if(st.sunburst){
+    let rays = '';
+    for(let i=0;i<24;i++){
+      const a = i*15;
+      rays += `<rect x="99.4" y="2" width="1.2" height="12" fill="${st.accent}" opacity=".55" transform="rotate(${a} 100 100)"/>`;
+    }
+    extras += rays;
+  }
+
+  // hands (will be rotated via transforms from JS if data-live, otherwise static)
+  // Hands are group with ids so JS can update or leave fixed.
+  return `
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="rim-${variant}" cx="50%" cy="40%" r="60%">
+          <stop offset="0%" stop-color="${st.rim}"/>
+          <stop offset="100%" stop-color="${st.rim2}"/>
+        </radialGradient>
+      </defs>
+      <circle cx="100" cy="100" r="98" fill="url(#rim-${variant})"/>
+      <circle cx="100" cy="100" r="92" fill="${st.face}"/>
+      ${extras}
+      ${ticks}
+      ${numerals}
+      <!-- hands -->
+      <g id="hands-${variant}">
+        <line class="hand-h" x1="100" y1="100" x2="100" y2="56" stroke="${st.ink}" stroke-width="4" stroke-linecap="round"/>
+        <line class="hand-m" x1="100" y1="100" x2="100" y2="38" stroke="${st.ink}" stroke-width="2.6" stroke-linecap="round"/>
+        <line class="hand-s" x1="100" y1="108" x2="100" y2="28" stroke="${st.accent}" stroke-width="1.2" stroke-linecap="round" opacity=".85"/>
+        <circle cx="100" cy="100" r="4" fill="${st.ink}"/>
+        <circle cx="100" cy="100" r="1.4" fill="${st.accent}"/>
+      </g>
+    </svg>`;
+}
+
+// instantiate analog clocks + set their hands
+function setHands(container, hours, minutes, seconds){
+  const hDeg = (hours%12)*30 + minutes*0.5;
+  const mDeg = minutes*6 + seconds*0.1;
+  const sDeg = seconds*6;
+  container.querySelector('.hand-h').setAttribute('transform', `rotate(${hDeg} 100 100)`);
+  container.querySelector('.hand-m').setAttribute('transform', `rotate(${mDeg} 100 100)`);
+  container.querySelector('.hand-s').setAttribute('transform', `rotate(${sDeg} 100 100)`);
+}
+// static ones – show the meaningful moment forever
+const fixedMap = {
+  dayday:{h:9,m:0,s:0},
+  meng:{h:0,m:0,s:0},
+  engaged:{h:12,m:0,s:0},
+  married:{h:12,m:0,s:0}
+};
+document.querySelectorAll('[data-clock]').forEach(el=>{
+  const v = el.dataset.clock;
+  el.innerHTML = analogSVG(v);
+  const t = fixedMap[v];
+  setHands(el, t.h, t.m, t.s);
+});
+
+// live seconds hand breathing animation (subtle tick) — optional
+// Keep hands fixed so each clock "holds" the meaningful moment.
+
+// ============ LIVE UPDATES ============
+function tick(){
+  const now = new Date();
+
+  // hero: LOVE WATCH
+  updateLoveWatch();
+
+  // mini flip (在一起 card): HH:MM:SS of elapsed time today
+  const tog = diffParts(TOGETHER, now);
+  const hs = pad(tog.h%24), ms = pad(tog.m), sss = pad(tog.s);
+  const setMini = (id,ch)=>{ const el=document.getElementById(id); if(el && el.textContent!==ch){el.textContent=ch; el.classList.remove('flipping'); void el.offsetWidth; el.classList.add('flipping');} };
+  setMini('s-h1',hs[0]); setMini('s-h2',hs[1]);
+  setMini('s-m1',ms[0]); setMini('s-m2',ms[1]);
+  setMini('s-s1',sss[0]);setMini('s-s2',sss[1]);
+
+  // tickers
+  const items = [
+    {key:'dayday', start:DAYDAY},
+    {key:'meng',   start:MENG},
+    {key:'engaged',start:ENGAGED},
+    {key:'married',start:MARRIED},
+    {key:'start',  start:TOGETHER}
+  ];
+  items.forEach(({key,start})=>{
+    const p = diffParts(start, now);
+    const dEl = document.getElementById(`t-${key}-d`);
+    const tEl = document.getElementById(`t-${key}-t`);
+    if(dEl) dEl.textContent = p.d.toLocaleString();
+    if(tEl) tEl.textContent = `${pad(p.h)}:${pad(p.m)}:${pad(p.s)}`;
+  });
+
+  // countdown to next anniversary (2025-05-25 12:00 noon → then +1yr each time)
+  let next = new Date(now.getFullYear(), 4, 25, 12, 0, 0);
+  if(next < now) next = new Date(now.getFullYear()+1, 4, 25, 12, 0, 0);
+  const cd = diffParts(now, next);
+  document.getElementById('cd-d').textContent = pad(cd.d,3);
+  document.getElementById('cd-h').textContent = pad(cd.h);
+  document.getElementById('cd-m').textContent = pad(cd.m);
+  document.getElementById('cd-s').textContent = pad(cd.s);
+  document.getElementById('cd-label').textContent =
+    `直到 ${next.getFullYear()} 年 5 月 25 日 · 正午十二点`;
+}
+tick();
+setInterval(tick, 1000);
+
+// ============ petals ============
+(function(){
+  const canvas = document.getElementById('petals');
+  const ctx = canvas.getContext('2d');
+  let W, H, DPR;
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio||1, 2);
+    W = canvas.width = innerWidth*DPR;
+    H = canvas.height = innerHeight*DPR;
+    canvas.style.width = innerWidth+'px';
+    canvas.style.height = innerHeight+'px';
+  }
+  resize();
+  addEventListener('resize', resize);
+  const mouse = {x:innerWidth/2,y:innerHeight/2,tx:innerWidth/2,ty:innerHeight/2};
+  addEventListener('pointermove', e=>{mouse.tx=e.clientX; mouse.ty=e.clientY;});
+  const COLORS = ['rgba(255,190,205,','rgba(255,220,200,','rgba(240,175,200,','rgba(255,240,220,'];
+  const petals = Array.from({length: 34}, () => ({
+    x: Math.random()*innerWidth,
+    y: Math.random()*innerHeight,
+    vx: (Math.random()-.5)*.25,
+    vy: .15 + Math.random()*.45,
+    r: 6 + Math.random()*14,
+    a: Math.random()*Math.PI*2,
+    va: (Math.random()-.5)*.01,
+    c: COLORS[(Math.random()*COLORS.length)|0],
+    op: .35 + Math.random()*.35
+  }));
+  function drawPetal(p){
+    ctx.save();
+    ctx.translate(p.x*DPR, p.y*DPR);
+    ctx.rotate(p.a);
+    ctx.scale(DPR, DPR);
+    const r = p.r;
+    ctx.beginPath();
+    ctx.moveTo(0, -r*0.2);
+    ctx.bezierCurveTo(r, -r*1.1, r*1.3, r*0.2, 0, r*1.0);
+    ctx.bezierCurveTo(-r*1.3, r*0.2, -r, -r*1.1, 0, -r*0.2);
+    const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, r*1.2);
+    grad.addColorStop(0, p.c + (p.op+0.1) + ')');
+    grad.addColorStop(1, p.c + '0)');
+    ctx.fillStyle = grad;
+    ctx.fill();
+    ctx.restore();
+  }
+  function frame(){
+    mouse.x += (mouse.tx-mouse.x)*0.08;
+    mouse.y += (mouse.ty-mouse.y)*0.08;
+    ctx.clearRect(0,0,W,H);
+    for(const p of petals){
+      const dx = mouse.x - p.x, dy = mouse.y - p.y;
+      const d2 = dx*dx+dy*dy;
+      const pull = Math.min(0.6, 8000/(d2+4000));
+      p.vx += (dx/Math.sqrt(d2+1))*pull*0.004;
+      p.vy += (dy/Math.sqrt(d2+1))*pull*0.004;
+      p.vx *= 0.985; p.vy = Math.min(p.vy*0.995 + 0.003, 0.9);
+      p.x += p.vx; p.y += p.vy;
+      p.a += p.va + p.vx*0.01;
+      if(p.y > innerHeight+40){ p.y=-20; p.x=Math.random()*innerWidth; p.vx=(Math.random()-.5)*.25; p.vy=.2+Math.random()*.5; }
+      if(p.x < -40) p.x = innerWidth+40;
+      if(p.x > innerWidth+40) p.x = -40;
+      drawPetal(p);
+    }
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+</body>
+</html>
+
