@@ -27,7 +27,6 @@ const metadata = {
   },
 };
 
-// Category-specific taglines
 const taglines: Record<string, { en: string; zh: string }> = {
   projects: {
     en: 'Built things. Broken things. Occasionally useful.',
@@ -42,8 +41,8 @@ const taglines: Record<string, { en: string; zh: string }> = {
     zh: '平常日子里的碎片。',
   },
   research: {
-    en: 'Half-formed thoughts I am still trying to prove.',
-    zh: '一些还没证完的想法。',
+    en: 'Half-formed thoughts still trying to become proofs.',
+    zh: '一些还在尝试变成证明的想法。',
   },
 };
 const slug = (category.slug || category.title || '').toLowerCase();
@@ -56,11 +55,16 @@ const tag = taglines[slug] || { en: 'Entries filed under this stream.', zh: '这
     title={String(category.title)}
     subtitle={tag.en}
     subtitleZh={tag.zh}
-    height="clamp(300px, 46vh, 440px)"
+    height="clamp(280px, 44vh, 420px)"
   />
 
   <div class="nf-continue">
-    <section class="px-6 sm:px-6 py-12 sm:py-16 mx-auto max-w-4xl">
+    <section class="nf-listwrap">
+      <div class="nf-section-head">
+        <span class="bar"></span>
+        <span>CATEGORY · {category.title}</span>
+        <span class="bar"></span>
+      </div>
       <BlogList posts={page.data} />
       <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
     </section>

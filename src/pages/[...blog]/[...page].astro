@@ -40,7 +40,12 @@ const metadata = {
   />
 
   <div class="nf-continue">
-    <section class="px-6 sm:px-6 py-12 sm:py-16 mx-auto max-w-4xl">
+    <section class="nf-listwrap">
+      <div class="nf-section-head">
+        <span class="bar"></span>
+        <span>LATEST · 最新</span>
+        <span class="bar"></span>
+      </div>
       <BlogList posts={page.data} />
       <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
     </section>
@@ -48,13 +53,13 @@ const metadata = {
 </Layout>
 
 <style is:global>
-  /* Dark themed continuation — applied to all Neural Flow pages */
+  /* ======== Neural Flow continuation backdrop ======== */
   .nf-continue {
     background:
-      radial-gradient(ellipse at 10% 0%, rgba(95, 211, 255, 0.04), transparent 50%),
-      radial-gradient(ellipse at 90% 20%, rgba(140, 100, 255, 0.03), transparent 60%),
+      radial-gradient(ellipse at 8% -5%, rgba(95, 211, 255, 0.06), transparent 55%),
+      radial-gradient(ellipse at 92% 30%, rgba(140, 100, 255, 0.04), transparent 60%),
       linear-gradient(180deg, #0a1326 0%, #0c1530 50%, #0a1326 100%);
-    min-height: 60vh;
+    min-height: 70vh;
     position: relative;
     color: #d7dff0;
   }
@@ -63,31 +68,209 @@ const metadata = {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background-image:
-      repeating-linear-gradient(0deg, rgba(95, 211, 255, 0.025) 0 1px, transparent 1px 4px);
-    opacity: 0.5;
+    background-image: repeating-linear-gradient(
+      0deg,
+      rgba(95, 211, 255, 0.018) 0 1px,
+      transparent 1px 4px
+    );
+    opacity: 0.6;
+    z-index: 0;
   }
-  /* rewrite AstroWind blog list cards for dark theme */
-  .nf-continue h1,
-  .nf-continue h2,
-  .nf-continue h3,
-  .nf-continue h4 {
+  .nf-listwrap {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+  .nf-section-head {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    color: rgba(160, 185, 225, 0.55);
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+  .nf-section-head .bar {
+    flex: 1;
+    max-width: 120px;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(95, 211, 255, 0.35),
+      transparent
+    );
+  }
+
+  /* ======== Nuke AstroWind ListItem card, replace with editorial row ======== */
+  .nf-continue article {
+    display: block !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+  /* the inner <div> that had bg-white/slate-800 & rounded-xl */
+  .nf-continue article > div {
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    transition: none !important;
+  }
+  /* image block — hidden for editorial simplicity (most posts don't have images anyway) */
+  .nf-continue article > a,
+  .nf-continue article > div.relative {
+    display: none !important;
+  }
+  .nf-continue article.md\:grid-cols-2 {
+    grid-template-columns: none !important;
+  }
+
+  /* list row spacing */
+  .nf-continue ul { padding: 0; list-style: none; }
+  .nf-continue ul > li {
+    margin: 0 !important;
+    padding: 36px 0 !important;
+    border-bottom: 1px solid rgba(95, 211, 255, 0.1);
+    transition: padding 0.3s;
+  }
+  .nf-continue ul > li:first-child { padding-top: 0 !important; }
+  .nf-continue ul > li:last-child { border-bottom: none; }
+  .nf-continue ul > li:hover {
+    padding-left: 8px !important;
+  }
+
+  /* meta line (date · author · category) */
+  .nf-continue article header .mb-1 {
+    font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+    font-size: 10px !important;
+    letter-spacing: 0.22em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 14px !important;
+  }
+  .nf-continue article header .mb-1 span,
+  .nf-continue article header .mb-1 time {
+    color: rgba(160, 185, 225, 0.7) !important;
+    font-size: 10px !important;
+  }
+  .nf-continue article header .mb-1 a {
+    color: #5fd3ff !important;
+    text-decoration: none !important;
+    border-bottom: 1px dotted rgba(95, 211, 255, 0.4);
+    padding-bottom: 1px;
+  }
+  .nf-continue article header .mb-1 a:hover {
+    color: #9fe5ff !important;
+    border-bottom-color: #9fe5ff;
+  }
+  .nf-continue article header .mb-1 svg {
+    color: rgba(160, 185, 225, 0.5) !important;
+  }
+
+  /* post title — big serif editorial */
+  .nf-continue article h2 {
+    font-family: 'Instrument Serif', 'Times New Roman', serif !important;
+    font-weight: 400 !important;
+    font-size: clamp(26px, 3.2vw, 40px) !important;
+    line-height: 1.1 !important;
+    letter-spacing: -0.015em !important;
+    margin: 0 0 14px 0 !important;
     color: #f1f5ff !important;
   }
-  .nf-continue a {
-    color: #bfd7ff;
+  .nf-continue article h2 a {
+    color: inherit !important;
+    text-decoration: none !important;
+    transition: color 0.25s, text-shadow 0.25s !important;
+    background: none !important;
   }
-  .nf-continue a:hover {
-    color: #5fd3ff;
+  .nf-continue article h2 a:hover {
+    color: #bfe5ff !important;
+    text-shadow: 0 0 18px rgba(95, 211, 255, 0.45);
   }
-  .nf-continue p,
-  .nf-continue li,
-  .nf-continue span:not(.badge):not(.kicker),
-  .nf-continue time {
-    color: rgba(210, 220, 245, 0.78);
+  .nf-continue article h2 .text-amber-600,
+  .nf-continue article h2 [class*='amber'] {
+    color: #ffe066 !important;
   }
-  .nf-continue article {
-    border-bottom: 1px solid rgba(95, 211, 255, 0.12);
-    padding-bottom: 2rem;
+
+  /* excerpt — italic serif, subtle */
+  .nf-continue article p {
+    font-family: 'Instrument Serif', 'Times New Roman', serif !important;
+    font-style: italic !important;
+    font-size: 18px !important;
+    line-height: 1.6 !important;
+    color: rgba(210, 220, 245, 0.78) !important;
+    margin: 0 !important;
+    max-width: 64ch;
+  }
+
+  /* tags row — flat, monospace chips */
+  .nf-continue article footer {
+    margin-top: 16px !important;
+  }
+  .nf-continue article footer ul {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 6px !important;
+    padding: 0 !important;
+  }
+  .nf-continue article footer ul li {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+  .nf-continue article footer ul li a,
+  .nf-continue article footer span {
+    display: inline-block !important;
+    padding: 3px 8px !important;
+    border: 1px solid rgba(95, 211, 255, 0.2) !important;
+    border-radius: 2px !important;
+    background: rgba(95, 211, 255, 0.04) !important;
+    font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+    font-size: 10px !important;
+    letter-spacing: 0.12em !important;
+    text-transform: lowercase !important;
+    color: rgba(160, 200, 240, 0.75) !important;
+    text-decoration: none !important;
+    transition: all 0.2s !important;
+  }
+  .nf-continue article footer ul li a:hover {
+    border-color: #5fd3ff !important;
+    color: #9fe5ff !important;
+    background: rgba(95, 211, 255, 0.12) !important;
+  }
+
+  /* pagination */
+  .nf-continue nav[aria-label*='aginat'],
+  .nf-continue .pagination {
+    margin-top: 56px !important;
+    padding-top: 32px !important;
+    border-top: 1px solid rgba(95, 211, 255, 0.15) !important;
+  }
+  .nf-continue nav a,
+  .nf-continue .pagination a {
+    color: #bfd7ff !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 11px !important;
+    letter-spacing: 0.2em !important;
+    text-transform: uppercase !important;
+  }
+  .nf-continue nav a:hover,
+  .nf-continue .pagination a:hover {
+    color: #5fd3ff !important;
+  }
+
+  @media (max-width: 640px) {
+    .nf-listwrap { padding: 40px 18px 64px; }
+    .nf-continue ul > li { padding: 28px 0 !important; }
+    .nf-continue article h2 { font-size: 24px !important; }
+    .nf-continue article p { font-size: 16px !important; }
   }
 </style>
