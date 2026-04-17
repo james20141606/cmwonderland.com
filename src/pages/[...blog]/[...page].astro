@@ -3,7 +3,6 @@ import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
 
 import Layout from '~/layouts/PageLayout.astro';
 import BlogList from '~/components/blog/List.astro';
-import Headline from '~/components/blog/Headline.astro';
 import Pagination from '~/components/blog/Pagination.astro';
 
 import { blogListRobots, getStaticPathsBlogList } from '~/utils/blog';
@@ -32,17 +31,346 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <!-- Hero section with gradient -->
-  <div class="relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-indigo-950/30 dark:via-slate-900 dark:to-purple-950/20"></div>
-    <section class="relative px-6 sm:px-6 pt-12 sm:pt-16 lg:pt-20 pb-8 mx-auto max-w-4xl">
-      <Headline
-        subtitle="Thoughts on research, AI, life, and everything in between."
-      >
-        WonderLand Blog
-      </Headline>
-    </section>
-  </div>
+  <!-- Neural Flow shader hero -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+
+  <section class="nf-hero">
+    <canvas id="nfCanvas" class="nf-canvas"></canvas>
+    <div class="nf-fade-top"></div>
+    <div class="nf-fade-bot"></div>
+
+    <div class="nf-meta">
+      <span class="dot"></span>
+      <span>NEURAL&nbsp;FLOW</span>
+      <span class="sep">/</span>
+      <span class="count">Somnium &amp; Somniator</span>
+    </div>
+
+    <div class="nf-copy">
+      <div class="nf-kicker">
+        <span class="bar"></span>
+        <span>WonderLand Notebook · v2026</span>
+        <span class="bar"></span>
+      </div>
+      <h1 class="nf-title">
+        <span class="zh">WonderLand</span>
+        <em class="en">/ Notes from the edge of thought</em>
+      </h1>
+      <p class="nf-sub">
+        Research, AI, biology, life — and the strange tissue between them.
+        <br />
+        <span class="nf-sub-zh">研究、AI、生命，以及它们之间那些奇异的组织。</span>
+      </p>
+      <div class="nf-hint">
+        <kbd>↓</kbd> scroll &nbsp;·&nbsp; <kbd>move</kbd> ripple the flow
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .nf-hero {
+      position: relative;
+      width: 100%;
+      height: clamp(420px, 68vh, 640px);
+      overflow: hidden;
+      background: #030512;
+      isolation: isolate;
+    }
+    .nf-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: crosshair;
+    }
+    .nf-fade-top {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 80px;
+      background: linear-gradient(180deg, rgba(3, 5, 18, 0.6), transparent);
+      pointer-events: none;
+    }
+    .nf-fade-bot {
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 180px;
+      background: linear-gradient(0deg, #ffffff, transparent);
+      pointer-events: none;
+    }
+    :global(.dark) .nf-fade-bot {
+      background: linear-gradient(0deg, rgb(15, 23, 42), transparent);
+    }
+
+    .nf-meta {
+      position: absolute;
+      top: 22px;
+      left: 28px;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      color: rgba(210, 230, 255, 0.65);
+      text-transform: uppercase;
+    }
+    .nf-meta .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #5fd3ff;
+      box-shadow: 0 0 12px #5fd3ff;
+      animation: nfPulse 2s ease-in-out infinite;
+    }
+    .nf-meta .sep { opacity: 0.4; }
+    @keyframes nfPulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+
+    .nf-copy {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      text-align: center;
+      color: #e8eeff;
+      width: min(900px, 92%);
+      padding: 0 20px;
+    }
+    .nf-kicker {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      color: rgba(210, 230, 255, 0.55);
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+    .nf-kicker .bar {
+      flex: 1;
+      max-width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(95, 211, 255, 0.5), transparent);
+    }
+    .nf-title {
+      font-family: 'Instrument Serif', 'Times New Roman', serif;
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: -0.025em;
+      margin: 0;
+      text-wrap: balance;
+    }
+    .nf-title .zh {
+      display: block;
+      font-size: clamp(52px, 10vw, 128px);
+      color: #f5f8ff;
+      text-shadow: 0 0 40px rgba(95, 211, 255, 0.25);
+    }
+    .nf-title .en {
+      display: block;
+      font-style: italic;
+      font-size: clamp(16px, 2.2vw, 22px);
+      color: rgba(200, 220, 255, 0.78);
+      margin-top: 14px;
+      letter-spacing: 0.01em;
+    }
+    .nf-sub {
+      margin: 26px auto 0;
+      max-width: 560px;
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: clamp(16px, 1.5vw, 19px);
+      color: rgba(215, 225, 250, 0.8);
+      line-height: 1.5;
+    }
+    .nf-sub-zh {
+      font-family: 'Noto Serif SC', 'PingFang SC', 'Microsoft YaHei', serif;
+      font-style: normal;
+      color: rgba(180, 205, 245, 0.7);
+      font-size: 0.9em;
+    }
+    .nf-hint {
+      margin-top: 28px;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: rgba(180, 205, 245, 0.5);
+      text-transform: uppercase;
+    }
+    .nf-hint kbd {
+      border: 1px solid rgba(180, 205, 245, 0.3);
+      padding: 2px 7px;
+      border-radius: 3px;
+      margin: 0 2px;
+      font-family: inherit;
+      color: rgba(210, 230, 255, 0.75);
+    }
+
+    @media (max-width: 720px) {
+      .nf-meta { top: 14px; left: 16px; font-size: 9px; }
+      .nf-hero { height: clamp(380px, 60vh, 520px); }
+    }
+  </style>
+
+  <script is:inline>
+    (function () {
+      const canvas = document.getElementById('nfCanvas');
+      if (!canvas) return;
+      const gl = canvas.getContext('webgl', { antialias: false, premultipliedAlpha: false });
+      if (!gl) return;
+
+      const VS = `attribute vec2 a_pos; void main(){ gl_Position = vec4(a_pos,0.0,1.0); }`;
+      const FS = `
+precision highp float;
+uniform vec2 u_res; uniform float u_time; uniform vec2 u_mouseN;
+
+vec2 hash2(vec2 p){ p = vec2(dot(p, vec2(127.1,311.7)), dot(p, vec2(269.5,183.3))); return -1.0 + 2.0*fract(sin(p)*43758.5453); }
+float noise(vec2 p){
+  vec2 i = floor(p); vec2 f = fract(p);
+  vec2 u = f*f*(3.0-2.0*f);
+  return mix(mix(dot(hash2(i+vec2(0,0)), f-vec2(0,0)),
+                 dot(hash2(i+vec2(1,0)), f-vec2(1,0)), u.x),
+             mix(dot(hash2(i+vec2(0,1)), f-vec2(0,1)),
+                 dot(hash2(i+vec2(1,1)), f-vec2(1,1)), u.x), u.y);
+}
+float fbm(vec2 p){
+  float v = 0.0; float a = 0.5;
+  for(int i=0;i<5;i++){ v += a*noise(p); p *= 2.02; a *= 0.5; }
+  return v;
+}
+
+void main(){
+  vec2 uv = gl_FragCoord.xy / u_res;
+  float ar = u_res.x/u_res.y;
+  vec2 p = (uv - 0.5) * vec2(ar, 1.0);
+  vec2 m = (u_mouseN - 0.5) * vec2(ar, 1.0);
+
+  float t = u_time * 0.12;
+
+  // mouse pull subtly warps the flow
+  float md = length(p - m);
+  vec2 pull = (m - p) * exp(-md*3.0) * 0.25;
+  vec2 pp = p + pull;
+
+  // domain-warped fbm — produces vascular / dendritic filaments
+  vec2 q = vec2(fbm(pp*1.6 + t), fbm(pp*1.6 + vec2(5.2,1.3) - t));
+  vec2 r = vec2(fbm(pp*1.6 + 3.5*q + vec2(1.7,9.2) + t*0.7),
+                fbm(pp*1.6 + 3.5*q + vec2(8.3,2.8) - t*0.6));
+  float f = fbm(pp*1.6 + 3.5*r);
+
+  // filament lines
+  float fil = pow(1.0 - abs(sin(f*9.0 + t*1.5)), 8.0);
+  fil += pow(1.0 - abs(sin(f*4.0 - t*0.8)), 14.0) * 0.5;
+
+  // silk sheen ridges
+  float ridge = smoothstep(0.35, 0.55, f) - smoothstep(0.55, 0.8, f);
+
+  // palette: deep blue → midnight → cyan filaments → white-cyan silk
+  vec3 deep   = vec3(0.010, 0.022, 0.070);
+  vec3 midn   = vec3(0.038, 0.090, 0.200);
+  vec3 teal   = vec3(0.12,  0.55,  0.85);
+  vec3 cyan   = vec3(0.40,  0.90,  1.10);
+  vec3 silk   = vec3(0.82,  0.96,  1.00);
+
+  vec3 col = mix(deep, midn, smoothstep(-0.3, 0.6, f));
+  col = mix(col, teal, ridge * 0.55);
+  col += cyan * fil * 0.85;
+  col += silk * pow(fil, 3.2) * 0.55;
+
+  // mouse glow
+  col += exp(-md*4.0) * vec3(0.28, 0.55, 0.85) * 0.35;
+
+  // fine film grain
+  float grain = fract(sin(dot(gl_FragCoord.xy, vec2(12.98,78.23))) * 43758.5453);
+  col += (grain - 0.5) * 0.025;
+
+  // vignette
+  col *= 1.0 - 0.5*pow(length(uv-0.5), 1.8);
+
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
+
+      function compile(type, src) {
+        const s = gl.createShader(type);
+        gl.shaderSource(s, src);
+        gl.compileShader(s);
+        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+          console.error(gl.getShaderInfoLog(s));
+        }
+        return s;
+      }
+      const prog = gl.createProgram();
+      gl.attachShader(prog, compile(gl.VERTEX_SHADER, VS));
+      gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FS));
+      gl.linkProgram(prog);
+
+      const a_pos = gl.getAttribLocation(prog, 'a_pos');
+      const u_res = gl.getUniformLocation(prog, 'u_res');
+      const u_time = gl.getUniformLocation(prog, 'u_time');
+      const u_mouseN = gl.getUniformLocation(prog, 'u_mouseN');
+
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+
+      function resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = Math.floor(rect.width * dpr);
+        canvas.height = Math.floor(rect.height * dpr);
+        gl.viewport(0, 0, canvas.width, canvas.height);
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const mouse = { tx: 0.5, ty: 0.5, nx: 0.5, ny: 0.5 };
+      canvas.addEventListener('pointermove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.tx = (e.clientX - rect.left) / rect.width;
+        mouse.ty = 1 - (e.clientY - rect.top) / rect.height;
+      });
+
+      const t0 = performance.now();
+      let visible = true;
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+          visible = entries[0].isIntersecting;
+        });
+        io.observe(canvas);
+      }
+
+      function frame() {
+        if (visible) {
+          mouse.nx += (mouse.tx - mouse.nx) * 0.1;
+          mouse.ny += (mouse.ty - mouse.ny) * 0.1;
+          gl.useProgram(prog);
+          gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+          gl.enableVertexAttribArray(a_pos);
+          gl.vertexAttribPointer(a_pos, 2, gl.FLOAT, false, 0, 0);
+          gl.uniform2f(u_res, canvas.width, canvas.height);
+          gl.uniform1f(u_time, (performance.now() - t0) / 1000);
+          gl.uniform2f(u_mouseN, mouse.nx, mouse.ny);
+          gl.drawArrays(gl.TRIANGLES, 0, 3);
+        }
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    })();
+  </script>
+
   <section class="px-6 sm:px-6 py-8 sm:py-12 mx-auto max-w-4xl">
     <BlogList posts={page.data} />
     <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
