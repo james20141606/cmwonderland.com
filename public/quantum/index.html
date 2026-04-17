@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>量子纠缠 · Quantum Entanglement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=3">
+</head>
+<body>
+  <!-- Scroll progress -->
+  <div class="scroll-progress"><div id="progressBar"></div></div>
+
+  <!-- Top nav -->
+  <nav class="topnav">
+    <div class="brand">
+      <span class="brand-glyph">ψ</span>
+      <span class="brand-text">Entangled <em>/ 纠缠</em></span>
+    </div>
+    <div class="nav-links">
+      <a href="#ch-0">00</a>
+      <a href="#ch-1">01</a>
+      <a href="#ch-2">02</a>
+      <a href="#ch-3">03</a>
+      <a href="#ch-4">04</a>
+      <a href="#ch-5">05</a>
+    </div>
+    <div class="nav-lang">
+      <button class="lang-btn active" data-lang="both">中 / EN</button>
+    </div>
+  </nav>
+
+  <!-- Side chapter indicator -->
+  <aside class="chapter-rail" id="chapterRail">
+    <div class="rail-dot" data-ch="0"><span>00</span><em>Prelude</em></div>
+    <div class="rail-dot" data-ch="1"><span>01</span><em>Superposition</em></div>
+    <div class="rail-dot" data-ch="2"><span>02</span><em>Bell State</em></div>
+    <div class="rail-dot" data-ch="3"><span>03</span><em>CHSH</em></div>
+    <div class="rail-dot" data-ch="4"><span>04</span><em>Double Slit</em></div>
+    <div class="rail-dot" data-ch="5"><span>05</span><em>Coda</em></div>
+  </aside>
+
+  <!-- Chapters injected here -->
+  <main id="main"></main>
+
+  <!-- Tweaks -->
+  <div class="tweaks-panel" id="tweaksPanel" hidden>
+    <div class="tweaks-head">
+      <span>Tweaks</span>
+      <button id="tweaksClose">×</button>
+    </div>
+    <div class="tweaks-body">
+      <label class="tw-row">
+        <span>Particle A hue</span>
+        <input type="range" id="twHueA" min="180" max="300" step="1" />
+        <var id="twHueAVal"></var>
+      </label>
+      <label class="tw-row">
+        <span>Particle B hue</span>
+        <input type="range" id="twHueB" min="260" max="360" step="1" />
+        <var id="twHueBVal"></var>
+      </label>
+      <label class="tw-row">
+        <span>Accent hue</span>
+        <input type="range" id="twHueC" min="20" max="90" step="1" />
+        <var id="twHueCVal"></var>
+      </label>
+      <label class="tw-row">
+        <span>Particle count</span>
+        <input type="range" id="twCount" min="60" max="400" step="10" />
+        <var id="twCountVal"></var>
+      </label>
+      <label class="tw-row tw-toggle">
+        <span>Show Chinese</span>
+        <input type="checkbox" id="twShowZh" checked />
+      </label>
+      <label class="tw-row tw-toggle">
+        <span>Show English</span>
+        <input type="checkbox" id="twShowEn" checked />
+      </label>
+      <label class="tw-row tw-toggle">
+        <span>Reduce motion</span>
+        <input type="checkbox" id="twReduceMotion" />
+      </label>
+    </div>
+  </div>
+
+  <!-- Defaults block (editable) -->
+  <script>
+    window.TWEAKS = /*EDITMODE-BEGIN*/{
+      "hueA": 230,
+      "hueB": 290,
+      "hueC": 45,
+      "particleCount": 180,
+      "showZh": true,
+      "showEn": true,
+      "reduceMotion": false
+    }/*EDITMODE-END*/;
+  </script>
+
+  <script src="scripts/app.js?v=3"></script>
+  <script src="scripts/hero.js?v=3"></script>
+  <script src="scripts/bloch.js?v=3"></script>
+  <script src="scripts/bell.js?v=3"></script>
+  <script src="scripts/chsh.js?v=3"></script>
+  <script src="scripts/doubleslit.js?v=3"></script>
+  <script src="scripts/ch.js?v=3"></script>
+  <script src="scripts/tw.js?v=3"></script>
+</body>
+</html>
