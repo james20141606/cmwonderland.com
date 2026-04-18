@@ -4,15 +4,25 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Abundant Intelligence · Fun Papers 04</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="paper.css" />
 </head>
 <body>
+<div class="gridfloor"></div>
+<div class="sun"></div>
 <div class="wrap">
   <nav class="crumb">
     <a href="index.html">← Fun Papers</a>
-    <span>Paper 04 of 05</span>
+    <span>Paper 04 of 20</span>
   </nav>
+
+  <div class="source-link">
+    <span class="label">◉ SOURCE</span>
+    <span class="title-inline">Abundant Intelligence and Deficient Demand: A Macro-Financial Stress Test of Rapid AI Adoption</span>
+    <a href="https://arxiv.org/abs/2603.09209" target="_blank" rel="noopener">ARXIV · 2603.09209 ↗</a>
+  </div>
 
   <header class="head">
     <div class="kicker"><span>Essay · 2026</span><span class="bar"></span><span>9 min read</span></div>
@@ -28,31 +38,31 @@
     <svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg">
       <!-- price of intelligence over time, dropping -->
       <g transform="translate(60,40)">
-        <line x1="0" y1="220" x2="680" y2="220" stroke="#1b1b1a"/>
-        <line x1="0" y1="0" x2="0" y2="220" stroke="#1b1b1a"/>
-        <text x="0" y="-10" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">$ per useful token →</text>
-        <text x="580" y="238" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">time →</text>
+        <line x1="0" y1="220" x2="680" y2="220" stroke="#d1fff0"/>
+        <line x1="0" y1="0" x2="0" y2="220" stroke="#d1fff0"/>
+        <text x="0" y="-10" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">$ per useful token →</text>
+        <text x="580" y="238" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">time →</text>
         <!-- gridlines -->
-        <g stroke="#1b1b1a" stroke-width=".3" opacity=".2">
+        <g stroke="#d1fff0" stroke-width=".3" opacity=".2">
           <line x1="0" y1="50" x2="680" y2="50"/>
           <line x1="0" y1="100" x2="680" y2="100"/>
           <line x1="0" y1="150" x2="680" y2="150"/>
         </g>
         <!-- falling curve -->
         <path d="M0 20 C 80 30, 140 50, 200 80 C 260 110, 320 150, 400 180 C 480 200, 560 210, 680 215"
-              stroke="#b43a2a" stroke-width="2.5" fill="none"/>
+              stroke="#ff2a6d" stroke-width="2.5" fill="none"/>
         <!-- annotated eras -->
-        <g font-family="IBM Plex Mono, monospace" font-size="9" fill="#5a564e">
-          <line x1="60" y1="40" x2="60" y2="20" stroke="#1b1b1a" stroke-width=".5"/>
-          <text x="66" y="35" fill="#1b1b1a">GPT-3 era</text>
-          <line x1="260" y1="125" x2="260" y2="105" stroke="#1b1b1a" stroke-width=".5"/>
-          <text x="266" y="120" fill="#1b1b1a">today</text>
-          <line x1="520" y1="215" x2="520" y2="195" stroke="#1b1b1a" stroke-width=".5"/>
-          <text x="460" y="190" fill="#b43a2a">"abundance"?</text>
+        <g font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(209,255,240,0.6)">
+          <line x1="60" y1="40" x2="60" y2="20" stroke="#d1fff0" stroke-width=".5"/>
+          <text x="66" y="35" fill="#d1fff0">GPT-3 era</text>
+          <line x1="260" y1="125" x2="260" y2="105" stroke="#d1fff0" stroke-width=".5"/>
+          <text x="266" y="120" fill="#d1fff0">today</text>
+          <line x1="520" y1="215" x2="520" y2="195" stroke="#d1fff0" stroke-width=".5"/>
+          <text x="460" y="190" fill="#ff2a6d">"abundance"?</text>
         </g>
         <!-- asymptote -->
-        <line x1="0" y1="218" x2="680" y2="218" stroke="#234e70" stroke-dasharray="3 3" stroke-width=".8"/>
-        <text x="600" y="214" font-family="Fraunces,serif" font-style="italic" font-size="11" fill="#234e70">floor ≈ electricity</text>
+        <line x1="0" y1="218" x2="680" y2="218" stroke="#05d9e8" stroke-dasharray="3 3" stroke-width=".8"/>
+        <text x="600" y="214" font-family="JetBrains Mono, monospace" font-style="italic" font-size="11" fill="#05d9e8">floor ≈ electricity</text>
       </g>
     </svg>
     <figcaption>Fig. 1 — If the cost curve keeps bending, the interesting questions stop being economic and start being social.</figcaption>
@@ -71,6 +81,38 @@
     <p>So in abundance, the scarce good is not thought. It is <strong>trustworthy thought</strong>. The professions that do best are the ones that were secretly verification work pretending to be generation work — medicine, law, research — and the professions that do worst are the ones that were secretly generation work pretending to be verification work. I will let you decide which is which. My own guesses are spicier than I want to put in print.</p>
 
     <blockquote>Abundance doesn't eliminate expertise. It relocates it, from the act of producing to the act of deciding what to believe.</blockquote>
+
+    <div class="widget-lab reveal">
+      <div class="lab-title">Interactive · drag the cost curve, watch the wedge grow</div>
+      <div class="lab-canvas">
+        <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" id="lab4svg">
+          <g transform="translate(40,30)">
+            <line x1="0" y1="190" x2="560" y2="190" stroke="#d1fff0"/>
+            <line x1="0" y1="0" x2="0" y2="190" stroke="#d1fff0"/>
+            <text x="0" y="-10" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">AI output capability →</text>
+            <text x="460" y="208" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">years (2025 → 2035) →</text>
+
+            <!-- supply curve -->
+            <path id="supply" d="" stroke="#ff2a6d" stroke-width="2.4" fill="none"/>
+            <!-- demand curve -->
+            <path id="demand" d="" stroke="#05d9e8" stroke-width="2" fill="none"/>
+            <!-- shaded wedge -->
+            <path id="wedge" d="" fill="#ff2a6d" opacity=".1"/>
+
+            <!-- labels -->
+            <text id="supplyLabel" x="420" y="30" font-family="IBM Plex Mono, monospace" font-size="10" fill="#ff2a6d">output (AI-driven)</text>
+            <text id="demandLabel" x="420" y="160" font-family="IBM Plex Mono, monospace" font-size="10" fill="#05d9e8">demand (human wage-bound)</text>
+            <text id="wedgeLabel" x="300" y="90" font-family="JetBrains Mono, monospace" font-style="italic" font-size="15" fill="#d1fff0" text-anchor="middle">ghost GDP</text>
+          </g>
+        </svg>
+      </div>
+      <div class="lab-controls">
+        <div id="slSupply" data-widget="slider" data-min="0" data-max="1" data-step="0.01" data-value="0.6" data-label="supply growth rate (AI improvement)" data-unit=""></div>
+        <div id="slDemand" data-widget="slider" data-min="0" data-max="1" data-step="0.01" data-value="0.15" data-label="demand growth rate (wage-bound)" data-unit=""></div>
+      </div>
+      <div class="lab-readout" id="lab4read">Bump supply higher than demand grows and the wedge widens. That wedge is the paper's thesis — production the economy could have but can't pay for.</div>
+      <div class="lab-caption">Simple two-line model · illustrative, not calibrated</div>
+    </div>
 
     <h2>Three shapes a post-scarcity career could take</h2>
 
@@ -111,8 +153,61 @@
 
   <div class="article-foot">
     <span><a href="index.html">← all fun papers</a></span>
-    <span>Next: <a href="05-pronunciation-assessment.html">05 Pronunciation →</a></span>
+    <span>Next: <a href="05-ai-levels-playing-field.html">05 AI Levels →</a></span>
   </div>
 </div>
+
+<script src="paper.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const supply = document.getElementById('supply');
+  const demand = document.getElementById('demand');
+  const wedge = document.getElementById('wedge');
+  const read = document.getElementById('lab4read');
+
+  const W = 560, H = 190;
+  let sRate = 0.6, dRate = 0.15;
+
+  function render(){
+    const sPts=[], dPts=[];
+    for(let i=0;i<=40;i++){
+      const t = i/40;
+      const x = t*W;
+      // supply: exponential-ish growth
+      const s = 0.1 + 0.9*Math.pow(t, 1 - sRate*0.7);
+      const d = 0.1 + 0.7*Math.pow(t, 1 - dRate*0.5)*0.7;
+      sPts.push([x, H - s*H]);
+      dPts.push([x, H - d*H]);
+    }
+    supply.setAttribute('d', 'M' + sPts.map(p=>p.join(' ')).join(' L '));
+    demand.setAttribute('d', 'M' + dPts.map(p=>p.join(' ')).join(' L '));
+    // wedge between supply and demand
+    const wedgeD = 'M' + sPts.map(p=>p.join(' ')).join(' L ') + ' L ' + [...dPts].reverse().map(p=>p.join(' ')).join(' L ') + ' Z';
+    wedge.setAttribute('d', wedgeD);
+
+    // compute wedge area (approx)
+    let area = 0;
+    for(let i=0;i<sPts.length;i++){
+      area += Math.abs(dPts[i][1] - sPts[i][1]);
+    }
+    const norm = area / (sPts.length * H);
+
+    let msg;
+    if(norm > 0.35){
+      msg = `<strong>Runaway wedge (${(norm*100).toFixed(0)}% gap).</strong> AI output has raced ahead of demand. Most of the capacity is economically "ghost" — producible but not paid for. The paper's displacement-spiral regime.`;
+    } else if(norm > 0.15){
+      msg = `<strong>Visible wedge (${(norm*100).toFixed(0)}% gap).</strong> Supply exceeds demand enough to matter. Firms in this regime invest in output that the market can't absorb. Margin compression follows.`;
+    } else {
+      msg = `<strong>Closed wedge (${(norm*100).toFixed(0)}% gap).</strong> Supply and demand are tracking. This is the equilibrium path, and it requires demand to grow roughly as fast as AI capability. Historically rare.`;
+    }
+    read.innerHTML = msg;
+  }
+  FP.bindSlider('slSupply', v=>{sRate=v;render();});
+  FP.bindSlider('slDemand', v=>{dRate=v;render();});
+  render();
+});
+</script>
+</body>
+</html>
 </body>
 </html>

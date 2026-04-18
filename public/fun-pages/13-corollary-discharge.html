@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>A Corollary Discharge Circuit in Human Speech · Fun Papers 12</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<div class="gridfloor"></div>
+<div class="sun"></div>
+<div class="wrap">
+  <nav class="crumb">
+    <a href="index.html">← Fun Papers</a>
+    <span>Paper 12 of 20</span>
+  </nav>
+
+  <div class="source-link">
+    <span class="label">◉ SOURCE</span>
+    <span class="title-inline">A corollary discharge circuit in human speech</span>
+    <a href="https://www.pnas.org/doi/10.1073/pnas.2404121121" target="_blank" rel="noopener">PNAS · 10.1073/pnas.2404121121 · 2024 ↗</a>
+  </div>
+
+  <header class="head">
+    <div class="kicker"><span>PNAS · 10.1073/pnas.2404121121 · Dec 2024</span><span class="bar"></span><span>11 min read</span></div>
+    <h1>A corollary discharge circuit in human speech, <em>or: how the brain whispers what it is about to say, to itself, in advance.</em></h1>
+    <div class="dek">Every animal that moves needs a copy of the motor command sent to sensory systems so they can tell "I did that" from "something happened to me." In humans, this <em>corollary discharge</em> was inferred from behaviour for decades but never located. We mapped it. It lives in ventral precentral gyrus. It takes 120 ms to arrive at auditory cortex.</div>
+    <div class="byline">
+      <span>Khalilian-Gourtani · Wang · Chen · Flinker et al.</span>
+      <span>NYU Langone · PNAS 2024</span>
+    </div>
+  </header>
+
+  <figure class="hero-fig">
+    <svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(60,60)">
+        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">HUMAN CORTEX · CORTICAL PATH OF THE DISCHARGE (schematic)</text>
+        <!-- cortex outline -->
+        <path d="M60 180 C 20 150, 25 70, 80 40 C 150 10, 280 25, 340 70 C 400 120, 360 190, 280 200 C 200 210, 120 205, 60 180 Z"
+              fill="rgba(5,217,232,0.06)" stroke="#d1fff0" stroke-width="1.4"/>
+        <!-- precentral gyrus (source) -->
+        <g transform="translate(130,105)">
+          <circle r="22" fill="#ff2a6d" opacity=".25" class="svg-pulse"/>
+          <circle r="10" fill="#ff2a6d"/>
+          <text y="-30" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#ff2a6d">ventral preCG</text>
+          <text y="-18" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="rgba(255,42,109,0.7)">source (t=0)</text>
+        </g>
+        <!-- STG (sink) -->
+        <g transform="translate(280,150)">
+          <circle r="18" fill="#05d9e8" opacity=".25"/>
+          <circle r="9" fill="#05d9e8"/>
+          <text y="30" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#05d9e8">STG</text>
+          <text y="42" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="rgba(5,217,232,0.7)">sink (t≈120ms)</text>
+        </g>
+        <!-- travelling pulse -->
+        <path class="svg-trace" d="M140 105 C 180 95, 230 120, 280 150" stroke="#ffe066" stroke-width="2.4" fill="none"/>
+        <!-- milliseconds markers -->
+        <g font-family="IBM Plex Mono, monospace" font-size="9" fill="#ffe066">
+          <circle cx="170" cy="102" r="2.5" fill="#ffe066"/><text x="160" y="92">30ms</text>
+          <circle cx="215" cy="118" r="2.5" fill="#ffe066"/><text x="200" y="108">70ms</text>
+          <circle cx="258" cy="138" r="2.5" fill="#ffe066"/><text x="245" y="128">100ms</text>
+        </g>
+        <!-- audio wave being compared -->
+        <g transform="translate(380,70)">
+          <text x="0" y="-4" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">AUDITORY INPUT (your own voice)</text>
+          <rect x="0" y="0" width="300" height="60" fill="#0a0a16" stroke="#d1fff0" stroke-width=".5"/>
+          <path class="svg-trace" d="M5 30 Q 20 15 35 30 T 65 30 T 95 12 T 125 46 T 155 22 T 185 38 T 215 28 T 245 35 T 275 30 T 295 30" stroke="#05d9e8" stroke-width="1.2" fill="none"/>
+          <text x="0" y="75" font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(209,255,240,0.6)">± cancelled by incoming discharge</text>
+        </g>
+        <g transform="translate(380,180)">
+          <text x="0" y="-4" font-family="IBM Plex Mono, monospace" font-size="10" fill="#ffe066">PREDICTED SPECTROGRAM (from discharge)</text>
+          <rect x="0" y="0" width="300" height="60" fill="#0a0a16" stroke="#ffe066" stroke-width=".6"/>
+          <path class="svg-trace" d="M5 30 Q 20 15 35 30 T 65 30 T 95 12 T 125 46 T 155 22 T 185 38 T 215 28 T 245 35 T 275 30 T 295 30" stroke="#ffe066" stroke-width="1.2" fill="none" opacity=".7"/>
+        </g>
+        <text x="380" y="270" font-family="JetBrains Mono, monospace" font-style="italic" font-size="13" fill="#d1fff0">Self ≈ predicted. Prediction error ≈ the part that is new.</text>
+      </g>
+    </svg>
+    <figcaption>Fig. 1 — The discharge travels from ventral precentral gyrus to superior temporal gyrus in ~120ms, carrying a prediction of what the mouth is about to produce.</figcaption>
+  </figure>
+
+  <article class="prose">
+
+    <p>If you whisper to yourself in a quiet room, the sound of your own voice does not startle you. If someone else whispers the same word, at the same volume, a foot from your ear, you jump. The nervous system has a prior on who made the sound, and the prior is built out of something the brain sent to itself a moment before the mouth moved.</p>
+
+    <p>That something is the <em>corollary discharge</em>. In frogs, in crickets, in cats, in primate visuomotor control, we have known for seventy years that such a signal exists. What had been missing, for humans, was a receipt. This paper is the receipt.</p>
+
+    <h2>Why it was hard to catch</h2>
+
+    <p>Behaviourally, corollary discharge has been easy to <em>infer</em> — auditory cortex suppresses during self-generated sound, perturbations of your own voice in real time elicit specific correction patterns, schizophrenia is partly a story about discharge failures. None of those tell you where the signal starts, when it arrives, or what it carries.</p>
+
+    <p>The reason the source was elusive is that the signal lives on a very short timeline — it has to arrive at auditory cortex <em>before</em> the sound reaches the ear, which gives it on the order of 100ms to travel a few centimetres of cortex. Non-invasive tools either do not have the spatial resolution (EEG/MEG) or do not have the temporal resolution (fMRI) to localise it.</p>
+
+    <p>We used intracranial ECoG recordings from patients undergoing clinical monitoring — the one window where you get millisecond timing AND millimetre localisation AND healthy-ish human cortex. And we used connectivity techniques that could tell us not just <em>when</em> a region was active but <em>where the activity came from</em>.</p>
+
+    <div class="widget-lab reveal">
+      <div class="lab-title">Interactive · slide the time cursor</div>
+      <div class="lab-canvas">
+        <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg" id="lab12svg">
+          <g transform="translate(40,30)">
+            <!-- two cortical sites -->
+            <g transform="translate(20,30)">
+              <circle id="preCG" r="18" fill="#ff2a6d" opacity=".3"/>
+              <circle r="7" fill="#ff2a6d"/>
+              <text y="-25" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#ff2a6d">preCG (source)</text>
+            </g>
+            <g transform="translate(260,100)">
+              <circle id="STG" r="18" fill="#05d9e8" opacity=".1"/>
+              <circle r="7" fill="#05d9e8"/>
+              <text y="35" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#05d9e8">STG (sink)</text>
+            </g>
+            <!-- travelling dot -->
+            <circle id="travellingDot" cx="40" cy="30" r="6" fill="#ffe066"/>
+            <!-- path -->
+            <path d="M40 30 C 100 20, 180 80, 280 100" stroke="#ffe066" stroke-width=".8" stroke-dasharray="3 3" fill="none" opacity=".5"/>
+            <!-- time axis -->
+            <g transform="translate(0,180)">
+              <line x1="0" y1="0" x2="560" y2="0" stroke="#d1fff0"/>
+              <g font-family="IBM Plex Mono, monospace" font-size="10" fill="rgba(209,255,240,0.6)">
+                <text x="-4" y="20">0</text><text x="196" y="20">60ms</text><text x="396" y="20">120ms</text><text x="540" y="20">180ms</text>
+              </g>
+              <line x1="0" y1="-4" x2="0" y2="4" stroke="#d1fff0"/>
+              <line x1="200" y1="-4" x2="200" y2="4" stroke="#d1fff0"/>
+              <line x1="400" y1="-4" x2="400" y2="4" stroke="#d1fff0"/>
+              <line x1="560" y1="-4" x2="560" y2="4" stroke="#d1fff0"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="lab-controls">
+        <div id="slT" data-widget="slider" data-min="0" data-max="180" data-step="1" data-value="60" data-label="time after speech onset" data-unit="ms"></div>
+      </div>
+      <div class="lab-readout" id="lab12read">Slide the time cursor. The yellow signal leaves preCG at t=0 and arrives at STG around t=120ms — just in time to pre-empt the echo.</div>
+      <div class="lab-caption">Simulated schematic of Fig. 3 — spatial path + timing</div>
+    </div>
+
+    <h2>What the signal actually looks like</h2>
+
+    <p>The discharge is not a single pulse. It is a tiled, frequency-specific pattern that matches the spectral content of the speech about to be produced — high energy in the 50–150 Hz range during voiced segments, silence during the stop consonants, band-limited activity timed to formants. It is, in other words, a <em>prediction</em> of the spectrogram, delivered in advance.</p>
+
+    <p>If the discharge were just "here comes speech, hush," the phenomenon would be interesting but architecturally simple. That it is frequency-specific means the downstream comparator is doing something much more like subtraction than gating. The auditory cortex doesn't go quiet; it goes <em>unsurprised</em>.</p>
+
+    <blockquote>The most elegant part of the paper, to me, is that the discharge spectrum tracks the about-to-be-produced phoneme. Not the category. The actual acoustic trajectory.</blockquote>
+
+    <h2>The clinical hook</h2>
+
+    <p>A natural question is whether the discharge is <em>disrupted</em> in conditions that have self-agency symptoms. Schizophrenia is the canonical example — patients sometimes experience their own thoughts as external voices, which is exactly the phenomenology you would expect if the comparator were miscalibrated. We do not answer that question in this paper. But we give the field an anatomical target and a timing window to look in, which is almost certainly the precondition for answering it.</p>
+
+    <div class="stats">
+      <div><div class="num">120</div><div class="lbl">ms · source → sink</div></div>
+      <div><div class="num">ventral preCG</div><div class="lbl">anatomical origin</div></div>
+      <div><div class="num">STG</div><div class="lbl">primary target</div></div>
+    </div>
+
+    <h2>My role in this paper</h2>
+
+    <p>I am a middle author. The lead — Amirhossein Khalilian-Gourtani — did the heavy causal-analysis lifting and is the reason the signal-to-noise in the connectivity figures is as clean as it is. My contribution was the spectrogram-matching analysis and some of the single-trial variance figures. I will say, without qualification, that this is the most scientifically mature paper I have been a coauthor on to date, and I am grateful for the window it gave me into how a really good senior-postdoc runs a multi-year investigation.</p>
+
+    <p>The feedforward-and-feedback story from <a href="06-distributed-cortical.html">paper 06</a> and this corollary-discharge story are two sides of the same coin. That paper showed the bidirectional flow during production. This paper tells you one specific thing that flow is <em>for</em>. Together they begin to sketch a mechanistic account of how humans produce language without getting drowned out by the sound of producing it.</p>
+
+  </article>
+
+  <div class="article-foot">
+    <span><a href="index.html">← all fun papers</a></span>
+    <span>Next: <a href="14-stimulus-gan.html">13 Stimulus GAN →</a></span>
+  </div>
+</div>
+
+<script src="paper.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const preCG = document.getElementById('preCG');
+  const STG = document.getElementById('STG');
+  const dot = document.getElementById('travellingDot');
+  const read = document.getElementById('lab12read');
+
+  // path interpolation along the cubic
+  function pointOnPath(t){
+    // t in [0,1], roughly along C cubic M40,30 C 100,20 180,80 280,100
+    const x0=40,y0=30,x1=100,y1=20,x2=180,y2=80,x3=280,y3=100;
+    const u=1-t;
+    const x = u*u*u*x0 + 3*u*u*t*x1 + 3*u*t*t*x2 + t*t*t*x3;
+    const y = u*u*u*y0 + 3*u*u*t*y1 + 3*u*t*t*y2 + t*t*t*y3;
+    return [x,y];
+  }
+  FP.bindSlider('slT', ms=>{
+    // 0-180ms maps to 0-1.2 along path, then clamp
+    const t = Math.min(1, ms/150);
+    const [x,y] = pointOnPath(t);
+    dot.setAttribute('cx', x);
+    dot.setAttribute('cy', y);
+    // source glow: bright at 0, fades
+    preCG.setAttribute('opacity', Math.max(0.08, 0.3*(1-ms/180)));
+    // sink glow: rises as signal arrives
+    STG.setAttribute('opacity', Math.max(0.1, Math.min(0.5, (ms-60)/80*0.4 + 0.1)));
+
+    let msg;
+    if(ms < 50){
+      msg = `<strong>t=${ms}ms · signal leaving preCG.</strong> The motor cortex has fired; the discharge is en route. Auditory cortex doesn't know yet.`;
+    } else if(ms < 140){
+      msg = `<strong>t=${ms}ms · travelling down the gyrus.</strong> Still along the sulcus, on its way to STG. The ear will hear sound in a few tens of ms.`;
+    } else {
+      msg = `<strong>t=${ms}ms · discharge arrived at STG.</strong> Auditory cortex now has a prediction. The actual sound hits the ear next; the comparator subtracts.`;
+    }
+    read.innerHTML = msg;
+  });
+});
+</script>
+</body>
+</html>

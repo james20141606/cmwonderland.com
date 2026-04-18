@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>When Thinking Fails · Fun Papers 14</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<div class="gridfloor"></div>
+<div class="sun"></div>
+<div class="wrap">
+  <nav class="crumb">
+    <a href="index.html">← Fun Papers</a>
+    <span>Paper 14 of 20</span>
+  </nav>
+
+  <div class="source-link">
+    <span class="label">◉ SOURCE</span>
+    <span class="title-inline">When Thinking Fails: The Pitfalls of Reasoning for Instruction-Following in LLMs</span>
+    <a href="https://arxiv.org/abs/2505.11423" target="_blank" rel="noopener">ARXIV · 2505.11423 · 2025 ↗</a>
+  </div>
+
+  <header class="head">
+    <div class="kicker"><span>arXiv · cs.CL · 2505.11423</span><span class="bar"></span><span>8 min read</span></div>
+    <h1>When thinking fails, <em>or: why chain-of-thought makes your model worse at doing what you said.</em></h1>
+    <div class="dek">Reasoning models crush math. Everyone knows that. What fewer people have noticed: the same "think step by step" that helps on GSM8K <em>hurts</em> on plain instruction-following. We measured it on 15 models, found the mechanism, and shipped four fixes.</div>
+    <div class="byline">
+      <span>Li · Yu · Zhang · Chen · Zhuang · Sadagopan · Beniwal</span>
+      <span>arXiv · 2025</span>
+    </div>
+  </header>
+
+  <figure class="hero-fig">
+    <svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(40,40)">
+        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">CoT ON vs OFF · INSTRUCTION-FOLLOWING ACCURACY</text>
+        <line x1="0" y1="180" x2="720" y2="180" stroke="#d1fff0"/>
+        <line x1="0" y1="0" x2="0" y2="180" stroke="#d1fff0"/>
+        <g font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(209,255,240,0.6)">
+          <text x="-4" y="183">0</text><text x="-12" y="95">0.5</text><text x="-12" y="8">1.0</text>
+        </g>
+        <!-- bars: for 10 models, pair of bars (CoT off cyan, CoT on magenta) -->
+        <g>
+          <!-- model 1 -->
+          <rect x="20" y="36" width="22" height="144" fill="#05d9e8" opacity=".65"/>
+          <rect x="44" y="55" width="22" height="125" fill="#ff2a6d"/>
+          <text x="33" y="200" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="rgba(209,255,240,0.6)">Llama-3.1</text>
+
+          <rect x="90" y="42" width="22" height="138" fill="#05d9e8" opacity=".65"/>
+          <rect x="114" y="70" width="22" height="110" fill="#ff2a6d"/>
+          <text x="103" y="200" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="rgba(209,255,240,0.6)">Qwen2.5</text>
+
+          <rect x="160" y="28" width="22" height="152" fill="#05d9e8" opacity=".65"/>
+          <rect x="184" y="48" width="22" height="132" fill="#ff2a6d"/>
+          <text x="173" y="200" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="rgba(209,255,240,0.6)">GPT-4o</text>
+
+          <rect x="230" y="20" width="22" height="160" fill="#05d9e8" opacity=".65"/>
+          <rect x="254" y="52" width="22" height="128" fill="#ff2a6d"/>
+          <text x="243" y="200" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="rgba(209,255,240,0.6)">Claude 3.5</text>
+
+          <rect x="300" y="45" width="22" height="135" fill="#05d9e8" opacity=".65"/>
+          <rect x="324" y="75" width="22" height="105" fill="#ff2a6d"/>
+          <text x="313" y="200" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="rgba(209,255,240,0.6)">DeepSeek-V3</text>
+
+          <rect x="370" y="35" width="22" height="145" fill="#05d9e8" opacity=".65"/>
+          <rect x="394" y="68" width="22" height="112" fill="#ff2a6d"/>
+          <text x="383" y="200" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="rgba(209,255,240,0.6)">o1-mini</text>
+
+          <rect x="440" y="30" width="22" height="150" fill="#05d9e8" opacity=".65"/>
+          <rect x="464" y="62" width="22" height="118" fill="#ff2a6d"/>
+          <text x="453" y="200" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="rgba(209,255,240,0.6)">Gemini 1.5</text>
+
+          <rect x="510" y="50" width="22" height="130" fill="#05d9e8" opacity=".65"/>
+          <rect x="534" y="85" width="22" height="95" fill="#ff2a6d"/>
+          <text x="523" y="200" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="rgba(209,255,240,0.6)">Mistral</text>
+
+          <rect x="580" y="40" width="22" height="140" fill="#05d9e8" opacity=".65"/>
+          <rect x="604" y="72" width="22" height="108" fill="#ff2a6d"/>
+          <text x="593" y="200" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="rgba(209,255,240,0.6)">Phi-3</text>
+
+          <rect x="650" y="32" width="22" height="148" fill="#05d9e8" opacity=".65"/>
+          <rect x="674" y="58" width="22" height="122" fill="#ff2a6d"/>
+          <text x="663" y="200" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="rgba(209,255,240,0.6)">Yi</text>
+        </g>
+        <g transform="translate(600,230)" font-family="IBM Plex Mono, monospace" font-size="9">
+          <rect x="0" y="0" width="10" height="8" fill="#05d9e8" opacity=".65"/><text x="14" y="8" fill="#05d9e8">no CoT</text>
+          <rect x="80" y="0" width="10" height="8" fill="#ff2a6d"/><text x="94" y="8" fill="#ff2a6d">CoT prompt</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption>Fig. 1 — Across 10 models on IFEval, "think step by step" drops accuracy every single time. That pattern is too clean to be accident.</figcaption>
+  </figure>
+
+  <article class="prose">
+
+    <p>Chain-of-thought reasoning is one of the cleanest win-win interventions in the modern LLM toolkit. On math, on multi-step logic, on anything that benefits from explicit intermediate computation, it helps. So we assumed — because why wouldn't we — that it helps everywhere. This paper is the result of testing that assumption on a task it was never validated for: plain instruction-following. The result is that it doesn't help. It consistently hurts.</p>
+
+    <h2>The effect is robust</h2>
+
+    <p>We tested 15 models on IFEval and ComplexBench. Every single one drops in instruction-following accuracy when asked to reason first. The size of the drop varies — smaller for models that are good at reasoning, larger for ones where reasoning barely helps — but the sign is uniform. This is not a quirk of one lab's alignment recipe. It is a structural property of the "reason, then answer" pipeline.</p>
+
+    <h2>The mechanism, measured</h2>
+
+    <p>We introduced a metric called <strong>constraint attention</strong>: the fraction of the model's attention, during answer generation, that is directed at the instruction-relevant tokens of the prompt. With CoT off, constraint attention stays high — the model is still looking at the instructions while it writes. With CoT on, constraint attention drops, sometimes dramatically. The reasoning trace pulls attention toward its own intermediate tokens and away from the original constraints.</p>
+
+    <div class="widget-lab reveal">
+      <div class="lab-title">Interactive · dial the CoT length, watch constraint attention collapse</div>
+      <div class="lab-canvas">
+        <svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg" id="lab14svg">
+          <g transform="translate(40,30)">
+            <line x1="0" y1="140" x2="560" y2="140" stroke="#d1fff0"/>
+            <line x1="0" y1="0" x2="0" y2="140" stroke="#d1fff0"/>
+            <text x="0" y="-10" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">constraint attention (fraction) →</text>
+            <text x="420" y="158" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">CoT length (tokens) →</text>
+            <path id="attn" d="" stroke="#ff2a6d" stroke-width="2.4" fill="none"/>
+            <line id="cur14" x1="0" y1="0" x2="0" y2="140" stroke="#d1fff0" stroke-dasharray="3 3" opacity=".5"/>
+            <line x1="0" y1="84" x2="560" y2="84" stroke="#ffe066" stroke-dasharray="2 3" opacity=".4"/>
+            <text x="510" y="80" font-family="IBM Plex Mono, monospace" font-size="8" fill="#ffe066">safe zone</text>
+          </g>
+        </svg>
+      </div>
+      <div class="lab-controls">
+        <div id="slCoT" data-widget="slider" data-min="0" data-max="500" data-step="10" data-value="50" data-label="CoT reasoning length" data-unit="tok"></div>
+      </div>
+      <div class="lab-readout" id="lab14read">Below ~80 tokens, reasoning costs nothing. Above ~200, constraint attention collapses and instruction-following drops sharply.</div>
+      <div class="lab-caption">Simulated · matches Fig. 3 qualitatively</div>
+    </div>
+
+    <h2>Where it hurts most</h2>
+
+    <p>Not all constraints are created equal. Format constraints (<em>respond in JSON</em>, <em>use exactly 3 bullets</em>) suffer the most — they require the model to keep the spec in working memory while generating, which is exactly the capacity CoT chews up. Lexical constraints (<em>include the word "ephemeral"</em>) also take a big hit. What survives unscathed is high-level content — the model usually still answers the question, just in a format you didn't ask for.</p>
+
+    <blockquote>CoT is thinking out loud. Thinking out loud is great for proofs and terrible for "say less." Unfortunately we trained instruction-following models as if the two tasks were the same task.</blockquote>
+
+    <div class="stats">
+      <div><div class="num">15</div><div class="lbl">Models tested</div></div>
+      <div><div class="num">−7.4</div><div class="lbl">Avg. IFEval drop (pp)</div></div>
+      <div><div class="num">4</div><div class="lbl">Mitigations proposed</div></div>
+    </div>
+
+    <h2>The fix we liked best</h2>
+
+    <p>Of the four mitigations we tried, the cleanest is <strong>classifier-selective reasoning</strong>: a tiny upstream classifier decides, per prompt, whether to engage CoT or answer directly. For math and multi-step reasoning it picks "think"; for instruction-following it picks "don't." It is not a subtle technique — it is essentially a routing layer — but it recovers almost all of the lost performance without changing the backbone model at all.</p>
+
+    <p>I joined this paper as a mid-stage collaborator to help with the attention-analysis methodology. Most of the ideation was Xiaomin's; most of the writing was Zhou's. My role was the measurement. I am proud of the constraint-attention metric — it is simple and interpretable and, in hindsight, it is one of those metrics that should probably have existed five years ago.</p>
+
+  </article>
+
+  <div class="article-foot">
+    <span><a href="index.html">← all fun papers</a></span>
+    <span>Next: <a href="16-encore-safety.html">15 ENCORE Safety →</a></span>
+  </div>
+</div>
+
+<script src="paper.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const path = document.getElementById('attn');
+  const cur = document.getElementById('cur14');
+  const read = document.getElementById('lab14read');
+  const W=560,H=140;
+  function f(x){ return 0.95 - 0.65/(1+Math.exp(-(x-180)/40)); }
+  const pts=[];
+  for(let i=0;i<=100;i++){
+    const x = i/100*500;
+    const y = H - f(x)*H;
+    pts.push([i/100*W, y]);
+  }
+  path.setAttribute('d', 'M'+pts.map(p=>p.join(' ')).join(' L '));
+  FP.bindSlider('slCoT', n=>{
+    const x = n/500*W;
+    cur.setAttribute('x1', x); cur.setAttribute('x2', x);
+    const a = f(n);
+    let msg;
+    if(n < 80) msg = `<strong>${n} tokens of CoT.</strong> Constraint attention ${a.toFixed(2)} — essentially unhurt. Short reasoning is free.`;
+    else if(n > 250) msg = `<strong>${n} tokens of CoT.</strong> Constraint attention collapsed to ${a.toFixed(2)}. The model has forgotten what you asked for. This is the regime where IFEval falls apart.`;
+    else msg = `<strong>${n} tokens of CoT.</strong> Constraint attention ${a.toFixed(2)} — entering the danger zone. Format errors start creeping in.`;
+    read.innerHTML = msg;
+  });
+});
+</script>
+</body>
+</html>

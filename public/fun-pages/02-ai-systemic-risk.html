@@ -4,15 +4,25 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>AI &amp; Systemic Risk · Fun Papers 02</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="paper.css" />
 </head>
 <body>
+<div class="gridfloor"></div>
+<div class="sun"></div>
 <div class="wrap">
   <nav class="crumb">
     <a href="index.html">← Fun Papers</a>
-    <span>Paper 02 of 05</span>
+    <span>Paper 02 of 20</span>
   </nav>
+
+  <div class="source-link">
+    <span class="label">◉ SOURCE</span>
+    <span class="title-inline">Artificial Intelligence and Systemic Risk: A Unified Model</span>
+    <a href="https://arxiv.org/abs/2604.03272" target="_blank" rel="noopener">ARXIV · 2604.03272 ↗</a>
+  </div>
 
   <header class="head">
     <div class="kicker"><span>arXiv · q-fin.CP · 2604.03272</span><span class="bar"></span><span>10 min read</span></div>
@@ -28,12 +38,12 @@
     <svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg">
       <!-- superlinear multiplier curve -->
       <g transform="translate(60,40)">
-        <line x1="0" y1="220" x2="680" y2="220" stroke="#1b1b1a" stroke-width="1"/>
-        <line x1="0" y1="0" x2="0" y2="220" stroke="#1b1b1a" stroke-width="1"/>
-        <text x="0" y="-10" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">Systemic risk multiplier M(φ)</text>
-        <text x="620" y="238" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">AI adoption φ →</text>
+        <line x1="0" y1="220" x2="680" y2="220" stroke="#d1fff0" stroke-width="1"/>
+        <line x1="0" y1="0" x2="0" y2="220" stroke="#d1fff0" stroke-width="1"/>
+        <text x="0" y="-10" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">Systemic risk multiplier M(φ)</text>
+        <text x="620" y="238" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">AI adoption φ →</text>
         <!-- gridlines -->
-        <g stroke="#1b1b1a" stroke-width=".4" opacity=".15">
+        <g stroke="#d1fff0" stroke-width=".4" opacity=".15">
           <line x1="0" y1="50" x2="680" y2="50"/>
           <line x1="0" y1="100" x2="680" y2="100"/>
           <line x1="0" y1="150" x2="680" y2="150"/>
@@ -43,18 +53,18 @@
         </g>
         <!-- curve M=1/(1-r(phi)) -->
         <path d="M0 210 C 120 205, 240 195, 340 170 C 420 145, 480 100, 540 55 C 580 25, 610 15, 630 10"
-              stroke="#b43a2a" stroke-width="2.5" fill="none"/>
+              stroke="#ff2a6d" stroke-width="2.5" fill="none"/>
         <!-- shaded danger zone -->
-        <path d="M480 0 L 480 220 L 680 220 L 680 0 Z" fill="#b43a2a" opacity=".08"/>
-        <line x1="480" y1="0" x2="480" y2="220" stroke="#b43a2a" stroke-dasharray="3 3" stroke-width="1"/>
-        <text x="490" y="20" font-family="Fraunces,serif" font-style="italic" font-size="14" fill="#b43a2a">monoculture regime</text>
+        <path d="M480 0 L 480 220 L 680 220 L 680 0 Z" fill="#ff2a6d" opacity=".08"/>
+        <line x1="480" y1="0" x2="480" y2="220" stroke="#ff2a6d" stroke-dasharray="3 3" stroke-width="1"/>
+        <text x="490" y="20" font-family="JetBrains Mono, monospace" font-style="italic" font-size="14" fill="#ff2a6d">monoculture regime</text>
         <!-- bifurcation marker -->
-        <circle cx="480" cy="100" r="5" fill="#b43a2a"/>
-        <text x="420" y="90" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">φ* · saddle-node</text>
+        <circle cx="480" cy="100" r="5" fill="#ff2a6d"/>
+        <text x="420" y="90" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">φ* · saddle-node</text>
         <!-- equation -->
         <g transform="translate(30,30)">
-          <text font-family="Fraunces,serif" font-style="italic" font-size="18" fill="#1b1b1a">r(φ) = φ·ρ·β / λ′(φ)</text>
-          <text y="22" font-family="IBM Plex Mono, monospace" font-size="10" fill="#5a564e">convex in φ  →  M = (1−r)⁻¹  blows up</text>
+          <text font-family="JetBrains Mono, monospace" font-style="italic" font-size="18" fill="#d1fff0">r(φ) = φ·ρ·β / λ′(φ)</text>
+          <text y="22" font-family="IBM Plex Mono, monospace" font-size="10" fill="rgba(209,255,240,0.6)">convex in φ  →  M = (1−r)⁻¹  blows up</text>
         </g>
       </g>
     </svg>
@@ -85,54 +95,91 @@
 
     <p>Which means the multiplier <code>M = (1 − r)⁻¹</code> isn't linear in adoption. It bends. And then it snaps.</p>
 
+    <div class="widget-lab reveal">
+      <div class="lab-title">Interactive · drag adoption, watch the multiplier go non-linear</div>
+      <div class="lab-canvas">
+        <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" id="lab2svg">
+          <g transform="translate(40,30)">
+            <line x1="0" y1="200" x2="560" y2="200" stroke="#d1fff0"/>
+            <line x1="0" y1="0" x2="0" y2="200" stroke="#d1fff0"/>
+            <text x="0" y="-10" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">M(φ) · systemic-risk multiplier →</text>
+            <text x="440" y="218" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">AI adoption φ →</text>
+
+            <!-- danger zone -->
+            <rect id="danger" x="0" y="0" width="0" height="200" fill="#ff2a6d" opacity=".08"/>
+
+            <!-- curve -->
+            <path id="riskCurve" d="" stroke="#ff2a6d" stroke-width="2.4" fill="none"/>
+
+            <!-- cursor -->
+            <line id="phiCur" x1="0" y1="0" x2="0" y2="200" stroke="#d1fff0" stroke-dasharray="3 3" opacity=".5"/>
+            <circle id="phiDot" cx="0" cy="0" r="5" fill="#ff2a6d"/>
+
+            <!-- readouts on curve -->
+            <g transform="translate(420,20)" font-family="IBM Plex Mono, monospace" font-size="11">
+              <text id="rdM" x="0" y="0" fill="#ff2a6d">M = 1.00</text>
+              <text id="rdR" x="0" y="18" fill="#05d9e8">r = 0.00</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="lab-controls">
+        <div id="slPhi" data-widget="slider" data-min="0" data-max="1" data-step="0.01" data-value="0.3" data-label="AI adoption share φ" data-unit=""></div>
+        <div id="slRho" data-widget="slider" data-min="0" data-max="1" data-step="0.01" data-value="0.55" data-label="signal correlation ρ" data-unit=""></div>
+        <div id="slBeta" data-widget="slider" data-min="0" data-max="2" data-step="0.01" data-value="1.0" data-label="feedback intensity β" data-unit=""></div>
+      </div>
+      <div class="lab-readout" id="lab2read">Move φ to the right. Before roughly φ=0.6 the multiplier is polite. After that it isn't. Also try dropping ρ or β — diversity-preserving regulation shifts the cliff.</div>
+      <div class="lab-caption">M(φ) = 1/(1 − φ·ρ·β/λ'(φ)) · λ'(φ) = 1 − 0.7φ · clipped at a ceiling for display</div>
+    </div>
+
     <figure class="fig">
       <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg">
         <!-- three panel diagram: three channels -->
         <g transform="translate(30,30)">
           <!-- panel 1: performative -->
           <g>
-            <rect x="0" y="0" width="180" height="180" fill="#ede6d3" stroke="#1b1b1a"/>
-            <text x="10" y="18" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">01 · PERFORMATIVE</text>
+            <rect x="0" y="0" width="180" height="180" fill="#0a0a16" stroke="#d1fff0"/>
+            <text x="10" y="18" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">01 · PERFORMATIVE</text>
             <!-- loop arrows -->
             <g transform="translate(90,100)">
-              <circle r="35" fill="none" stroke="#b43a2a" stroke-width="1.8" stroke-dasharray="4 3"/>
-              <polyline points="30,-15 35,-5 25,-3" fill="none" stroke="#b43a2a" stroke-width="1.8"/>
-              <text text-anchor="middle" y="5" font-family="Fraunces, serif" font-style="italic" font-size="13" fill="#1b1b1a">price ↔</text>
-              <text text-anchor="middle" y="20" font-family="Fraunces, serif" font-style="italic" font-size="13" fill="#1b1b1a">prediction</text>
+              <circle r="35" fill="none" stroke="#ff2a6d" stroke-width="1.8" stroke-dasharray="4 3"/>
+              <polyline points="30,-15 35,-5 25,-3" fill="none" stroke="#ff2a6d" stroke-width="1.8"/>
+              <text text-anchor="middle" y="5" font-family="JetBrains Mono, monospace" font-style="italic" font-size="13" fill="#d1fff0">price ↔</text>
+              <text text-anchor="middle" y="20" font-family="JetBrains Mono, monospace" font-style="italic" font-size="13" fill="#d1fff0">prediction</text>
             </g>
-            <text x="10" y="170" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5a564e">feedback intensity β</text>
+            <text x="10" y="170" font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(209,255,240,0.6)">feedback intensity β</text>
           </g>
           <!-- panel 2: herding -->
           <g transform="translate(200,0)">
-            <rect x="0" y="0" width="180" height="180" fill="#ede6d3" stroke="#1b1b1a"/>
-            <text x="10" y="18" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">02 · HERDING</text>
-            <g transform="translate(90,100)" stroke="#234e70" stroke-width="2">
+            <rect x="0" y="0" width="180" height="180" fill="#0a0a16" stroke="#d1fff0"/>
+            <text x="10" y="18" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">02 · HERDING</text>
+            <g transform="translate(90,100)" stroke="#05d9e8" stroke-width="2">
               <line x1="-50" y1="0" x2="50" y2="0" marker-end="url(#none)"/>
               <line x1="-50" y1="-20" x2="50" y2="-20"/>
               <line x1="-50" y1="20" x2="50" y2="20"/>
               <line x1="-50" y1="-40" x2="50" y2="-40"/>
               <line x1="-50" y1="40" x2="50" y2="40"/>
             </g>
-            <text x="10" y="170" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5a564e">signal correlation ρ</text>
+            <text x="10" y="170" font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(209,255,240,0.6)">signal correlation ρ</text>
           </g>
           <!-- panel 3: dependency -->
           <g transform="translate(400,0)">
-            <rect x="0" y="0" width="180" height="180" fill="#ede6d3" stroke="#1b1b1a"/>
-            <text x="10" y="18" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">03 · DEPENDENCY</text>
+            <rect x="0" y="0" width="180" height="180" fill="#0a0a16" stroke="#d1fff0"/>
+            <text x="10" y="18" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">03 · DEPENDENCY</text>
             <!-- human head with model inside -->
             <g transform="translate(90,95)">
-              <circle r="40" fill="#f5f1e8" stroke="#1b1b1a" stroke-width="1.2"/>
-              <g transform="translate(-15,-15)" stroke="#6b6a2e" stroke-width="1.2" fill="none">
+              <circle r="40" fill="#05050b" stroke="#d1fff0" stroke-width="1.2"/>
+              <g transform="translate(-15,-15)" stroke="#ffe066" stroke-width="1.2" fill="none">
                 <rect x="0" y="0" width="30" height="30"/>
-                <circle cx="8" cy="8" r="2" fill="#6b6a2e"/>
-                <circle cx="22" cy="8" r="2" fill="#6b6a2e"/>
-                <circle cx="8" cy="22" r="2" fill="#6b6a2e"/>
-                <circle cx="22" cy="22" r="2" fill="#6b6a2e"/>
+                <circle cx="8" cy="8" r="2" fill="#ffe066"/>
+                <circle cx="22" cy="8" r="2" fill="#ffe066"/>
+                <circle cx="8" cy="22" r="2" fill="#ffe066"/>
+                <circle cx="22" cy="22" r="2" fill="#ffe066"/>
                 <line x1="8" y1="8" x2="22" y2="22"/>
                 <line x1="22" y1="8" x2="8" y2="22"/>
               </g>
             </g>
-            <text x="10" y="170" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5a564e">state variable · hysteretic</text>
+            <text x="10" y="170" font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(209,255,240,0.6)">state variable · hysteretic</text>
           </g>
         </g>
       </svg>
@@ -151,6 +198,18 @@
 
     <p>There is also a version of this paper that is about AI outside finance. I haven't written it yet. But when I watch my Slack autocomplete and my coworker's Slack autocomplete finish each other's sentences, I think about it a lot.</p>
 
+    <h2>The policy thought that keeps surfacing</h2>
+
+    <p>If diversity is the fix — if the whole structural problem is that everyone's models correlate because everyone's models are downstream of the same training data — then the simplest policy lever is <strong>diversity-preserving regulation</strong>, which I mean in a boring, practical sense rather than a grand one. Things like: a licensing regime that rewards firms for demonstrably uncorrelated approaches; stress tests that penalise synchronous trading patterns even when individual firms are solvent; reserve requirements that scale not just with balance-sheet size but with signal overlap with peers.</p>
+
+    <p>None of these are radical. All of them are harder to administer than the current rules because they require measuring a quantity — model similarity across firms — that firms have every incentive to obscure. That is a technical research agenda I'd like to see someone take up, and one the paper's appendix quietly gestures toward.</p>
+
+    <h2>A small self-critique</h2>
+
+    <p>The impossibility theorem in section 4 is the cleanest mathematical content, but it is also, candidly, the part of the paper that will age the worst if someone builds a time-dynamic equilibrium framework that captures hysteresis. I expect this to happen within two years. When it does, the theorem becomes a statement about <em>static</em> equilibrium specifically, rather than a blanket negative result, and the correct citation format is "Chen &amp; Meng showed this for the static case, which was the relevant case at the time." Which is fine. I think that is the honest place for a negative result to end up.</p>
+
+    <p>The paper's <em>affirmative</em> contribution — the convex coupling, the superlinear multiplier, the three-channel decomposition — will age better. That is the part I want people to argue with.</p>
+
   </article>
 
   <div class="article-foot">
@@ -158,5 +217,74 @@
     <span>Next: <a href="03-r-llava.html">03 R-LLaVA →</a></span>
   </div>
 </div>
+
+<script src="paper.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const curve = document.getElementById('riskCurve');
+  const cur = document.getElementById('phiCur');
+  const dot = document.getElementById('phiDot');
+  const rdM = document.getElementById('rdM');
+  const rdR = document.getElementById('rdR');
+  const danger = document.getElementById('danger');
+  const read = document.getElementById('lab2read');
+
+  const W = 560, H = 200;
+  let phi = 0.3, rho = 0.55, beta = 1.0;
+
+  function rf(p){ return p*rho*beta / Math.max(0.05, (1 - 0.7*p)); }
+  function Mf(p){
+    const r = Math.min(0.98, rf(p));
+    return 1/(1-r);
+  }
+
+  function render(){
+    // find critical phi where r=1
+    let phiStar = 1;
+    for(let i=0;i<=100;i++){
+      const p = i/100;
+      if(rf(p) >= 0.95){ phiStar = p; break; }
+    }
+    const pts = [];
+    for(let i=0;i<=100;i++){
+      const p = i/100;
+      const M = Mf(p);
+      const x = p*W;
+      const y = H - Math.min(M,10)/10 * H;
+      pts.push([x, y]);
+    }
+    curve.setAttribute('d', 'M' + pts.map(p=>p.join(' ')).join(' L '));
+    // danger zone
+    danger.setAttribute('x', phiStar*W);
+    danger.setAttribute('width', W - phiStar*W);
+
+    // cursor
+    const x = phi*W;
+    const M = Mf(phi);
+    const y = H - Math.min(M,10)/10 * H;
+    cur.setAttribute('x1', x); cur.setAttribute('x2', x);
+    dot.setAttribute('cx', x);
+    dot.setAttribute('cy', y);
+    const r = Math.min(0.98, rf(phi));
+    rdM.textContent = 'M = ' + (M>50 ? '∞' : M.toFixed(2));
+    rdR.textContent = 'r = ' + r.toFixed(2);
+
+    let msg;
+    if(phi >= phiStar){
+      msg = `<strong>Past the bifurcation.</strong> At φ=${phi.toFixed(2)} with ρ=${rho.toFixed(2)}, β=${beta.toFixed(2)}, the coupling r=${r.toFixed(2)} has exceeded the stable regime. Monoculture. The multiplier is mathematically undefined; the system is.`;
+    } else if(M > 3){
+      msg = `<strong>Amplifying.</strong> M=${M.toFixed(2)}× at φ=${phi.toFixed(2)}. A 1% shock propagates as a ${M.toFixed(1)}% shock. The curve is convex — another 10% adoption will not add 10% more risk, it adds more than that.`;
+    } else {
+      msg = `<strong>Polite regime.</strong> M=${M.toFixed(2)}× at φ=${phi.toFixed(2)}. Still additive, still legible. The question the paper asks is whether you can <em>stay</em> in this regime with market forces alone. Our answer is no.`;
+    }
+    read.innerHTML = msg;
+  }
+
+  FP.bindSlider('slPhi', v=>{phi=v;render();});
+  FP.bindSlider('slRho', v=>{rho=v;render();});
+  FP.bindSlider('slBeta', v=>{beta=v;render();});
+  render();
+});
+</script>
 </body>
 </html>

@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>VANGUARD · Fun Papers 11</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<div class="gridfloor"></div>
+<div class="sun"></div>
+<div class="wrap">
+  <nav class="crumb">
+    <a href="index.html">← Fun Papers</a>
+    <span>Paper 10 of 20</span>
+  </nav>
+
+  <div class="source-link">
+    <span class="label">◉ SOURCE</span>
+    <span class="title-inline">VANGUARD: Vehicle-Anchored Ground Sample Distance Estimation for UAVs in GPS-Denied Environments</span>
+    <a href="https://arxiv.org/abs/2603.04277" target="_blank" rel="noopener">ARXIV · 2603.04277 ↗</a>
+  </div>
+
+  <header class="head">
+    <div class="kicker"><span>arXiv · robotics · 2603.04277</span><span class="bar"></span><span>8 min read</span></div>
+    <h1>VANGUARD, <em>recovering absolute scale from parked cars.</em></h1>
+    <div class="dek">A drone in a GPS-denied alley knows <em>what</em> it is looking at but not <em>how big</em> its image is. Visual-language models invent scales. We cheated nobly — used the one object whose size is culturally standardised — the sedan — as a ruler.</div>
+    <div class="byline">
+      <span>Y. Chen · Wang · Jiao · Liu · X. Chen</span>
+      <span>2026</span>
+    </div>
+  </header>
+
+  <figure class="hero-fig">
+    <svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="skyA" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="rgba(5,217,232,0.1)"/><stop offset="1" stop-color="#2a3a55"/></linearGradient>
+      </defs>
+
+      <!-- top half: drone POV with annotations -->
+      <rect x="0" y="0" width="800" height="220" fill="url(#skyA)"/>
+
+      <!-- drone -->
+      <g transform="translate(380,40)" class="svg-float">
+        <rect x="-16" y="-3" width="32" height="6" fill="#d1fff0"/>
+        <circle cx="-20" cy="0" r="5" fill="rgba(209,255,240,0.6)"/>
+        <circle cx="20" cy="0" r="5" fill="rgba(209,255,240,0.6)"/>
+        <line x1="0" y1="4" x2="0" y2="16" stroke="#d1fff0"/>
+        <rect x="-4" y="16" width="8" height="4" fill="#ff2a6d"/>
+      </g>
+
+      <!-- POV cone -->
+      <g stroke="#d1fff0" stroke-width=".8" fill="#0a0a16" opacity=".35">
+        <polygon points="380,62 220,200 540,200"/>
+      </g>
+
+      <!-- vehicles on the ground -->
+      <g transform="translate(240,190)">
+        <rect x="0" y="10" width="50" height="10" fill="#05d9e8" rx="2"/>
+        <rect x="8" y="0" width="34" height="12" fill="#05d9e8" opacity=".8" rx="2"/>
+        <circle cx="13" cy="22" r="3.2" fill="#d1fff0"/>
+        <circle cx="43" cy="22" r="3.2" fill="#d1fff0"/>
+      </g>
+      <g transform="translate(340,186)">
+        <rect x="0" y="10" width="60" height="12" fill="#ff2a6d" rx="2"/>
+        <rect x="10" y="0" width="40" height="13" fill="#ff2a6d" opacity=".85" rx="2"/>
+        <circle cx="14" cy="25" r="3.5" fill="#d1fff0"/>
+        <circle cx="50" cy="25" r="3.5" fill="#d1fff0"/>
+      </g>
+      <g transform="translate(430,189)">
+        <rect x="0" y="10" width="46" height="10" fill="#ffe066" rx="2"/>
+        <rect x="9" y="0" width="30" height="12" fill="#ffe066" opacity=".85" rx="2"/>
+        <circle cx="13" cy="22" r="3.2" fill="#d1fff0"/>
+        <circle cx="39" cy="22" r="3.2" fill="#d1fff0"/>
+      </g>
+
+      <!-- ROI boxes around vehicles -->
+      <g stroke="#ff2a6d" stroke-width="1.3" fill="none" stroke-dasharray="4 2" class="svg-flicker">
+        <rect x="235" y="180" width="60" height="35"/>
+        <rect x="335" y="180" width="70" height="40"/>
+        <rect x="425" y="180" width="56" height="32"/>
+      </g>
+
+      <!-- scale bar callout -->
+      <g transform="translate(335,230)">
+        <line x1="0" y1="0" x2="70" y2="0" stroke="#ff2a6d" stroke-width="1.6"/>
+        <line x1="0" y1="-4" x2="0" y2="4" stroke="#ff2a6d" stroke-width="1.6"/>
+        <line x1="70" y1="-4" x2="70" y2="4" stroke="#ff2a6d" stroke-width="1.6"/>
+        <text x="35" y="16" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#ff2a6d">≈ 4.62 m (sedan)</text>
+      </g>
+
+      <!-- lower half: geometry diagram -->
+      <g transform="translate(60,260)">
+        <text x="0" y="0" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">GROUND SAMPLE DISTANCE = (pixel_width × real_width_m) / detected_box_width_px</text>
+        <g transform="translate(0,18)" font-family="JetBrains Mono, monospace" font-style="italic" font-size="15" fill="#d1fff0">
+          <text>Whatever the drone's altimeter says: a parked sedan is the rosetta stone.</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption>Fig. 1 — Pipeline: detect vehicles, look up the canonical size, solve for the pixels-to-metres ratio.</figcaption>
+  </figure>
+
+  <article class="prose">
+
+    <p>GSD — ground sample distance — is the ratio of real-world metres to image pixels. A drone that knows its GSD can measure, count, navigate, and hand meaningful coordinates to whoever is downstream. A drone that doesn't, can't.</p>
+
+    <p>In an outdoor field with sky all around, the altimeter and the camera intrinsics tell you GSD. In a GPS-denied alley, an indoor warehouse, or a cluttered construction site, they don't. Your altitude estimate drifts. Your intrinsics are correct but underdetermined without an additional metric cue. This paper is about the world's cheapest metric cue.</p>
+
+    <h2>The sedan as a ruler</h2>
+
+    <p>Vehicles are almost uniquely well-suited to the problem. They are:</p>
+    <ul>
+      <li><strong>Everywhere humans are</strong> — so you can rely on at least one being in frame in most operational environments.</li>
+      <li><strong>Strongly bimodal in size</strong> — most vehicles cluster tightly around one of three widths (sedan, SUV/truck, van).</li>
+      <li><strong>Culturally standardised</strong> — Toyota Camrys and Honda Civics span a narrow band; the mean sedan is 1.82 m wide, σ ≈ 6 cm.</li>
+      <li><strong>Easy to detect</strong> — every general-purpose object detector has more "car" data than "any other outdoor object" combined.</li>
+    </ul>
+    <p>Given a detected car in the image, we recover its pixel width. Given the class-conditional real-world width prior, we solve for GSD directly. It is ugly and simple and correct.</p>
+
+    <div class="widget-lab reveal">
+      <div class="lab-title">Interactive · how much does class granularity help?</div>
+      <div class="lab-canvas">
+        <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" id="lab11svg">
+          <g transform="translate(40,30)">
+            <line x1="0" y1="180" x2="560" y2="180" stroke="#d1fff0"/>
+            <line x1="0" y1="0" x2="0" y2="180" stroke="#d1fff0"/>
+            <text x="0" y="-10" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">GSD estimation error (% of true) →</text>
+            <text x="410" y="198" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">vehicles in frame →</text>
+
+            <!-- error curves -->
+            <path id="errCoarse" d="" stroke="#05d9e8" stroke-width="2" fill="none"/>
+            <path id="errFine" d="" stroke="#ff2a6d" stroke-width="2" fill="none"/>
+
+            <!-- cursor -->
+            <line id="xCur" x1="0" y1="0" x2="0" y2="180" stroke="#d1fff0" stroke-dasharray="3 3" opacity=".5"/>
+
+            <!-- legend -->
+            <g transform="translate(350,10)" font-family="IBM Plex Mono, monospace" font-size="9">
+              <rect x="0" y="0" width="10" height="3" fill="#05d9e8"/><text x="14" y="5" fill="#05d9e8">generic "vehicle" class</text>
+              <rect x="0" y="14" width="10" height="3" fill="#ff2a6d"/><text x="14" y="19" fill="#ff2a6d">fine-grained (sedan/SUV/truck)</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="lab-controls">
+        <div id="slN" data-widget="slider" data-min="1" data-max="20" data-step="1" data-value="3" data-label="vehicles in frame" data-unit=""></div>
+        <div id="tgFine" data-widget="toggle" data-label="use fine-grained class prior" data-on="ON" data-off="OFF" data-value="true"></div>
+      </div>
+      <div class="lab-readout" id="lab11read">Even one vehicle gives a usable GSD. Fine-grained priors cut the error roughly in half.</div>
+      <div class="lab-caption">Simulated · matches paper's Fig. 3 qualitatively</div>
+    </div>
+
+    <h2>Why vision-language models hallucinate scale</h2>
+
+    <p>There is a failure mode that motivated the paper. Modern VLMs are excellent at <em>what</em> questions ("what is in this image?") and unreliable at <em>how big</em> questions ("how far is it?", "how wide?", "what is the GSD?"). They confidently invent answers. We tested this on a held-out set of UAV images and found that SOTA VLMs produced scale estimates with median error &gt;35% — often with confident, fluent explanations attached.</p>
+
+    <p>The reason, once you look at it, is structural. A language model has no mechanism to recover metric scale from pixel content alone; the mapping pixels-to-metres is genuinely not in the image. The "answer" the VLM returns is a language-prior answer — a plausible-sounding number consistent with the class of scene. It is fluent and not measurable.</p>
+
+    <blockquote>A drone does not need fluent guesses about scale. A drone needs correct numbers or honest uncertainty. VANGUARD provides both, by outsourcing the metric question to an object whose size is actually known.</blockquote>
+
+    <h2>What we had to get right</h2>
+
+    <p><strong>Class-conditional priors, not a single number.</strong> We maintain separate priors for sedan, SUV/crossover, pickup, van, and truck. The detector outputs class probabilities; we marginalise. Using a single "vehicle" size gives error ~11%; using class-conditional gives 5–6%.</p>
+
+    <p><strong>Orientation matters.</strong> The pixel-width of a car depends on its orientation relative to the camera. We ignored this in v1 and it cost us a lot of accuracy. In v2, we use the detector's orientation estimate to apply a cosine correction. This was the single biggest win in the paper.</p>
+
+    <p><strong>Confidence-weighted averaging.</strong> With multiple vehicles in frame, we average GSD estimates weighted by each detection's confidence. This gives soft robustness to the occasional misdetection.</p>
+
+    <p><strong>Ground-plane assumption.</strong> GSD as we define it assumes the cars are on a flat ground plane. For drones operating near structures, we extended this to work with a coarse plane-estimate from consecutive frames. It works; we don't love it; it's in the limitations section.</p>
+
+    <figure class="fig">
+      <svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(40,30)">
+          <text x="0" y="0" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">GSD ERROR ON UAVID-GSD BENCHMARK</text>
+          <g transform="translate(0,20)">
+            <text x="0" y="14" font-family="JetBrains Mono, monospace" font-size="12">VLM zero-shot (GPT-4V)</text>
+            <rect x="180" y="4" width="380" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="180" y="4" width="320" height="12" fill="#05d9e8" opacity=".55"/>
+            <text x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10">37.2%</text>
+          </g>
+          <g transform="translate(0,44)">
+            <text x="0" y="14" font-family="JetBrains Mono, monospace" font-size="12">Altimeter + fixed intrinsics</text>
+            <rect x="180" y="4" width="380" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="180" y="4" width="130" height="12" fill="#05d9e8" opacity=".55"/>
+            <text x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10">14.8%</text>
+          </g>
+          <g transform="translate(0,68)">
+            <text x="0" y="14" font-family="JetBrains Mono, monospace" font-size="12">VANGUARD (coarse)</text>
+            <rect x="180" y="4" width="380" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="180" y="4" width="90" height="12" fill="#ff2a6d" opacity=".7"/>
+            <text x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#ff2a6d">10.1%</text>
+          </g>
+          <g transform="translate(0,92)">
+            <text x="0" y="14" font-family="JetBrains Mono, monospace" font-size="12">VANGUARD (fine-grained)</text>
+            <rect x="180" y="4" width="380" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="180" y="4" width="50" height="12" fill="#ff2a6d"/>
+            <text x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#ff2a6d">5.6%</text>
+          </g>
+          <text x="0" y="130" font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(209,255,240,0.6)">lower is better · mean absolute error on held-out scenes</text>
+        </g>
+      </svg>
+      <div class="cap"><strong>Fig. 2 —</strong> Six-percent error is inside what most downstream tasks tolerate. VLM scale hallucinations are not.</div>
+    </figure>
+
+    <h2>What the method doesn't do</h2>
+
+    <p>It doesn't work in environments without vehicles. A forest fire drone cannot use VANGUARD. It doesn't work in non-terrestrial environments at all. And it has a graceful-degradation property we like, which is that in the <em>one</em> vehicle-less frame in a sequence, the last good GSD estimate persists — the drone keeps flying until the next car shows up.</p>
+
+    <p>I am a co-author on this one, not the driver. Yifei led the vehicle-prior work; I contributed the calibration analysis and some of the robustness-ablation framing. The project is a small reminder that the right choice of "anchor" — the thing whose size you happen to know — can collapse a hard problem into an easy one, and that anchors don't have to be exotic. Sometimes they are a Honda.</p>
+
+  </article>
+
+  <div class="article-foot">
+    <span><a href="index.html">← all fun papers</a></span>
+    <span>Next: <a href="12-cerebral-palsy.html">11 Cerebral Palsy →</a></span>
+  </div>
+</div>
+
+<script src="paper.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const ec = document.getElementById('errCoarse');
+  const ef = document.getElementById('errFine');
+  const cur = document.getElementById('xCur');
+  const read = document.getElementById('lab11read');
+
+  const W = 560, H = 180;
+  // error decays with sqrt(N)
+  function err(N, fine){
+    const base = fine ? 7 : 13;
+    return Math.max(2, base / Math.sqrt(N));
+  }
+  function buildPath(fine){
+    const pts = [];
+    for(let N=1; N<=20; N++){
+      const x = (N-1)/19*W;
+      // map error (0..20%) to y
+      const e = err(N, fine);
+      const y = H - (1 - Math.min(e,20)/20)*H;
+      pts.push([x, y]);
+    }
+    return 'M' + pts.map(p=>p.join(' ')).join(' L ');
+  }
+  ec.setAttribute('d', buildPath(false));
+  ef.setAttribute('d', buildPath(true));
+
+  let fine = true;
+  function update(N){
+    const x = (N-1)/19*W;
+    cur.setAttribute('x1', x); cur.setAttribute('x2', x);
+    const e = err(N, fine);
+    const alt = err(N, !fine);
+    let msg;
+    if(N === 1){
+      msg = `<strong>One vehicle.</strong> Error ~${e.toFixed(1)}% with ${fine?'fine':'coarse'} prior. Surprisingly, a single sedan is already enough to beat altimeter-only estimates.`;
+    } else if(N >= 10){
+      msg = `<strong>${N} vehicles in frame.</strong> Error drops to ${e.toFixed(1)}% (vs ${alt.toFixed(1)}% with the other setting). Returns diminish past ~8, but robustness to misdetections keeps growing.`;
+    } else {
+      msg = `<strong>${N} vehicles.</strong> ${fine?'Fine-grained':'Coarse'} prior: ${e.toFixed(1)}% error. Switch the toggle to compare.`;
+    }
+    read.innerHTML = msg;
+  }
+  FP.bindSlider('slN', N=>update(N));
+  FP.bindToggle('tgFine', v=>{ fine=v; ec.setAttribute('stroke-width', fine?2:3); ef.setAttribute('stroke-width', fine?3:2); update(parseInt(document.querySelector('#slN input').value)); });
+});
+</script>
+</body>
+</html>

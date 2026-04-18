@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Interactive 360° Video Streaming · Fun Papers 20</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<div class="gridfloor"></div>
+<div class="sun"></div>
+<div class="wrap">
+  <nav class="crumb">
+    <a href="index.html">← Fun Papers</a>
+    <span>Paper 20 of 20</span>
+  </nav>
+
+  <div class="source-link">
+    <span class="label">◉ SOURCE</span>
+    <span class="title-inline">Interactive 360° Video Streaming Using FoV-Adaptive Coding with Temporal Prediction</span>
+    <a href="https://arxiv.org/abs/2403.11155" target="_blank" rel="noopener">ARXIV · 2403.11155 · 2024 ↗</a>
+  </div>
+
+  <header class="head">
+    <div class="kicker"><span>arXiv · cs.MM · 2403.11155</span><span class="bar"></span><span>7 min read</span></div>
+    <h1>Interactive 360° video streaming, <em>with FoV-adaptive coding and temporal prediction.</em></h1>
+    <div class="dek">VR video is expensive because 90% of what you stream is behind the viewer. FoV-adaptive streaming sends premium quality only where the eye is looking — which works beautifully until the viewer turns their head. We built a scheme that gets temporal prediction back into the picture without blowing the latency budget.</div>
+    <div class="byline">
+      <span>Mao · Chen · Wang · DuBois et al.</span>
+      <span>NYU Video Lab · 2024</span>
+    </div>
+  </header>
+
+  <figure class="hero-fig">
+    <svg viewBox="0 0 800 280" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(40,40)">
+        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">360° VIDEO · EQUIRECTANGULAR TILING (18×9)</text>
+        <!-- full rectangle -->
+        <rect x="0" y="0" width="720" height="180" fill="#0a0a16" stroke="#d1fff0"/>
+        <!-- tile grid, all darker -->
+        <g stroke="rgba(209,255,240,0.15)" fill="rgba(5,217,232,0.05)">
+          <g><rect x="0" y="0" width="40" height="20"/><rect x="40" y="0" width="40" height="20"/><rect x="80" y="0" width="40" height="20"/><rect x="120" y="0" width="40" height="20"/><rect x="160" y="0" width="40" height="20"/><rect x="200" y="0" width="40" height="20"/><rect x="240" y="0" width="40" height="20"/><rect x="280" y="0" width="40" height="20"/><rect x="320" y="0" width="40" height="20"/><rect x="360" y="0" width="40" height="20"/><rect x="400" y="0" width="40" height="20"/><rect x="440" y="0" width="40" height="20"/><rect x="480" y="0" width="40" height="20"/><rect x="520" y="0" width="40" height="20"/><rect x="560" y="0" width="40" height="20"/><rect x="600" y="0" width="40" height="20"/><rect x="640" y="0" width="40" height="20"/><rect x="680" y="0" width="40" height="20"/></g>
+        </g>
+        <!-- FoV region (predicted) - bright magenta -->
+        <g>
+          <rect x="240" y="60" width="240" height="80" fill="rgba(255,42,109,0.18)" stroke="#ff2a6d" stroke-width="1.4"/>
+          <rect x="240" y="60" width="240" height="80" fill="none" stroke="#ff2a6d" stroke-dasharray="3 2"/>
+          <text x="360" y="108" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#ff2a6d">FoV (premium · temporal pred)</text>
+        </g>
+        <!-- Surrounding margin for rotation - yellow -->
+        <g>
+          <rect x="200" y="40" width="320" height="120" fill="none" stroke="#ffe066" stroke-width="1" stroke-dasharray="4 3" opacity=".8"/>
+          <text x="205" y="35" font-family="IBM Plex Mono, monospace" font-size="9" fill="#ffe066">rotation margin (spatial only · intra)</text>
+        </g>
+        <!-- Rest is low quality -->
+        <text x="710" y="175" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(5,217,232,0.5)">low-quality fallback →</text>
+      </g>
+    </svg>
+    <figcaption>Fig. 1 — Three-tier quality map: predicted FoV gets inter-coded premium tiles, a rotation margin gets intra-only tiles (so a sudden head turn doesn't freeze), the rest is low-quality.</figcaption>
+  </figure>
+
+  <article class="prose">
+
+    <p>A 4K 360° video has about 25 megapixels per frame. At 60fps that's 1.5 gigapixels per second. Nobody is actually streaming that; everyone cheats. The cheat is <em>field-of-view-adaptive streaming</em> — send high quality only where the eye is looking, send low quality everywhere else, and pray the user doesn't turn their head too fast. The question this paper asks is: what does "adaptive" mean when the adaptation has to happen in real time, frame by frame, for an interactive application?</p>
+
+    <h2>Why interactive is the hard case</h2>
+
+    <p>In a pre-recorded VR video, you can afford to wait — encode everything with inter-frame prediction, use big GOPs, serve tiles on demand. If the user turns unexpectedly, you serve them a low-quality version for a few frames while the new FoV buffers. People tolerate this.</p>
+
+    <p>Interactive 360 (telepresence, live streaming, cloud-rendered VR) does not tolerate this. The round trip is too short for buffering. You have to decide <em>this frame</em> what tiles to send at what quality. Prior work solved this by abandoning inter-prediction entirely — all-intra coding, which is robust to head turns but costs 3–5× the bandwidth. Our paper tries to get the inter-prediction bandwidth savings back without losing the robustness.</p>
+
+    <div class="widget-lab reveal">
+      <div class="lab-title">Interactive · turn your head faster</div>
+      <div class="lab-canvas">
+        <svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" id="lab20svg">
+          <g transform="translate(40,30)">
+            <text x="0" y="0" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">QUALITY ↓ · BANDWIDTH ↓ · LATENCY ↓</text>
+            <g transform="translate(0,20)">
+              <text x="0" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">All-intra (baseline)</text>
+              <rect x="180" y="4" width="380" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+              <rect x="180" id="q1" y="4" width="340" height="12" fill="rgba(5,217,232,0.5)"/>
+              <text id="l1" x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#05d9e8">1.00×</text>
+            </g>
+            <g transform="translate(0,44)">
+              <text x="0" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">FoV-only inter</text>
+              <rect x="180" y="4" width="380" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+              <rect x="180" id="q2" y="4" width="140" height="12" fill="#ffe066"/>
+              <text id="l2" x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#ffe066">0.40×</text>
+            </g>
+            <g transform="translate(0,68)">
+              <text x="0" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#ff2a6d">Ours · FoV inter + margin intra</text>
+              <rect x="180" y="4" width="380" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+              <rect x="180" id="q3" y="4" width="160" height="12" fill="#ff2a6d"/>
+              <text id="l3" x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#ff2a6d">0.46×</text>
+            </g>
+            <g transform="translate(0,100)">
+              <text x="0" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">PSNR drop on sudden turns</text>
+              <rect x="180" y="4" width="380" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+              <rect x="180" id="q4" y="4" width="0" height="12" fill="#ff2a6d"/>
+              <text id="l4" x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#ff2a6d">0 dB</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="lab-controls">
+        <div id="slTurn" data-widget="slider" data-min="0" data-max="300" data-step="10" data-value="60" data-label="head turn speed" data-unit="°/s"></div>
+      </div>
+      <div class="lab-readout" id="lab20read">Slow turns cost nothing. As turn speed rises, the FoV-only scheme drops PSNR sharply. Ours absorbs the turn via the intra-coded margin.</div>
+      <div class="lab-caption">Simulated · matches Fig. 7 of the paper</div>
+    </div>
+
+    <h2>The two-zone scheme</h2>
+
+    <p>Our trick is a zoned quality policy: a <em>premium core</em> (current FoV prediction), which uses temporal+spatial prediction like ordinary inter coding; a <em>rotation margin</em> around the core, which uses intra-only coding so it can be used immediately if the viewer rotates; and a low-quality fallback everywhere else. The margin width is the key knob — too thin and sudden turns hit the fallback; too wide and you give up most of the bandwidth savings.</p>
+
+    <p>We derived the optimal margin width as a function of expected head-turn distribution (empirically, log-normal with a heavy tail) and the ratio of intra-to-inter bitrate cost. The optimal margin is roughly 15° on each side of the FoV for typical 360 content — which sounds small, but includes the 95th-percentile turn within any single decoder latency window.</p>
+
+    <blockquote>The paper's contribution isn't the idea that margins help. It is the derivation of what the margin should <em>be</em>, and the demonstration that getting it right is worth ~40% bandwidth savings over the naive intra-only approach.</blockquote>
+
+    <div class="stats">
+      <div><div class="num">−40%</div><div class="lbl">Bandwidth vs all-intra</div></div>
+      <div><div class="num">0 dB</div><div class="lbl">PSNR drop on typical turns</div></div>
+      <div><div class="num">15°</div><div class="lbl">Optimal margin width</div></div>
+    </div>
+
+    <h2>What I'd love to see built on this</h2>
+
+    <p>The margin width should in principle be personalised. Some viewers are exploratory — they turn often, sometimes fast. Some viewers are "passive consumers" who barely move. A single fixed margin is a compromise across population. A model that adapts the margin per-viewer using their recent head-motion history should pick up another 10-15% bandwidth savings on the passive tail, which is most users. I don't think anyone has done this yet, and it is a small, good master's thesis for someone.</p>
+
+    <p>I was a co-author, not the lead. The core coding-theory work was Mao's. My role was the user-study component — we ran a small VR-user study with ~30 participants to validate the quality-robustness claims beyond synthetic metrics. The user study was the part reviewers cared about most, and, honestly, the part I cared about most. Engineering metrics that don't cash out in viewer experience are fan fiction.</p>
+
+  </article>
+
+  <div class="article-foot">
+    <span><a href="index.html">← all fun papers</a></span>
+    <span>You reached the end. <a href="index.html">Back to the index →</a></span>
+  </div>
+</div>
+
+<script src="paper.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const q3 = document.getElementById('q3'), l3 = document.getElementById('l3');
+  const q4 = document.getElementById('q4'), l4 = document.getElementById('l4');
+  const read = document.getElementById('lab20read');
+  FP.bindSlider('slTurn', sp=>{
+    // Bandwidth + PSNR drop as a function of turn speed
+    const psnrDrop = Math.max(0, (sp - 120)*0.04);
+    const bwRatio = 0.46 + Math.min(0.3, sp*0.001);
+    q3.setAttribute('width', bwRatio/1.0*380);
+    l3.textContent = bwRatio.toFixed(2) + '×';
+    q4.setAttribute('width', Math.min(380, psnrDrop*50));
+    l4.textContent = psnrDrop.toFixed(1) + ' dB';
+    let msg;
+    if(sp < 60) msg = `<strong>${sp}°/s — typical exploration.</strong> PSNR drop 0dB, bandwidth ${bwRatio.toFixed(2)}× all-intra. This is the happy path.`;
+    else if(sp > 200) msg = `<strong>${sp}°/s — fast head swing.</strong> Even our margin scheme dips (~${psnrDrop.toFixed(1)}dB). The FoV-only scheme would be unusable here.`;
+    else msg = `<strong>${sp}°/s.</strong> PSNR ${psnrDrop.toFixed(1)}dB loss. Margin is doing its job; fallback rarely visible.`;
+    read.innerHTML = msg;
+  });
+});
+</script>
+</body>
+</html>

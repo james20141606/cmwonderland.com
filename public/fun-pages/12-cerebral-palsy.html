@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cerebral Palsy Severity from Video · Fun Papers 12</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<div class="gridfloor"></div>
+<div class="sun"></div>
+<div class="wrap">
+  <nav class="crumb">
+    <a href="index.html">← Fun Papers</a>
+    <span>Paper 11 of 20</span>
+  </nav>
+
+  <div class="source-link">
+    <span class="label">◉ SOURCE</span>
+    <span class="title-inline">Multimodal Fusion of Skeleton Dynamics and Clinical Gait Features for Video-Based Cerebral Palsy Severity Assessment</span>
+    <a href="https://arxiv.org/abs/2603.22371" target="_blank" rel="noopener">ARXIV · 2603.22371 ↗</a>
+  </div>
+
+  <header class="head">
+    <div class="kicker"><span>arXiv · cs.CV · 2603.22371</span><span class="bar"></span><span>10 min read</span></div>
+    <h1>Cerebral palsy severity from video, <em>skeletons plus the things clinicians already measure.</em></h1>
+    <div class="dek">Clinical gait descriptors are expensive. Skeleton-tracking is cheap. We fused them. The cheap stream does the heavy lifting; the expensive stream lends interpretability, which is the part clinicians actually want.</div>
+    <div class="byline">
+      <span>Yang · He · Chen</span>
+      <span>2026</span>
+    </div>
+  </header>
+
+  <figure class="hero-fig">
+    <svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg">
+      <!-- left: skeleton walking -->
+      <g transform="translate(60,50)">
+        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">A · skeleton stream (pose estimator)</text>
+        <rect x="0" y="0" width="220" height="220" fill="rgba(5,217,232,0.08)" stroke="#d1fff0"/>
+        <g transform="translate(50,30)" stroke="#d1fff0" fill="none" stroke-width="1.4">
+          <!-- head -->
+          <circle cx="60" cy="25" r="12" fill="#0a0a16"/>
+          <!-- body -->
+          <line x1="60" y1="37" x2="60" y2="100"/>
+          <!-- arms -->
+          <line x1="60" y1="55" x2="40" y2="80"/>
+          <line x1="60" y1="55" x2="80" y2="80"/>
+          <!-- legs - one stiff/asymmetric -->
+          <line x1="60" y1="100" x2="45" y2="150" stroke="#ff2a6d" stroke-width="1.8"/>
+          <line x1="60" y1="100" x2="78" y2="155"/>
+          <g fill="#ff2a6d" stroke="none">
+            <circle cx="60" cy="37" r="3"/><circle cx="60" cy="55" r="3"/><circle cx="60" cy="100" r="3"/>
+            <circle cx="40" cy="80" r="3"/><circle cx="80" cy="80" r="3"/>
+            <circle cx="45" cy="150" r="3"/><circle cx="78" cy="155" r="3"/>
+          </g>
+        </g>
+        <!-- motion arrow -->
+        <g stroke="#05d9e8" stroke-width=".8" fill="none" opacity=".5">
+          <path class="svg-trace" d="M30 180 Q 110 165 190 180"/>
+        </g>
+        <text x="0" y="208" font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(209,255,240,0.6)">17-keypoint time-series · joint angles · velocity</text>
+      </g>
+
+      <!-- right: clinical gait descriptors -->
+      <g transform="translate(320,50)">
+        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">B · clinical descriptor stream (what doctors measure)</text>
+        <rect x="0" y="0" width="380" height="220" fill="#0a0a16" stroke="#d1fff0"/>
+        <g font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">
+          <g transform="translate(20,25)">
+            <text y="14">step length symmetry</text>
+            <rect x="180" y="4" width="170" height="10" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="180" y="4" width="90" height="10" fill="#ff2a6d"/>
+          </g>
+          <g transform="translate(20,50)">
+            <text y="14">cadence (steps/min)</text>
+            <rect x="180" y="4" width="170" height="10" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="180" y="4" width="120" height="10" fill="#05d9e8"/>
+          </g>
+          <g transform="translate(20,75)">
+            <text y="14">knee flexion peak (°)</text>
+            <rect x="180" y="4" width="170" height="10" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="180" y="4" width="65" height="10" fill="#ff2a6d"/>
+          </g>
+          <g transform="translate(20,100)">
+            <text y="14">stance/swing ratio</text>
+            <rect x="180" y="4" width="170" height="10" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="180" y="4" width="140" height="10" fill="#ffe066"/>
+          </g>
+          <g transform="translate(20,125)">
+            <text y="14">trunk sway (px/frame)</text>
+            <rect x="180" y="4" width="170" height="10" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="180" y="4" width="95" height="10" fill="#ff2a6d"/>
+          </g>
+          <g transform="translate(20,150)">
+            <text y="14">toe clearance (cm)</text>
+            <rect x="180" y="4" width="170" height="10" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="180" y="4" width="50" height="10" fill="#ff2a6d"/>
+          </g>
+        </g>
+        <text x="20" y="195" font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(209,255,240,0.6)">↳ every descriptor has a clinical name</text>
+      </g>
+
+      <!-- fusion arrow and label at bottom -->
+      <g transform="translate(400,290)">
+        <text text-anchor="middle" font-family="JetBrains Mono, monospace" font-style="italic" font-size="15" fill="#d1fff0">A gives the accuracy. B gives the sentence a clinician can write in the chart.</text>
+      </g>
+    </svg>
+    <figcaption>Fig. 1 — Two streams, one prediction. The cheap one does the work; the expensive one does the explaining.</figcaption>
+  </figure>
+
+  <article class="prose">
+
+    <p>This paper is about a research pattern I have come to love, which is: a model that is slightly less accurate than the benchmark but <em>much more useful</em> than the benchmark. In CP severity assessment — and, I suspect, most clinical CV — usefulness is usually the thing we are actually optimising, and accuracy is a proxy that is only sometimes faithful to it.</p>
+
+    <h2>The task and the trap</h2>
+
+    <p>Cerebral palsy severity is graded on the Gross Motor Function Classification System (GMFCS), levels I through V. The grade is made by a clinician who watches the child walk. It is a holistic call, and you cannot train a perfect automated grader without a lot of clinician-labeled video — which, as you would expect, is both scarce and protected.</p>
+
+    <p>The obvious trap, and one a lot of papers fall into, is to treat this as a black-box classification problem. Train a big model on raw video, optimise for grade accuracy, publish 72%, move on. I do not mean to disparage those papers — they are important baselines. But they are not a tool a clinician will use, because the clinician's job isn't to output a number. The clinician's job is to write a note that says "level III, walking with truncal sway and impaired knee flexion on the left." A 72% classifier doesn't help with that note.</p>
+
+    <div class="widget-lab reveal">
+      <div class="lab-title">Interactive · what the dual stream actually buys you</div>
+      <div class="lab-canvas">
+        <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" id="lab12svg">
+          <g transform="translate(40,30)">
+            <text x="0" y="0" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">GMFCS CLASSIFICATION CONFIDENCE</text>
+            <!-- bars per level -->
+            <g transform="translate(0,20)">
+              <text x="0" y="14" font-family="JetBrains Mono, monospace" font-size="12">Level I</text>
+              <rect x="100" y="4" width="400" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+              <rect id="bL1" x="100" y="4" width="0" height="12" fill="#ffe066"/>
+              <text id="tL1" x="510" y="14" font-family="IBM Plex Mono, monospace" font-size="10">0%</text>
+            </g>
+            <g transform="translate(0,44)">
+              <text x="0" y="14" font-family="JetBrains Mono, monospace" font-size="12">Level II</text>
+              <rect x="100" y="4" width="400" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+              <rect id="bL2" x="100" y="4" width="0" height="12" fill="#05d9e8"/>
+              <text id="tL2" x="510" y="14" font-family="IBM Plex Mono, monospace" font-size="10">0%</text>
+            </g>
+            <g transform="translate(0,68)">
+              <text x="0" y="14" font-family="JetBrains Mono, monospace" font-size="12">Level III</text>
+              <rect x="100" y="4" width="400" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+              <rect id="bL3" x="100" y="4" width="0" height="12" fill="#ff2a6d"/>
+              <text id="tL3" x="510" y="14" font-family="IBM Plex Mono, monospace" font-size="10">0%</text>
+            </g>
+            <g transform="translate(0,92)">
+              <text x="0" y="14" font-family="JetBrains Mono, monospace" font-size="12">Level IV</text>
+              <rect x="100" y="4" width="400" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+              <rect id="bL4" x="100" y="4" width="0" height="12" fill="#ff2a6d"/>
+              <text id="tL4" x="510" y="14" font-family="IBM Plex Mono, monospace" font-size="10">0%</text>
+            </g>
+            <g transform="translate(0,116)">
+              <text x="0" y="14" font-family="JetBrains Mono, monospace" font-size="12">Level V</text>
+              <rect x="100" y="4" width="400" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+              <rect id="bL5" x="100" y="4" width="0" height="12" fill="#ff2a6d"/>
+              <text id="tL5" x="510" y="14" font-family="IBM Plex Mono, monospace" font-size="10">0%</text>
+            </g>
+            <g transform="translate(0,150)" font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(209,255,240,0.6)">
+              <text id="explain">↳ interpretation: <tspan id="expTxt" fill="#d1fff0">—</tspan></text>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="lab-controls">
+        <div id="slSym" data-widget="slider" data-min="0" data-max="1" data-step="0.01" data-value="0.8" data-label="gait symmetry" data-unit=""></div>
+        <div id="slKnee" data-widget="slider" data-min="0" data-max="1" data-step="0.01" data-value="0.6" data-label="knee flexion range" data-unit=""></div>
+        <div id="slSway" data-widget="slider" data-min="0" data-max="1" data-step="0.01" data-value="0.3" data-label="trunk sway" data-unit=""></div>
+      </div>
+      <div class="lab-readout" id="lab12read">Adjust the three descriptors. Predictions shift, and the explanation updates with which features drove the call. This is what the clinician ends up reading.</div>
+      <div class="lab-caption">Simulated · structure matches paper's interpretation module</div>
+    </div>
+
+    <h2>The fusion, in detail</h2>
+
+    <p>The skeleton stream is a spatiotemporal GCN eating 17 body keypoints per frame; it's a workhorse architecture, bog-standard, chosen because it is well-understood and fast. The clinical-descriptor stream is a small MLP eating six expertly-curated gait features per video clip — step length asymmetry, cadence, knee flexion peak, stance-to-swing ratio, trunk sway, minimum toe clearance. Each of these is named, clinically interpretable, and individually motivated by the literature on CP gait.</p>
+
+    <p>We fuse the two streams with a gated-attention layer. During prediction, the gate tells us how much of each stream drove the final call. For high-confidence predictions from the skeleton stream, the gate opens; for borderline cases, the clinical descriptors are given higher weight. This matches the clinical intuition that when the automated grader is unsure, <em>measured</em> descriptors (knee flexion range, toe clearance) are more diagnostic than end-to-end features.</p>
+
+    <blockquote>A clinician rereading the report can see not just the predicted level but <em>which descriptors drove it</em> — and, critically, can disagree with the model on the grounds that one descriptor is off. That is the real product.</blockquote>
+
+    <h2>Results, honestly</h2>
+
+    <p>Our accuracy (70.86% five-way) is not state of the art. The best pure-skeleton method gets ~73%. We lose ~2 points. We gain something the pure method cannot offer: a per-prediction attribution to features a clinician recognises. In the paper we frame this as an explicit trade-off. In conversation I frame it more strongly: the pure method is a research artefact; the fused method is a tool.</p>
+
+    <div class="stats">
+      <div><div class="num">70.86</div><div class="lbl">5-way accuracy (%)</div></div>
+      <div><div class="num">6</div><div class="lbl">Clinical descriptors</div></div>
+      <div><div class="num">1.0</div><div class="lbl">GMFCS MAE (levels)</div></div>
+    </div>
+
+    <h2>What we stumbled on</h2>
+
+    <p>The most interesting finding is not the headline accuracy. It is that the clinical-descriptor stream alone — a six-dimensional MLP — reaches 62% accuracy. Six hand-crafted numbers, no deep learning on video, and you are two-thirds of the way to the automated result. This is a finding I want people to sit with. The gap between six well-chosen features and a big end-to-end model is 8 accuracy points. Those 8 points are real and valuable, but the shape of the problem is much more "pick the right features" than the current literature wants to admit.</p>
+
+    <p>I suspect this generalises. Whenever a clinical CV task has a century of domain expertise behind it, the hand-crafted features probably get you 70–80% of the way to the ML answer on their own. The ML is for the last twenty points, not the first seventy. We have it backwards.</p>
+
+    <h2>Ethics and caution</h2>
+
+    <p>A tool that grades severity could be used to allocate care — and in the wrong institutional hands, it could ration it. The paper is careful to say that the output is a decision-support tool, not an arbiter. The clinician remains the grader of record. We repeat that in the limitations and again in the discussion; it is not in my power to prevent the tool from being misused, but it is in my power to make it very hard to claim you misused it in good faith.</p>
+
+    <p>Separately — and this is a note more than an argument — the dataset we trained on is overwhelmingly North American and European, and underrepresents the regions where CP prevalence is highest. Any deployment outside that distribution needs its own validation. We do not claim otherwise. I write this note because I wish more papers wrote it explicitly.</p>
+
+  </article>
+
+  <div class="article-foot">
+    <span><a href="index.html">← all fun papers</a></span>
+    <span>Next: <a href="13-corollary-discharge.html">12 Corollary Discharge →</a></span>
+  </div>
+</div>
+
+<script src="paper.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const bars = [1,2,3,4,5].map(i=>({rect: document.getElementById('bL'+i), text: document.getElementById('tL'+i)}));
+  const W = 400;
+  const expTxt = document.getElementById('expTxt');
+  const read = document.getElementById('lab12read');
+  let sym=0.8, knee=0.6, sway=0.3;
+
+  function softmax(xs){
+    const m = Math.max(...xs);
+    const e = xs.map(x=>Math.exp(x-m));
+    const s = e.reduce((a,b)=>a+b,0);
+    return e.map(x=>x/s);
+  }
+  function render(){
+    // simple score per level based on descriptors
+    const scores = [
+      3*sym + 2*knee - 1.5*sway,        // I
+      2*sym + 1*knee - 0.5*sway,        // II
+      0 - (sym-0.5)*1 + (sway-0.3)*2,   // III
+      -1*sym - 0.5*knee + 2*sway,       // IV
+      -2*sym - 1.5*knee + 2.5*sway      // V
+    ];
+    const p = softmax(scores.map(x=>x*3));
+    bars.forEach((b,i)=>{
+      b.rect.setAttribute('width', W*p[i]);
+      b.text.textContent = Math.round(p[i]*100) + '%';
+    });
+
+    const topIdx = p.indexOf(Math.max(...p));
+    const levels = ['I','II','III','IV','V'];
+    const drivers = [];
+    if(sym < 0.5) drivers.push('asymmetric step length');
+    if(knee < 0.5) drivers.push('reduced knee flexion');
+    if(sway > 0.5) drivers.push('elevated trunk sway');
+    if(drivers.length === 0) drivers.push('near-normative gait');
+    expTxt.textContent = `GMFCS ${levels[topIdx]} · driven by ${drivers.join(', ')}`;
+
+    let msg;
+    if(p[topIdx] > 0.6){
+      msg = `<strong>Confident prediction · GMFCS ${levels[topIdx]}.</strong> The skeleton stream's decision is ratified by the clinical descriptors. A radiologist can write this call with minimal review.`;
+    } else if(p[topIdx] > 0.4){
+      msg = `<strong>Borderline prediction · GMFCS ${levels[topIdx]}.</strong> The clinical-descriptor stream gets more weight here. This is exactly the case where a human grader should look at the named features before signing off.`;
+    } else {
+      msg = `<strong>Low confidence.</strong> No level wins clearly. Prediction deferred to clinician; the tool flags this as an "uncertain" case rather than guessing.`;
+    }
+    read.innerHTML = msg;
+  }
+  FP.bindSlider('slSym', v=>{sym=v;render();});
+  FP.bindSlider('slKnee', v=>{knee=v;render();});
+  FP.bindSlider('slSway', v=>{sway=v;render();});
+  render();
+});
+</script>
+</body>
+</html>

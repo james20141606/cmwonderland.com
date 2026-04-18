@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Stimulus Speech Decoding GAN · Fun Papers 13</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<div class="gridfloor"></div>
+<div class="sun"></div>
+<div class="wrap">
+  <nav class="crumb">
+    <a href="index.html">← Fun Papers</a>
+    <span>Paper 13 of 20</span>
+  </nav>
+
+  <div class="source-link">
+    <span class="label">◉ SOURCE</span>
+    <span class="title-inline">Stimulus Speech Decoding from Human Cortex with Generative Adversarial Network Transfer Learning</span>
+    <a href="https://ieeexplore.ieee.org/abstract/document/9098589" target="_blank" rel="noopener">IEEE ISBI · doc 9098589 · 2020 ↗</a>
+  </div>
+
+  <header class="head">
+    <div class="kicker"><span>IEEE ISBI · 2020</span><span class="bar"></span><span>7 min read</span></div>
+    <h1>Stimulus speech decoding with GAN transfer learning, <em>the paper where I learned to cheat honestly.</em></h1>
+    <div class="dek">Reconstructing heard speech from cortex is a chicken-and-egg problem: you don't have enough ECoG-paired audio to train a good decoder, and you can't pretrain on something else because "something else" doesn't exist. We used a GAN trained on natural speech as a prior, then borrowed its decoder. Small ECoG dataset, credible reconstructions.</div>
+    <div class="byline">
+      <span>Chen · Wang · Flinker et al.</span>
+      <span>ISBI · 2020</span>
+    </div>
+  </header>
+
+  <figure class="hero-fig">
+    <svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg">
+      <!-- Stage 1: GAN pretraining on natural speech -->
+      <g transform="translate(40,50)">
+        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">STAGE 1 · pretrain GAN on lots of speech</text>
+        <rect x="0" y="0" width="180" height="100" fill="rgba(5,217,232,0.06)" stroke="#d1fff0"/>
+        <g transform="translate(20,30)" stroke="#05d9e8" stroke-width="1.2" fill="none">
+          <!-- generator -->
+          <rect x="0" y="0" width="50" height="50" fill="rgba(5,217,232,0.1)"/>
+          <text x="25" y="30" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#05d9e8">G</text>
+          <line x1="50" y1="25" x2="80" y2="25" stroke="#d1fff0"/>
+          <rect x="80" y="0" width="50" height="50" fill="rgba(255,42,109,0.08)"/>
+          <text x="105" y="30" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#ff2a6d">D</text>
+        </g>
+        <path class="svg-trace" d="M15 82 Q 25 70 35 82 T 55 82 T 75 70 T 95 90 T 115 75 T 135 82 T 155 82" stroke="#ffe066" stroke-width="1" fill="none"/>
+      </g>
+
+      <!-- Stage 2: freeze G, train ECoG encoder -->
+      <g transform="translate(260,50)">
+        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#ffe066">STAGE 2 · freeze G · attach ECoG encoder</text>
+        <rect x="0" y="0" width="280" height="100" fill="rgba(255,224,102,0.04)" stroke="#ffe066"/>
+        <g transform="translate(18,30)">
+          <!-- ECoG -->
+          <rect x="0" y="0" width="50" height="50" fill="rgba(255,42,109,0.08)" stroke="#ff2a6d"/>
+          <g fill="#ff2a6d"><circle cx="12" cy="12" r="2"/><circle cx="25" cy="12" r="2"/><circle cx="38" cy="12" r="2"/><circle cx="12" cy="25" r="2"/><circle cx="25" cy="25" r="2.5"/><circle cx="38" cy="25" r="2"/><circle cx="12" cy="38" r="2"/><circle cx="25" cy="38" r="2"/><circle cx="38" cy="38" r="2"/></g>
+          <!-- arrow -->
+          <line x1="50" y1="25" x2="78" y2="25" stroke="#d1fff0" stroke-width="1"/>
+          <polyline points="72,22 78,25 72,28" stroke="#d1fff0" fill="none"/>
+          <!-- encoder (trainable) -->
+          <rect x="80" y="0" width="50" height="50" fill="rgba(255,224,102,0.15)" stroke="#ffe066"/>
+          <text x="105" y="30" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#ffe066">Enc</text>
+          <!-- arrow -->
+          <line x1="130" y1="25" x2="158" y2="25" stroke="#d1fff0" stroke-width="1"/>
+          <polyline points="152,22 158,25 152,28" stroke="#d1fff0" fill="none"/>
+          <!-- frozen G -->
+          <rect x="160" y="0" width="50" height="50" fill="rgba(5,217,232,0.2)" stroke="#05d9e8" stroke-dasharray="3 2"/>
+          <text x="185" y="26" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#05d9e8">G</text>
+          <text x="185" y="40" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="7" fill="#05d9e8">(frozen)</text>
+          <!-- output -->
+          <line x1="210" y1="25" x2="240" y2="25" stroke="#d1fff0" stroke-width="1"/>
+          <polyline points="234,22 240,25 234,28" stroke="#d1fff0" fill="none"/>
+        </g>
+        <text x="255" y="90" font-family="IBM Plex Mono, monospace" font-size="9" fill="#ffe066" text-anchor="end">→ decoded spectrogram</text>
+      </g>
+
+      <text x="400" y="240" text-anchor="middle" font-family="JetBrains Mono, monospace" font-style="italic" font-size="14" fill="#d1fff0">The trick: the hard, data-heavy part of the model was learned from free data.</text>
+    </svg>
+    <figcaption>Fig. 1 — GAN on speech first, freeze, then learn the tiny ECoG→latent encoder on what little ECoG you have.</figcaption>
+  </figure>
+
+  <article class="prose">
+
+    <p>This was my first paper as a PhD student, and it is the one that taught me the single most useful technical habit I have: <em>check whether the task your data supports is actually the task you are trying to solve</em>. ECoG-paired-with-speech datasets are small. You cannot train a good speech generator on a few hours of data. But you do not <em>need</em> to train a speech generator on ECoG — you need to train a map from ECoG to a speech space that already exists.</p>
+
+    <p>So we built the speech space with a GAN on freely-available natural speech, took its generator's latent manifold as our target, and then trained only the small ECoG→latent encoder on the paired ECoG data we actually had. Instead of data-hungry end-to-end training, we had two small regression problems and one large pretraining problem solved for us by the audio community.</p>
+
+    <h2>Why this worked</h2>
+
+    <p>The generator's latent space is organised by <em>acoustic content</em>. It is already smooth: nearby points in latent space produce acoustically similar speech. That smoothness is exactly the property you need downstream — a small imprecision in the ECoG encoder's output produces a small imprecision in the synthesised speech, not a catastrophic jump to a different utterance. This was not guaranteed, but it held empirically and it is why the paper even had numbers worth publishing.</p>
+
+    <div class="widget-lab reveal">
+      <div class="lab-title">Interactive · how much ECoG data would a fully end-to-end model need?</div>
+      <div class="lab-canvas">
+        <svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" id="lab13svg">
+          <g transform="translate(40,30)">
+            <line x1="0" y1="160" x2="560" y2="160" stroke="#d1fff0"/>
+            <line x1="0" y1="0" x2="0" y2="160" stroke="#d1fff0"/>
+            <text x="0" y="-10" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">reconstruction quality (PCC) →</text>
+            <text x="420" y="178" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">ECoG data available (hours) →</text>
+            <path id="endToEnd" d="" stroke="#05d9e8" stroke-width="2" fill="none"/>
+            <path id="ours" d="" stroke="#ff2a6d" stroke-width="2" fill="none"/>
+            <line id="cur" x1="0" y1="0" x2="0" y2="160" stroke="#d1fff0" stroke-dasharray="3 3" opacity=".5"/>
+            <g transform="translate(380,6)" font-family="IBM Plex Mono, monospace" font-size="9">
+              <rect x="0" y="0" width="10" height="3" fill="#05d9e8"/><text x="14" y="5" fill="#05d9e8">end-to-end (scratch)</text>
+              <rect x="0" y="14" width="10" height="3" fill="#ff2a6d"/><text x="14" y="19" fill="#ff2a6d">GAN-pretrained (ours)</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="lab-controls">
+        <div id="slH" data-widget="slider" data-min="0.5" data-max="20" data-step="0.1" data-value="3" data-label="ECoG data available" data-unit="h"></div>
+      </div>
+      <div class="lab-readout" id="lab13read">Below ~5h of paired data — the regime most labs live in — pretrained models crush end-to-end ones. Above 15h it stops mattering.</div>
+      <div class="lab-caption">Qualitative shape · matches Fig. 4</div>
+    </div>
+
+    <h2>What I got wrong</h2>
+
+    <p>Two things. First, I over-indexed on generator quality as the limiting factor. In reality the ECoG encoder was the bottleneck — the generator was already better than my encoder could address. Second, I assumed speaker identity would come "for free" from the generator's latent space. It did not; speaker identity lives in a disentangled direction we didn't have supervision for. That problem got solved properly four years later in <a href="01-neural-speech-decoding.html">paper 01</a>.</p>
+
+    <blockquote>The best thing I did in this paper was pretend I had 1000x more data than I had, by outsourcing the expensive half of the learning to a task other people had already solved.</blockquote>
+
+    <div class="stats">
+      <div><div class="num">4h</div><div class="lbl">Paired ECoG used</div></div>
+      <div><div class="num">+32%</div><div class="lbl">PCC vs scratch</div></div>
+      <div><div class="num">2020</div><div class="lbl">Year of suffering</div></div>
+    </div>
+
+    <h2>What it taught me about research</h2>
+
+    <p>In every subsequent paper I have written, I start by asking: is there a free version of the hard part? Can I borrow an embedding space, a generator, a classifier, a representation — and then only learn the narrow subject-specific mapping into it? More often than not the answer is yes, and the answer is why our labs' downstream work became feasible.</p>
+
+  </article>
+
+  <div class="article-foot">
+    <span><a href="index.html">← all fun papers</a></span>
+    <span>Next: <a href="15-when-thinking-fails.html">14 When Thinking Fails →</a></span>
+  </div>
+</div>
+
+<script src="paper.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const e2e = document.getElementById('endToEnd');
+  const ours = document.getElementById('ours');
+  const cur = document.getElementById('cur');
+  const read = document.getElementById('lab13read');
+  const W=560, H=160;
+  function build(f){
+    const pts=[];
+    for(let i=0;i<=60;i++){
+      const h = 0.5 + i/60*19.5;
+      const y = H - f(h)*H;
+      const x = (h-0.5)/19.5 * W;
+      pts.push([x,y]);
+    }
+    return 'M' + pts.map(p=>p.join(' ')).join(' L ');
+  }
+  function e2eFn(h){ return Math.max(0, 0.85/(1+Math.exp(-(h-10)/2.5))); }
+  function oursFn(h){ return Math.max(0.3, Math.min(0.85, 0.3 + 0.55/(1+Math.exp(-(h-2)/1.5)))); }
+  e2e.setAttribute('d', build(e2eFn));
+  ours.setAttribute('d', build(oursFn));
+  FP.bindSlider('slH', h=>{
+    const x = (h-0.5)/19.5 * W;
+    cur.setAttribute('x1', x); cur.setAttribute('x2', x);
+    const a = e2eFn(h), b = oursFn(h);
+    let msg;
+    if(h < 4) msg = `<strong>${h.toFixed(1)}h.</strong> End-to-end: ${a.toFixed(2)}. Ours: ${b.toFixed(2)}. This is the realistic regime — scratch training barely works.`;
+    else if(h > 14) msg = `<strong>${h.toFixed(1)}h.</strong> Both approaches converge (e2e ${a.toFixed(2)}, ours ${b.toFixed(2)}). With enough data, the pretraining trick stops helping.`;
+    else msg = `<strong>${h.toFixed(1)}h.</strong> Still a gap: ours ${b.toFixed(2)} vs e2e ${a.toFixed(2)}. The gap is what buys you a publishable paper on a small ECoG budget.`;
+    read.innerHTML = msg;
+  });
+});
+</script>
+</body>
+</html>

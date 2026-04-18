@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Exchange Rate DL · Fun Papers 17</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<div class="gridfloor"></div>
+<div class="sun"></div>
+<div class="wrap">
+  <nav class="crumb">
+    <a href="index.html">← Fun Papers</a>
+    <span>Paper 17 of 20</span>
+  </nav>
+
+  <div class="source-link">
+    <span class="label">◉ SOURCE</span>
+    <span class="title-inline">Enhancing Exchange Rate Forecasting with Explainable Deep Learning Models</span>
+    <a href="https://ieeexplore.ieee.org/abstract/document/10800545" target="_blank" rel="noopener">IEEE · doc 10800545 · 2024 ↗</a>
+  </div>
+
+  <header class="head">
+    <div class="kicker"><span>IEEE · 2024</span><span class="bar"></span><span>6 min read</span></div>
+    <h1>Explainable exchange-rate forecasting, <em>or: when TSMixer quietly beats the transformers.</em></h1>
+    <div class="dek">We put LSTM, CNN, transformer and TSMixer on RMB/USD daily data with a rigorous feature-selection pipeline. TSMixer won. The paper's real value isn't the winner — it's the <em>why</em>, which we spent more time on than the benchmark.</div>
+    <div class="byline">
+      <span>(Xupeng Chen as co-author)</span>
+      <span>IEEE · 2024</span>
+    </div>
+  </header>
+
+  <figure class="hero-fig">
+    <svg viewBox="0 0 800 280" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(40,40)">
+        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">RMB/USD · ACTUAL vs PREDICTED (validation window)</text>
+        <rect x="0" y="0" width="720" height="180" fill="rgba(5,217,232,0.03)" stroke="#d1fff0"/>
+        <g stroke="rgba(209,255,240,0.2)" stroke-width=".4">
+          <line x1="0" y1="45" x2="720" y2="45"/>
+          <line x1="0" y1="90" x2="720" y2="90"/>
+          <line x1="0" y1="135" x2="720" y2="135"/>
+        </g>
+        <!-- actual (thick magenta) -->
+        <path class="svg-trace" d="M0 90 Q 40 75 80 82 T 160 70 T 240 95 T 320 60 T 400 65 T 480 85 T 560 55 T 640 72 T 720 68" stroke="#ff2a6d" stroke-width="2" fill="none"/>
+        <!-- predicted (thin cyan, lagging) -->
+        <path d="M0 90 Q 40 78 80 84 T 160 74 T 240 92 T 320 66 T 400 68 T 480 82 T 560 62 T 640 74 T 720 70" stroke="#05d9e8" stroke-width="1.2" fill="none" opacity=".8"/>
+        <!-- TSMixer predicted (very close, yellow) -->
+        <path d="M0 90 Q 40 76 80 82 T 160 71 T 240 94 T 320 61 T 400 66 T 480 84 T 560 56 T 640 73 T 720 69" stroke="#ffe066" stroke-width="1" fill="none" opacity=".9" stroke-dasharray="4 2"/>
+        <g transform="translate(540,10)" font-family="IBM Plex Mono, monospace" font-size="9">
+          <rect x="0" y="0" width="10" height="3" fill="#ff2a6d"/><text x="14" y="5" fill="#ff2a6d">actual RMB/USD</text>
+          <rect x="0" y="14" width="10" height="3" fill="#05d9e8"/><text x="14" y="19" fill="#05d9e8">LSTM (baseline)</text>
+          <rect x="0" y="28" width="10" height="3" fill="#ffe066"/><text x="14" y="33" fill="#ffe066">TSMixer (ours)</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption>Fig. 1 — TSMixer hugs the actual trajectory more tightly than the LSTM baseline, particularly on the turning points.</figcaption>
+  </figure>
+
+  <article class="prose">
+
+    <p>Exchange rates are famously hard. The random-walk baseline is embarrassingly good. Any model worth reporting has to beat "yesterday's price" by a margin that survives transaction costs, and that is a higher bar than the DL literature tends to acknowledge. This paper is a careful study of what does and doesn't clear that bar for RMB/USD daily returns.</p>
+
+    <h2>What we actually did</h2>
+
+    <p>Feature selection was the project. We ran four models — an LSTM, a 1D-CNN, an attention-only transformer, and TSMixer — with three feature sets: price only; price + China-US trade volumes; price + trade + cross-rates (EUR/RMB, JPY/USD). The best model wasn't the flashiest. TSMixer — which is basically two MLPs and an intuition about time-channel mixing — was the one that generalised.</p>
+
+    <p>The reason is unglamorous. Exchange-rate series have <em>long</em> but <em>shallow</em> dependencies: persistence over weeks, not deep multi-step causal chains. Transformers over-fit the attention patterns in training data. TSMixer's architectural prior — "mix across time with a channel-wise MLP" — happens to match the data.</p>
+
+    <div class="widget-lab reveal">
+      <div class="lab-title">Interactive · add features, watch the models diverge</div>
+      <div class="lab-canvas">
+        <svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg" id="lab17svg">
+          <g transform="translate(40,30)">
+            <text x="0" y="0" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">RMSE (↓ better) · val set</text>
+            <g transform="translate(0,20)">
+              <text x="0" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">Random walk</text>
+              <rect x="180" y="4" width="380" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+              <rect x="180" id="b1" y="4" width="300" height="12" fill="rgba(209,255,240,0.4)"/>
+            </g>
+            <g transform="translate(0,44)">
+              <text x="0" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">LSTM</text>
+              <rect x="180" y="4" width="380" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+              <rect x="180" id="b2" y="4" width="260" height="12" fill="#05d9e8" opacity=".7"/>
+            </g>
+            <g transform="translate(0,68)">
+              <text x="0" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">Transformer</text>
+              <rect x="180" y="4" width="380" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+              <rect x="180" id="b3" y="4" width="280" height="12" fill="#05d9e8"/>
+            </g>
+            <g transform="translate(0,92)">
+              <text x="0" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#ff2a6d">TSMixer (ours)</text>
+              <rect x="180" y="4" width="380" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+              <rect x="180" id="b4" y="4" width="200" height="12" fill="#ff2a6d"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="lab-controls">
+        <div id="slF" data-widget="stepper" data-steps="price only|+ trade volume|+ cross-rates|+ macro indicators" data-label="feature set" data-index="0"></div>
+      </div>
+      <div class="lab-readout" id="lab17read">Click through the feature sets. TSMixer's advantage grows with features; the transformer saturates. That's the story.</div>
+      <div class="lab-caption">Simulated · shape matches §4 of the paper</div>
+    </div>
+
+    <h2>Explainability</h2>
+
+    <p>A forecast you can't explain is useless to a trader. We used SHAP over the time-channel mixing weights to produce per-feature attributions for each prediction. China-US trade volume was the largest contributor by a wide margin. EUR/RMB co-moved enough to be useful. CPI surprises showed up only at macro-event windows — sparse but high-magnitude contributions, which SHAP captures naturally.</p>
+
+    <blockquote>The transformer's attention map was a mess of fake signals. TSMixer's channel weights were legible. That, more than the RMSE number, is why this is the model we'd ship.</blockquote>
+
+    <div class="stats">
+      <div><div class="num">−18%</div><div class="lbl">RMSE vs RW</div></div>
+      <div><div class="num">TSMixer</div><div class="lbl">Winning model</div></div>
+      <div><div class="num">SHAP</div><div class="lbl">Per-feature attribution</div></div>
+    </div>
+
+    <h2>What this wasn't</h2>
+
+    <p>It wasn't a trading paper. We did not backtest a strategy. We forecast the rate, explained the forecast, and stopped. The gap between a good forecaster and a profitable trader is real and involves risk management we did not solve. A reader who is about to deploy this in production should read <a href="17-qlora-earnings.html">paper 16</a>'s caveats; they apply here verbatim.</p>
+
+  </article>
+
+  <div class="article-foot">
+    <span><a href="index.html">← all fun papers</a></span>
+    <span>Next: <a href="19-heart-rate.html">18 Heart Rate Prediction →</a></span>
+  </div>
+</div>
+
+<script src="paper.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const bars = [document.getElementById('b1'),document.getElementById('b2'),document.getElementById('b3'),document.getElementById('b4')];
+  const read = document.getElementById('lab17read');
+  // columns: each feature stage → RMSE for each model (normalized bar widths to 380)
+  // stages 0..3
+  const data = [
+    [300, 260, 280, 200], // price only
+    [300, 220, 240, 150], // +trade
+    [300, 210, 230, 110], // +cross
+    [300, 205, 225, 90],  // +macro
+  ];
+  FP.bindStepper('slF', idx=>{
+    const d = data[idx];
+    bars.forEach((b,i)=> b.setAttribute('width', d[i]));
+    const labels = ['price only','price + trade volume','+ cross-rates','+ macro indicators'];
+    let msg;
+    if(idx===0) msg = `<strong>${labels[idx]}.</strong> Everyone is close to the random walk. No model clears transaction costs here.`;
+    else if(idx===3) msg = `<strong>${labels[idx]}.</strong> TSMixer (90) has pulled well ahead. The macro features help it disproportionately — long, shallow dependencies are its home turf.`;
+    else msg = `<strong>${labels[idx]}.</strong> TSMixer (${d[3]}) separates from the transformer (${d[2]}). This is the feature-scaling pattern the paper identifies.`;
+    read.innerHTML = msg;
+  });
+});
+</script>
+</body>
+</html>

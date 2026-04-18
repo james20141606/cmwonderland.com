@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ENCORE · Safety Reward Models · Fun Papers 15</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<div class="gridfloor"></div>
+<div class="sun"></div>
+<div class="wrap">
+  <nav class="crumb">
+    <a href="index.html">← Fun Papers</a>
+    <span>Paper 15 of 20</span>
+  </nav>
+
+  <div class="source-link">
+    <span class="label">◉ SOURCE</span>
+    <span class="title-inline">ENCORE: Entropy-guided Reward Composition for Multi-head Safety Reward Models</span>
+    <a href="https://ojs.aaai.org/index.php/AAAI/article/view/40442" target="_blank" rel="noopener">AAAI · vol. 40, no. 37 · 2026 ↗</a>
+  </div>
+
+  <header class="head">
+    <div class="kicker"><span>AAAI · Technical Track · 2026</span><span class="bar"></span><span>8 min read</span></div>
+    <h1>ENCORE, <em>downweight the confused rules, keep the confident ones.</em></h1>
+    <div class="dek">Multi-head safety reward models judge a response against a list of rules — "is it toxic?", "is it factual?", "is it harmful?". Some rules are ambiguous; their scores are noisy. We showed that rules with high rating entropy hurt accuracy, and the simple fix — entropy-weighted composition — beats the state of the art without any retraining.</div>
+    <div class="byline">
+      <span>Li · Chen · Fan · Jiang · Gao</span>
+      <span>Harvard · NYU · UCLA · MIT</span>
+    </div>
+  </header>
+
+  <figure class="hero-fig">
+    <svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+      <!-- left: traditional multi-head -->
+      <g transform="translate(40,40)">
+        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">BEFORE · equal-weight average over all rules</text>
+        <rect x="0" y="0" width="280" height="190" fill="rgba(5,217,232,0.04)" stroke="#d1fff0"/>
+        <!-- rule bars, all equal weight -->
+        <g font-family="IBM Plex Mono, monospace" font-size="9">
+          <g transform="translate(20,20)">
+            <text y="14" fill="#d1fff0">rule A (low entropy · good)</text>
+            <rect x="170" y="4" width="80" height="10" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="170" y="4" width="80" height="10" fill="#05d9e8"/>
+          </g>
+          <g transform="translate(20,45)">
+            <text y="14" fill="#d1fff0">rule B (low entropy · good)</text>
+            <rect x="170" y="4" width="80" height="10" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="170" y="4" width="80" height="10" fill="#05d9e8"/>
+          </g>
+          <g transform="translate(20,70)">
+            <text y="14" fill="#ffe066">rule C (HIGH entropy · noisy)</text>
+            <rect x="170" y="4" width="80" height="10" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="170" y="4" width="80" height="10" fill="#05d9e8"/>
+          </g>
+          <g transform="translate(20,95)">
+            <text y="14" fill="#ffe066">rule D (HIGH entropy · noisy)</text>
+            <rect x="170" y="4" width="80" height="10" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="170" y="4" width="80" height="10" fill="#05d9e8"/>
+          </g>
+          <text x="140" y="140" text-anchor="middle" fill="#ff2a6d">Σ · mean → noisy aggregate</text>
+        </g>
+      </g>
+
+      <!-- right: ENCORE -->
+      <g transform="translate(460,40)">
+        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#ffe066">AFTER · weight by (1 − H) · downweight noisy</text>
+        <rect x="0" y="0" width="280" height="190" fill="rgba(255,224,102,0.04)" stroke="#ffe066"/>
+        <g font-family="IBM Plex Mono, monospace" font-size="9">
+          <g transform="translate(20,20)">
+            <text y="14" fill="#d1fff0">rule A · weight 0.90</text>
+            <rect x="170" y="4" width="80" height="10" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="170" y="4" width="72" height="10" fill="#ff2a6d"/>
+          </g>
+          <g transform="translate(20,45)">
+            <text y="14" fill="#d1fff0">rule B · weight 0.82</text>
+            <rect x="170" y="4" width="80" height="10" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="170" y="4" width="66" height="10" fill="#ff2a6d"/>
+          </g>
+          <g transform="translate(20,70)">
+            <text y="14" fill="rgba(209,255,240,0.5)">rule C · weight 0.15</text>
+            <rect x="170" y="4" width="80" height="10" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="170" y="4" width="12" height="10" fill="#ff2a6d" opacity=".5"/>
+          </g>
+          <g transform="translate(20,95)">
+            <text y="14" fill="rgba(209,255,240,0.5)">rule D · weight 0.08</text>
+            <rect x="170" y="4" width="80" height="10" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="170" y="4" width="6" height="10" fill="#ff2a6d" opacity=".4"/>
+          </g>
+          <text x="140" y="140" text-anchor="middle" fill="#05d9e8">Σ w·r → trustable aggregate</text>
+        </g>
+      </g>
+
+      <text x="400" y="260" text-anchor="middle" font-family="JetBrains Mono, monospace" font-style="italic" font-size="13" fill="#d1fff0">The only change is the weights. No retraining. +4.5pts on RewardBench-safety.</text>
+    </svg>
+    <figcaption>Fig. 1 — Rules with high rating entropy (noisy judgments) get downweighted. Confident rules dominate the aggregate.</figcaption>
+  </figure>
+
+  <article class="prose">
+
+    <p>Safety alignment uses reward models to score model outputs against a catalogue of rules. A single "is this safe?" head is coarse; the trend has been to split it into many heads — "is it toxic?", "is it harmful?", "is it factual?" — and aggregate. The natural aggregation is the mean, or a learned linear combination. We found that both of those waste information, and we found a simple fix.</p>
+
+    <h2>The observation that started it</h2>
+
+    <p>Looking at per-rule accuracy on RewardBench, we noticed a strong negative correlation between a rule's <em>rating entropy</em> (the variance of how it scores a fixed set of responses) and its downstream accuracy. Rules with crisp, low-entropy judgments were the ones that separated preferred from dispreferred responses. Rules whose judgments were all over the place did roughly nothing.</p>
+
+    <p>If noisy rules are noise, you should downweight them. The weight that falls out of a Bradley–Terry analysis of this setup is almost exactly <code>1 − H(rule)</code>, where H is the normalised entropy of the rule's scores over a calibration set. That is what ENCORE does.</p>
+
+    <div class="widget-lab reveal">
+      <div class="lab-title">Interactive · see how entropy weighting changes the aggregate</div>
+      <div class="lab-canvas">
+        <svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" id="lab15svg">
+          <g transform="translate(40,30)">
+            <!-- simulated reward distribution: preferred (magenta) vs dispreferred (cyan) -->
+            <text x="0" y="0" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">AGGREGATE REWARD · sep. between preferred &amp; dispreferred</text>
+            <line x1="0" y1="150" x2="560" y2="150" stroke="#d1fff0"/>
+            <path id="distPref" d="" fill="#ff2a6d" opacity=".4"/>
+            <path id="distDis" d="" fill="#05d9e8" opacity=".4"/>
+            <text id="sepLabel" x="280" y="175" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#ffe066">separation: 0.42</text>
+          </g>
+        </svg>
+      </div>
+      <div class="lab-controls">
+        <div id="slE" data-widget="slider" data-min="0" data-max="1" data-step="0.05" data-value="0" data-label="entropy weighting strength" data-unit=""></div>
+      </div>
+      <div class="lab-readout" id="lab15read">Slide right to downweight high-entropy rules. The two distributions pull apart — that gap is what the reward model actually uses to rank.</div>
+      <div class="lab-caption">Simulated Gaussian mixture · shape matches ablation in §4.2</div>
+    </div>
+
+    <h2>Why this is theoretically grounded</h2>
+
+    <p>Under Bradley–Terry, the optimal aggregation weights are inversely proportional to the variance of each rule's contribution to the margin. Rating entropy is a close proxy for that variance in the bounded-score regime safety models operate in. So ENCORE is not a heuristic; it is a first-order approximation to the Bayes-optimal aggregator. The approximation is cheap, the approximation is interpretable, and the approximation works.</p>
+
+    <blockquote>Sometimes the paper that gets accepted is the one where you noticed a simple coefficient and argued carefully that it is the right one. That is this paper.</blockquote>
+
+    <div class="stats">
+      <div><div class="num">+4.5</div><div class="lbl">Pts on RewardBench-safety</div></div>
+      <div><div class="num">0</div><div class="lbl">Training required</div></div>
+      <div><div class="num">interpretable</div><div class="lbl">Per-rule weights</div></div>
+    </div>
+
+    <h2>My contribution</h2>
+
+    <p>Xiaomin drove the project. I contributed the Bradley–Terry derivation and the theoretical writeup. The empirical sweep was largely Jingxuan and Mingye. I think this paper will be useful because it proposes something an alignment team can apply to their existing reward models without touching a GPU — and that kind of drop-in fix is how alignment research actually reaches deployment.</p>
+
+    <p>I am a co-author with <a href="15-when-thinking-fails.html">Xiaomin Li on "When Thinking Fails" (paper 14)</a>. Both papers share a methodological temperament: look at what a model is actually doing at the attention / score level, find a structural issue, and fix it with a lightweight intervention. I keep drifting toward that kind of work. It feels like the shape of a research taste forming.</p>
+
+  </article>
+
+  <div class="article-foot">
+    <span><a href="index.html">← all fun papers</a></span>
+    <span>Next: <a href="17-qlora-earnings.html">16 QLoRA Earnings →</a></span>
+  </div>
+</div>
+
+<script src="paper.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const distPref = document.getElementById('distPref');
+  const distDis = document.getElementById('distDis');
+  const lab = document.getElementById('sepLabel');
+  const read = document.getElementById('lab15read');
+  const W=560,H=150;
+  function gauss(mu, sig, x){ return Math.exp(-Math.pow((x-mu)/sig,2)/2); }
+  function build(mu, sig){
+    const pts = [];
+    for(let i=0;i<=80;i++){
+      const x = i/80*W;
+      const v = gauss(mu, sig, x);
+      pts.push([x, H - v*H*0.9]);
+    }
+    return 'M0 '+H+' L ' + pts.map(p=>p.join(' ')).join(' L ') + ` L ${W} ${H} Z`;
+  }
+  FP.bindSlider('slE', e=>{
+    // e=0: both distributions wide and overlapping; e=1: narrow and separated
+    const sigma = 100 - 60*e;
+    const muGap = 80 + 120*e;
+    const muPref = W/2 + muGap/2;
+    const muDis = W/2 - muGap/2;
+    distPref.setAttribute('d', build(muPref, sigma));
+    distDis.setAttribute('d', build(muDis, sigma));
+    const sep = (muGap / sigma);
+    lab.textContent = 'separation: ' + sep.toFixed(2) + 'σ';
+    let msg;
+    if(e < 0.2) msg = `<strong>No entropy weighting.</strong> Preferred and dispreferred overlap heavily (${sep.toFixed(2)}σ). This is the baseline — a lot of the reward-model capacity is wasted on rules that don't discriminate.`;
+    else if(e > 0.7) msg = `<strong>Full weighting.</strong> The two distributions are now ${sep.toFixed(2)}σ apart. Classification is clean; the reward model becomes usable for downstream RLHF.`;
+    else msg = `<strong>Partial weighting.</strong> Separation ${sep.toFixed(2)}σ. Already better than baseline. The full effect kicks in near e=0.8, matching the paper's grid search.`;
+    read.innerHTML = msg;
+  });
+});
+</script>
+</body>
+</html>

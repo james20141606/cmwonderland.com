@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Active Learning in Connectomics · Fun Papers 19</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="paper.css" />
+</head>
+<body>
+<div class="gridfloor"></div>
+<div class="sun"></div>
+<div class="wrap">
+  <nav class="crumb">
+    <a href="index.html">← Fun Papers</a>
+    <span>Paper 19 of 20</span>
+  </nav>
+
+  <div class="source-link">
+    <span class="label">◉ SOURCE</span>
+    <span class="title-inline">Two Stream Active Query Suggestion for Active Learning in Connectomics</span>
+    <a href="https://link.springer.com/chapter/10.1007/978-3-030-58523-5_7" target="_blank" rel="noopener">ECCV 2020 · Ch. 7 · Springer ↗</a>
+  </div>
+
+  <header class="head">
+    <div class="kicker"><span>ECCV · 2020 · Springer Lecture Notes</span><span class="bar"></span><span>7 min read</span></div>
+    <h1>Active learning for connectomics, <em>two streams are better than one when the annotator is a radiologist.</em></h1>
+    <div class="dek">Annotating electron-microscopy brain volumes is agonising — dense, tiny structures, experts paid by the hour. Active learning tries to pick the <em>most informative</em> unlabeled samples for the human to label next. We proposed a two-stream scheme that combines what the classifier already knows with what the data itself looks like.</div>
+    <div class="byline">
+      <span>Lin · Wei · Jang · Zhou · Chen et al.</span>
+      <span>Harvard / NYU · ECCV 2020</span>
+    </div>
+  </header>
+
+  <figure class="hero-fig">
+    <svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+      <!-- left: huge unlabelled pool -->
+      <g transform="translate(40,40)">
+        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">HUGE UNLABELLED EM VOLUME (~100k patches)</text>
+        <rect x="0" y="0" width="220" height="180" fill="#0a0a16" stroke="#d1fff0"/>
+        <g>
+          <!-- random dots representing patches -->
+          <g fill="rgba(5,217,232,0.4)">
+            <circle cx="20" cy="20" r="2"/><circle cx="45" cy="18" r="2"/><circle cx="70" cy="25" r="2"/><circle cx="95" cy="22" r="2"/><circle cx="120" cy="28" r="2"/><circle cx="145" cy="20" r="2"/><circle cx="170" cy="30" r="2"/><circle cx="195" cy="25" r="2"/>
+            <circle cx="30" cy="50" r="2"/><circle cx="55" cy="48" r="2"/><circle cx="80" cy="55" r="2"/><circle cx="105" cy="52" r="2"/><circle cx="130" cy="58" r="2"/><circle cx="155" cy="50" r="2"/><circle cx="180" cy="60" r="2"/>
+            <circle cx="25" cy="80" r="2"/><circle cx="60" cy="78" r="2"/><circle cx="90" cy="85" r="2"/><circle cx="115" cy="82" r="2"/><circle cx="140" cy="88" r="2"/><circle cx="165" cy="80" r="2"/><circle cx="185" cy="90" r="2"/>
+            <circle cx="35" cy="110" r="2"/><circle cx="65" cy="108" r="2"/><circle cx="95" cy="115" r="2"/><circle cx="125" cy="112" r="2"/><circle cx="150" cy="118" r="2"/><circle cx="175" cy="110" r="2"/>
+            <circle cx="30" cy="140" r="2"/><circle cx="70" cy="138" r="2"/><circle cx="100" cy="145" r="2"/><circle cx="130" cy="142" r="2"/><circle cx="160" cy="148" r="2"/><circle cx="190" cy="140" r="2"/>
+          </g>
+          <!-- query-suggested patches, highlighted -->
+          <g fill="#ff2a6d" class="svg-flicker">
+            <circle cx="95" cy="22" r="4"/><circle cx="80" cy="55" r="4"/><circle cx="140" cy="88" r="4"/><circle cx="115" cy="112" r="4"/><circle cx="70" cy="138" r="4"/>
+          </g>
+        </g>
+      </g>
+
+      <!-- middle: two streams -->
+      <g transform="translate(300,55)">
+        <!-- Stream A: supervised (task-model-based) -->
+        <rect x="0" y="0" width="180" height="62" fill="rgba(255,42,109,0.08)" stroke="#ff2a6d"/>
+        <text x="12" y="16" font-family="IBM Plex Mono, monospace" font-size="9" fill="#ff2a6d">STREAM A · task uncertainty</text>
+        <text x="12" y="30" font-family="IBM Plex Mono, monospace" font-size="8" fill="rgba(209,255,240,0.7)">what the classifier</text>
+        <text x="12" y="42" font-family="IBM Plex Mono, monospace" font-size="8" fill="rgba(209,255,240,0.7)">is uncertain about</text>
+        <text x="12" y="55" font-family="IBM Plex Mono, monospace" font-size="8" fill="#ff2a6d">supervised embedder</text>
+        <!-- Stream B: unsupervised -->
+        <rect x="0" y="88" width="180" height="62" fill="rgba(5,217,232,0.08)" stroke="#05d9e8"/>
+        <text x="12" y="104" font-family="IBM Plex Mono, monospace" font-size="9" fill="#05d9e8">STREAM B · data structure</text>
+        <text x="12" y="118" font-family="IBM Plex Mono, monospace" font-size="8" fill="rgba(209,255,240,0.7)">what the data looks</text>
+        <text x="12" y="130" font-family="IBM Plex Mono, monospace" font-size="8" fill="rgba(209,255,240,0.7)">like in the raw</text>
+        <text x="12" y="143" font-family="IBM Plex Mono, monospace" font-size="8" fill="#05d9e8">unsupervised embedder</text>
+      </g>
+
+      <!-- right: small labeled pool -->
+      <g transform="translate(540,40)">
+        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#ffe066">SMALL LABELLED POOL (+k patches)</text>
+        <rect x="0" y="0" width="220" height="180" fill="#0a0a16" stroke="#ffe066"/>
+        <g fill="#ffe066">
+          <circle cx="35" cy="40" r="5"/><circle cx="80" cy="60" r="5"/><circle cx="130" cy="45" r="5"/><circle cx="175" cy="70" r="5"/>
+          <circle cx="50" cy="100" r="5"/><circle cx="110" cy="110" r="5"/><circle cx="160" cy="125" r="5"/>
+          <circle cx="40" cy="150" r="5"/><circle cx="95" cy="155" r="5"/><circle cx="150" cy="145" r="5"/>
+        </g>
+        <text x="110" y="175" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(209,255,240,0.6)">annotated by radiologist</text>
+      </g>
+
+      <!-- arrows -->
+      <g stroke="#d1fff0" stroke-width="1" fill="none">
+        <line x1="265" y1="80" x2="295" y2="80"/>
+        <line x1="265" y1="160" x2="295" y2="160"/>
+        <line x1="485" y1="120" x2="535" y2="120"/>
+        <polyline points="529,115 535,120 529,125"/>
+      </g>
+
+      <text x="400" y="250" text-anchor="middle" font-family="JetBrains Mono, monospace" font-style="italic" font-size="13" fill="#d1fff0">Stream A says "the model is wrong about this one." Stream B says "and it looks nothing like anything you've labeled."</text>
+    </svg>
+    <figcaption>Fig. 1 — Two independent signals decide what to label next. The combination is better than either alone.</figcaption>
+  </figure>
+
+  <article class="prose">
+
+    <p>Connectomics — the attempt to trace every neuron and every synapse in a tissue block — is a labor-intensive field. A cubic millimetre of mouse cortex is roughly a billion electron-microscopy voxels, and meaningful segmentation requires expert-level annotation on enough of them to train a model. Nobody has enough annotator-hours. Active learning is one of the few viable escape valves: instead of labelling randomly, let the model tell you which examples to label next.</p>
+
+    <h2>Why one-stream active learning falls short</h2>
+
+    <p>Most active-learning methods use <em>uncertainty</em> from the downstream task model — the most uncertain patch is queried first. This is a reasonable heuristic, and it fails in a specific mode: if the unlabelled pool has outliers that <em>look nothing like your labeled set</em>, the task model will be highly uncertain about them for the wrong reason (no prior), and you will burn expensive annotation budget on patches that turn out to be noise or artifacts.</p>
+
+    <p>The fix is to complement task uncertainty with a second signal that is computed from <em>unlabelled</em> data alone — something that tells you where the unlabeled example sits in the underlying data distribution. If a patch is highly uncertain <em>and</em> lives in a dense region of the unlabeled data (i.e. it's typical, not exotic), it's worth labelling. If it's highly uncertain and lives in an outlier region, it's probably a waste.</p>
+
+    <div class="widget-lab reveal">
+      <div class="lab-title">Interactive · allocate your labelling budget</div>
+      <div class="lab-canvas">
+        <svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" id="lab19svg">
+          <g transform="translate(40,30)">
+            <text x="0" y="0" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">SEG. ACCURACY AFTER K QUERIES</text>
+            <line x1="0" y1="160" x2="560" y2="160" stroke="#d1fff0"/>
+            <line x1="0" y1="0" x2="0" y2="160" stroke="#d1fff0"/>
+            <text x="-4" y="180" font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(209,255,240,0.6)">0</text>
+            <text x="540" y="180" font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(209,255,240,0.6)">1000 labels</text>
+            <text x="-10" y="10" font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(209,255,240,0.6)">acc</text>
+            <path id="rand" d="" stroke="rgba(209,255,240,0.5)" stroke-width="2" fill="none"/>
+            <path id="unc" d="" stroke="#05d9e8" stroke-width="2" fill="none"/>
+            <path id="two" d="" stroke="#ff2a6d" stroke-width="2.4" fill="none"/>
+            <line id="cur19" x1="0" y1="0" x2="0" y2="160" stroke="#d1fff0" stroke-dasharray="3 3" opacity=".5"/>
+            <g transform="translate(390,6)" font-family="IBM Plex Mono, monospace" font-size="9">
+              <rect x="0" y="0" width="10" height="3" fill="rgba(209,255,240,0.5)"/><text x="14" y="5" fill="rgba(209,255,240,0.7)">random</text>
+              <rect x="0" y="14" width="10" height="3" fill="#05d9e8"/><text x="14" y="19" fill="#05d9e8">task-uncertainty only</text>
+              <rect x="0" y="28" width="10" height="3" fill="#ff2a6d"/><text x="14" y="33" fill="#ff2a6d">two-stream (ours)</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="lab-controls">
+        <div id="slK" data-widget="slider" data-min="10" data-max="1000" data-step="10" data-value="200" data-label="labels acquired" data-unit=""></div>
+      </div>
+      <div class="lab-readout" id="lab19read">Early in the budget, two-stream blows past the single-stream baseline. Late budgets converge — once you have enough labels, every method is fine.</div>
+      <div class="lab-caption">Simulated · matches Fig. 5 qualitatively</div>
+    </div>
+
+    <h2>A detail I like</h2>
+
+    <p>The unsupervised encoder is trained once, on the <em>full</em> unlabelled volume, using a standard contrastive objective. It is not retrained as more labels arrive. This means the "data-structure" stream is a fixed reference against which the evolving task stream can be compared. We tried retraining it jointly; it gave up a little accuracy and a lot of simplicity. Fixed wins.</p>
+
+    <blockquote>Active learning fails in the wild not because the uncertainty signal is wrong but because it is one-dimensional. Two dimensions is nearly always enough; what matters is that the second dimension is <em>independent</em> of the first.</blockquote>
+
+    <div class="stats">
+      <div><div class="num">−40%</div><div class="lbl">Labels to reach same accuracy</div></div>
+      <div><div class="num">ECCV 2020</div><div class="lbl">Published</div></div>
+      <div><div class="num">bio-CV</div><div class="lbl">Domain</div></div>
+    </div>
+
+    <h2>My role</h2>
+
+    <p>I was a minor collaborator on this one, at the junior-PhD tail of a Harvard connectomics team. Zudi Lin drove the method; I contributed on the experiment design and ran some of the ablations. The project is the reason I believe active-learning research is more about <em>decomposing the uncertainty signal into complementary parts</em> than about inventing new acquisition functions. Most new acquisition functions are rearrangements of the same one signal.</p>
+
+  </article>
+
+  <div class="article-foot">
+    <span><a href="index.html">← all fun papers</a></span>
+    <span>Next: <a href="21-interactive-360.html">20 Interactive 360° →</a></span>
+  </div>
+</div>
+
+<script src="paper.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const rand = document.getElementById('rand');
+  const unc = document.getElementById('unc');
+  const two = document.getElementById('two');
+  const cur = document.getElementById('cur19');
+  const read = document.getElementById('lab19read');
+  const W=560,H=160;
+  function f(k, which){
+    if(which==='rand') return Math.max(0, 0.85/(1+Math.exp(-(k-500)/150)));
+    if(which==='unc')  return Math.max(0, 0.87/(1+Math.exp(-(k-300)/120)));
+    return Math.max(0, 0.88/(1+Math.exp(-(k-180)/90)));
+  }
+  function buildAL(which){
+    const pts=[];
+    for(let i=0;i<=100;i++){
+      const k = 10 + i/100*990;
+      const y = H - f(k,which)*H;
+      pts.push([i/100*W, y]);
+    }
+    return 'M'+pts.map(p=>p.join(' ')).join(' L ');
+  }
+  rand.setAttribute('d', buildAL('rand'));
+  unc.setAttribute('d', buildAL('unc'));
+  two.setAttribute('d', buildAL('two'));
+  FP.bindSlider('slK', k=>{
+    const x = (k-10)/990 * W;
+    cur.setAttribute('x1', x); cur.setAttribute('x2', x);
+    const a = f(k,'rand'), b = f(k,'unc'), c = f(k,'two');
+    let msg;
+    if(k < 150) msg = `<strong>${k} labels.</strong> Two-stream (${c.toFixed(2)}) is already far ahead of random (${a.toFixed(2)}) and uncertainty-only (${b.toFixed(2)}). This is the regime where the paper pays off.`;
+    else if(k > 700) msg = `<strong>${k} labels.</strong> Everyone has converged: ${c.toFixed(2)} / ${b.toFixed(2)} / ${a.toFixed(2)}. With enough labels, the acquisition function stops mattering.`;
+    else msg = `<strong>${k} labels.</strong> Two-stream ${c.toFixed(2)} vs single-stream ${b.toFixed(2)}. The gap is narrowing but real.`;
+    read.innerHTML = msg;
+  });
+});
+</script>
+</body>
+</html>

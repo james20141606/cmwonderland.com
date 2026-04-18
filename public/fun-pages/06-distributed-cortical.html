@@ -4,15 +4,25 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Distributed Feedforward & Feedback Cortical Processing · Fun Papers 06</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="paper.css" />
 </head>
 <body>
+<div class="gridfloor"></div>
+<div class="sun"></div>
 <div class="wrap">
   <nav class="crumb">
     <a href="index.html">← Fun Papers</a>
-    <span>Paper 06 of 12</span>
+    <span>Paper 06 of 20</span>
   </nav>
+
+  <div class="source-link">
+    <span class="label">◉ SOURCE</span>
+    <span class="title-inline">Distributed feedforward and feedback cortical processing supports human speech production</span>
+    <a href="https://www.pnas.org/doi/10.1073/pnas.2300255120" target="_blank" rel="noopener">PNAS · 2023 ↗</a>
+  </div>
 
   <header class="head">
     <div class="kicker"><span>PNAS · 2023</span><span class="bar"></span><span>13 min read</span></div>
@@ -28,39 +38,39 @@
     <svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg">
       <!-- two brains side by side showing directional edges -->
       <g transform="translate(50,60)">
-        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">A · feedforward (motor → auditory)</text>
+        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">A · feedforward (motor → auditory)</text>
         <path d="M40 160 C 10 130, 15 70, 60 40 C 120 10, 200 25, 230 70 C 260 110, 230 160, 170 168 C 130 180, 70 175, 40 160 Z"
-              fill="#f5eadd" stroke="#1b1b1a" stroke-width="1.2"/>
+              fill="rgba(5,217,232,0.08)" stroke="#d1fff0" stroke-width="1.2"/>
         <!-- regions -->
-        <circle cx="85" cy="90" r="12" fill="#b43a2a" opacity=".8"/>
-        <text x="85" y="94" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#f5f1e8">IFG</text>
-        <circle cx="180" cy="115" r="12" fill="#234e70" opacity=".7"/>
-        <text x="180" y="119" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#f5f1e8">STG</text>
-        <circle cx="135" cy="75" r="12" fill="#6b6a2e" opacity=".8"/>
-        <text x="135" y="79" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#f5f1e8">preCG</text>
+        <circle cx="85" cy="90" r="12" fill="#ff2a6d" opacity=".8"/>
+        <text x="85" y="94" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#05050b">IFG</text>
+        <circle cx="180" cy="115" r="12" fill="#05d9e8" opacity=".7"/>
+        <text x="180" y="119" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#05050b">STG</text>
+        <circle cx="135" cy="75" r="12" fill="#ffe066" opacity=".8"/>
+        <text x="135" y="79" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#05050b">preCG</text>
         <!-- arrows -->
-        <g stroke="#b43a2a" stroke-width="1.8" fill="none">
+        <g stroke="#ff2a6d" stroke-width="1.8" fill="none">
           <path class="svg-trace" d="M85 90 C 110 85, 125 80, 135 75"/>
           <path class="svg-trace" d="M135 75 C 155 85, 170 100, 180 115"/>
         </g>
       </g>
 
       <g transform="translate(450,60)">
-        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">B · feedback (auditory → motor) · simultaneous</text>
+        <text x="0" y="-14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">B · feedback (auditory → motor) · simultaneous</text>
         <path d="M40 160 C 10 130, 15 70, 60 40 C 120 10, 200 25, 230 70 C 260 110, 230 160, 170 168 C 130 180, 70 175, 40 160 Z"
-              fill="#f5eadd" stroke="#1b1b1a" stroke-width="1.2"/>
-        <circle cx="85" cy="90" r="12" fill="#b43a2a" opacity=".8"/>
-        <text x="85" y="94" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#f5f1e8">IFG</text>
-        <circle cx="180" cy="115" r="12" fill="#234e70" opacity=".7"/>
-        <text x="180" y="119" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#f5f1e8">STG</text>
-        <circle cx="135" cy="75" r="12" fill="#6b6a2e" opacity=".8"/>
-        <text x="135" y="79" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#f5f1e8">preCG</text>
-        <g stroke="#234e70" stroke-width="1.8" stroke-dasharray="4 3" fill="none">
+              fill="rgba(5,217,232,0.08)" stroke="#d1fff0" stroke-width="1.2"/>
+        <circle cx="85" cy="90" r="12" fill="#ff2a6d" opacity=".8"/>
+        <text x="85" y="94" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#05050b">IFG</text>
+        <circle cx="180" cy="115" r="12" fill="#05d9e8" opacity=".7"/>
+        <text x="180" y="119" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#05050b">STG</text>
+        <circle cx="135" cy="75" r="12" fill="#ffe066" opacity=".8"/>
+        <text x="135" y="79" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#05050b">preCG</text>
+        <g stroke="#05d9e8" stroke-width="1.8" stroke-dasharray="4 3" fill="none">
           <path class="svg-trace" d="M180 115 C 160 105, 150 95, 135 85"/>
           <path class="svg-trace" d="M135 85 C 110 85, 95 90, 85 94"/>
         </g>
       </g>
-      <text x="400" y="330" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-size="15" fill="#1b1b1a">both graphs live in the same 300ms window, in the same cortex, every syllable.</text>
+      <text x="400" y="330" text-anchor="middle" font-family="JetBrains Mono, monospace" font-style="italic" font-size="15" fill="#d1fff0">both graphs live in the same 300ms window, in the same cortex, every syllable.</text>
     </svg>
     <figcaption>Fig. 1 — Simultaneous feedforward and feedback during speech production. Neither is the "real" direction — both are.</figcaption>
   </figure>
@@ -89,29 +99,29 @@
         <svg viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg" id="lab6svg">
           <!-- time axis -->
           <g transform="translate(40,200)">
-            <line x1="0" y1="0" x2="600" y2="0" stroke="#1b1b1a"/>
-            <g stroke="#1b1b1a" stroke-width=".5"><line x1="150" y1="0" x2="150" y2="5"/><line x1="300" y1="0" x2="300" y2="5"/><line x1="450" y1="0" x2="450" y2="5"/><line x1="600" y1="0" x2="600" y2="5"/></g>
-            <g font-family="IBM Plex Mono, monospace" font-size="10" fill="#5a564e">
+            <line x1="0" y1="0" x2="600" y2="0" stroke="#d1fff0"/>
+            <g stroke="#d1fff0" stroke-width=".5"><line x1="150" y1="0" x2="150" y2="5"/><line x1="300" y1="0" x2="300" y2="5"/><line x1="450" y1="0" x2="450" y2="5"/><line x1="600" y1="0" x2="600" y2="5"/></g>
+            <g font-family="IBM Plex Mono, monospace" font-size="10" fill="rgba(209,255,240,0.6)">
               <text x="-4" y="18">-300</text><text x="146" y="18">-150</text><text x="296" y="18">0</text><text x="446" y="18">150</text><text x="596" y="18">300</text>
             </g>
-            <text x="294" y="-8" font-family="IBM Plex Mono, monospace" font-size="9" fill="#b43a2a">speech onset</text>
+            <text x="294" y="-8" font-family="IBM Plex Mono, monospace" font-size="9" fill="#ff2a6d">speech onset</text>
           </g>
           <!-- feedforward trace -->
           <g transform="translate(40,40)">
-            <text x="0" y="-4" font-family="IBM Plex Mono, monospace" font-size="9" fill="#b43a2a">FEEDFORWARD ·  IFG → STG</text>
-            <path id="ffPath" d="" stroke="#b43a2a" stroke-width="1.8" fill="none"/>
+            <text x="0" y="-4" font-family="IBM Plex Mono, monospace" font-size="9" fill="#ff2a6d">FEEDFORWARD ·  IFG → STG</text>
+            <path id="ffPath" d="" stroke="#ff2a6d" stroke-width="1.8" fill="none"/>
           </g>
           <!-- feedback trace -->
           <g transform="translate(40,115)">
-            <text x="0" y="-4" font-family="IBM Plex Mono, monospace" font-size="9" fill="#234e70">FEEDBACK ·  STG → IFG</text>
-            <path id="fbPath" d="" stroke="#234e70" stroke-width="1.8" fill="none"/>
+            <text x="0" y="-4" font-family="IBM Plex Mono, monospace" font-size="9" fill="#05d9e8">FEEDBACK ·  STG → IFG</text>
+            <path id="fbPath" d="" stroke="#05d9e8" stroke-width="1.8" fill="none"/>
           </g>
           <!-- cursor -->
-          <line id="cursor" x1="340" y1="30" x2="340" y2="200" stroke="#1b1b1a" stroke-dasharray="3 3" opacity=".6"/>
+          <line id="cursor" x1="340" y1="30" x2="340" y2="200" stroke="#d1fff0" stroke-dasharray="3 3" opacity=".6"/>
           <!-- readouts -->
           <g transform="translate(500,40)" font-family="IBM Plex Mono, monospace" font-size="10">
-            <text id="rdFF" x="0" y="0" fill="#b43a2a">FF: 0.00</text>
-            <text id="rdFB" x="0" y="18" fill="#234e70">FB: 0.00</text>
+            <text id="rdFF" x="0" y="0" fill="#ff2a6d">FF: 0.00</text>
+            <text id="rdFB" x="0" y="18" fill="#05d9e8">FB: 0.00</text>
           </g>
         </svg>
       </div>
@@ -139,34 +149,34 @@
     <figure class="fig">
       <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
         <g transform="translate(40,40)">
-          <text x="0" y="0" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">GRANGER-F · MEAN ACROSS PATIENTS (n=12)</text>
+          <text x="0" y="0" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">GRANGER-F · MEAN ACROSS PATIENTS (n=12)</text>
           <g transform="translate(0,30)">
-            <text x="0" y="14" font-family="Fraunces, serif" font-size="12">IFG → preCG</text>
-            <rect x="160" y="4" width="400" height="12" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
-            <rect x="160" y="4" width="180" height="12" fill="#b43a2a"/>
-            <text x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#b43a2a">0.45</text>
+            <text x="0" y="14" font-family="JetBrains Mono, monospace" font-size="12">IFG → preCG</text>
+            <rect x="160" y="4" width="400" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="160" y="4" width="180" height="12" fill="#ff2a6d"/>
+            <text x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#ff2a6d">0.45</text>
           </g>
           <g transform="translate(0,56)">
-            <text x="0" y="14" font-family="Fraunces, serif" font-size="12">preCG → STG</text>
-            <rect x="160" y="4" width="400" height="12" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
-            <rect x="160" y="4" width="220" height="12" fill="#b43a2a"/>
-            <text x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#b43a2a">0.55</text>
+            <text x="0" y="14" font-family="JetBrains Mono, monospace" font-size="12">preCG → STG</text>
+            <rect x="160" y="4" width="400" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="160" y="4" width="220" height="12" fill="#ff2a6d"/>
+            <text x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#ff2a6d">0.55</text>
           </g>
           <g transform="translate(0,82)">
-            <text x="0" y="14" font-family="Fraunces, serif" font-size="12">STG → preCG</text>
-            <rect x="160" y="4" width="400" height="12" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
-            <rect x="160" y="4" width="170" height="12" fill="#234e70"/>
-            <text x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#234e70">0.42</text>
+            <text x="0" y="14" font-family="JetBrains Mono, monospace" font-size="12">STG → preCG</text>
+            <rect x="160" y="4" width="400" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="160" y="4" width="170" height="12" fill="#05d9e8"/>
+            <text x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#05d9e8">0.42</text>
           </g>
           <g transform="translate(0,108)">
-            <text x="0" y="14" font-family="Fraunces, serif" font-size="12">STG → IFG</text>
-            <rect x="160" y="4" width="400" height="12" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".4"/>
-            <rect x="160" y="4" width="150" height="12" fill="#234e70"/>
-            <text x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#234e70">0.38</text>
+            <text x="0" y="14" font-family="JetBrains Mono, monospace" font-size="12">STG → IFG</text>
+            <rect x="160" y="4" width="400" height="12" fill="#0a0a16" stroke="#d1fff0" stroke-width=".4"/>
+            <rect x="160" y="4" width="150" height="12" fill="#05d9e8"/>
+            <text x="570" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="#05d9e8">0.38</text>
           </g>
           <g transform="translate(0,140)" font-family="IBM Plex Mono, monospace" font-size="9">
-            <rect x="0" y="0" width="10" height="8" fill="#b43a2a"/><text x="14" y="8" fill="#5a564e">feedforward</text>
-            <rect x="120" y="0" width="10" height="8" fill="#234e70"/><text x="134" y="8" fill="#5a564e">feedback</text>
+            <rect x="0" y="0" width="10" height="8" fill="#ff2a6d"/><text x="14" y="8" fill="rgba(209,255,240,0.6)">feedforward</text>
+            <rect x="120" y="0" width="10" height="8" fill="#05d9e8"/><text x="134" y="8" fill="rgba(209,255,240,0.6)">feedback</text>
           </g>
         </g>
       </svg>

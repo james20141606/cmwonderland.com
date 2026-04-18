@@ -6,15 +6,23 @@
 <title>A Neural Speech Decoding Framework · Fun Papers 01</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="paper.css" />
 </head>
 <body>
+<div class="gridfloor"></div>
+<div class="sun"></div>
 <div class="wrap">
   <nav class="crumb">
     <a href="index.html">← Fun Papers</a>
-    <span>Paper 01 of 05</span>
+    <span>Paper 01 of 20</span>
   </nav>
+
+  <div class="source-link">
+    <span class="label">◉ SOURCE</span>
+    <span class="title-inline">A neural speech decoding framework leveraging deep learning and speech synthesis</span>
+    <a href="https://www.nature.com/articles/s42256-024-00824-8" target="_blank" rel="noopener">NAT. MACH. INTELL. · 2024 ↗</a>
+  </div>
 
   <header class="head">
     <div class="kicker"><span>Nature Machine Intelligence · 2024</span><span class="bar"></span><span>12 min read</span></div>
@@ -30,45 +38,45 @@
     <svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="spec" x1="0" x2="1">
-          <stop offset="0" stop-color="#b43a2a" stop-opacity=".08"/>
-          <stop offset=".5" stop-color="#b43a2a" stop-opacity=".5"/>
-          <stop offset="1" stop-color="#234e70" stop-opacity=".25"/>
+          <stop offset="0" stop-color="#ff2a6d" stop-opacity=".08"/>
+          <stop offset=".5" stop-color="#ff2a6d" stop-opacity=".5"/>
+          <stop offset="1" stop-color="#05d9e8" stop-opacity=".25"/>
         </linearGradient>
       </defs>
       <!-- brain silhouette -->
       <g transform="translate(60,70)">
         <path d="M20 120 C -5 90, 0 40, 40 20 C 80 0, 140 5, 175 25 C 210 45, 210 90, 195 115 C 180 140, 140 155, 100 150 C 80 165, 40 160, 20 140 Z"
-              fill="#f5eadd" stroke="#1b1b1a" stroke-width="1.4"/>
+              fill="rgba(5,217,232,0.08)" stroke="#d1fff0" stroke-width="1.4"/>
         <!-- sulci -->
-        <path d="M40 70 C 70 55, 100 65, 130 50" stroke="#1b1b1a" stroke-width=".8" fill="none" opacity=".5"/>
-        <path d="M40 100 C 80 90, 120 95, 160 85" stroke="#1b1b1a" stroke-width=".8" fill="none" opacity=".5"/>
+        <path d="M40 70 C 70 55, 100 65, 130 50" stroke="#d1fff0" stroke-width=".8" fill="none" opacity=".5"/>
+        <path d="M40 100 C 80 90, 120 95, 160 85" stroke="#d1fff0" stroke-width=".8" fill="none" opacity=".5"/>
         <!-- ECoG grid patch -->
         <g transform="translate(70,55)">
-          <rect x="0" y="0" width="90" height="50" fill="none" stroke="#b43a2a" stroke-width="1.2"/>
-          <g fill="#b43a2a">
+          <rect x="0" y="0" width="90" height="50" fill="none" stroke="#ff2a6d" stroke-width="1.2"/>
+          <g fill="#ff2a6d">
             <circle cx="10" cy="10" r="2.5"/><circle cx="30" cy="10" r="2.5"/><circle cx="50" cy="10" r="2.5"/><circle cx="70" cy="10" r="2.5"/>
             <circle cx="10" cy="25" r="2.5"/><circle cx="30" cy="25" r="3"/><circle cx="50" cy="25" r="3"/><circle cx="70" cy="25" r="2.5"/>
             <circle cx="10" cy="40" r="2.5"/><circle cx="30" cy="40" r="2.5"/><circle cx="50" cy="40" r="3"/><circle cx="70" cy="40" r="2.5"/>
           </g>
         </g>
-        <text x="0" y="195" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">1 · ECoG cortex</text>
+        <text x="0" y="195" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">1 · ECoG cortex</text>
       </g>
 
       <!-- arrows -->
-      <g stroke="#1b1b1a" fill="none" stroke-width="1.2">
+      <g stroke="#d1fff0" fill="none" stroke-width="1.2">
         <line x1="280" y1="180" x2="340" y2="180"/>
         <polyline points="332,174 340,180 332,186"/>
       </g>
 
       <!-- neural net box -->
       <g transform="translate(350,100)">
-        <rect x="0" y="0" width="120" height="160" fill="#ede6d3" stroke="#1b1b1a"/>
-        <g stroke="#234e70" fill="#234e70" opacity=".6">
+        <rect x="0" y="0" width="120" height="160" fill="#0a0a16" stroke="#d1fff0"/>
+        <g stroke="#05d9e8" fill="#05d9e8" opacity=".6">
           <circle cx="25" cy="30" r="4"/><circle cx="25" cy="60" r="4"/><circle cx="25" cy="90" r="4"/><circle cx="25" cy="120" r="4"/>
           <circle cx="60" cy="45" r="4"/><circle cx="60" cy="75" r="4"/><circle cx="60" cy="105" r="4"/>
           <circle cx="95" cy="60" r="4"/><circle cx="95" cy="90" r="4"/>
         </g>
-        <g stroke="#1b1b1a" stroke-width=".4" opacity=".3">
+        <g stroke="#d1fff0" stroke-width=".4" opacity=".3">
           <line x1="25" y1="30" x2="60" y2="45"/><line x1="25" y1="30" x2="60" y2="75"/>
           <line x1="25" y1="60" x2="60" y2="45"/><line x1="25" y1="60" x2="60" y2="75"/><line x1="25" y1="60" x2="60" y2="105"/>
           <line x1="25" y1="90" x2="60" y2="75"/><line x1="25" y1="90" x2="60" y2="105"/>
@@ -76,29 +84,29 @@
           <line x1="60" y1="45" x2="95" y2="60"/><line x1="60" y1="75" x2="95" y2="60"/><line x1="60" y1="75" x2="95" y2="90"/>
           <line x1="60" y1="105" x2="95" y2="90"/>
         </g>
-        <text x="0" y="180" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">2 · ECoG decoder</text>
+        <text x="0" y="180" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">2 · ECoG decoder</text>
       </g>
 
-      <g stroke="#1b1b1a" fill="none" stroke-width="1.2">
+      <g stroke="#d1fff0" fill="none" stroke-width="1.2">
         <line x1="480" y1="180" x2="540" y2="180"/>
         <polyline points="532,174 540,180 532,186"/>
       </g>
 
       <!-- differentiable synthesizer -->
       <g transform="translate(550,100)">
-        <rect x="0" y="0" width="200" height="160" fill="url(#spec)" stroke="#1b1b1a"/>
+        <rect x="0" y="0" width="200" height="160" fill="url(#spec)" stroke="#d1fff0"/>
         <!-- formants -->
-        <path d="M0 130 Q 30 100 60 110 T 120 90 T 180 105 T 200 100" stroke="#b43a2a" stroke-width="1.8" fill="none"/>
-        <path d="M0 90 Q 30 70 60 65 T 120 50 T 180 58 T 200 54" stroke="#234e70" stroke-width="1.4" fill="none"/>
-        <path d="M0 55 Q 30 45 60 38 T 120 30 T 180 34 T 200 32" stroke="#6b6a2e" stroke-width="1" fill="none"/>
-        <text x="0" y="180" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">3 · Speech spectrogram</text>
+        <path d="M0 130 Q 30 100 60 110 T 120 90 T 180 105 T 200 100" stroke="#ff2a6d" stroke-width="1.8" fill="none"/>
+        <path d="M0 90 Q 30 70 60 65 T 120 50 T 180 58 T 200 54" stroke="#05d9e8" stroke-width="1.4" fill="none"/>
+        <path d="M0 55 Q 30 45 60 38 T 120 30 T 180 34 T 200 32" stroke="#ffe066" stroke-width="1" fill="none"/>
+        <text x="0" y="180" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">3 · Speech spectrogram</text>
       </g>
 
       <!-- waveform at bottom -->
       <g transform="translate(60,300)">
         <path d="M0 15 Q 10 5, 20 15 T 40 15 T 60 15 T 80 15 T 100 15 T 120 5 T 140 25 T 160 10 T 180 20 T 200 10 T 220 25 T 240 5 T 260 20 T 280 15 T 300 15 T 320 10 T 340 20 T 360 15 T 380 10 T 400 25 T 420 10 T 440 15 T 460 20 T 480 5 T 500 15 T 520 15 T 540 15 T 560 15 T 580 15 T 600 15 T 620 15 T 640 15 T 660 15 T 680 15"
-              fill="none" stroke="#b43a2a" stroke-width="1.2"/>
-        <text x="-10" y="-8" font-family="IBM Plex Mono, monospace" font-size="9" fill="#5a564e">→ "It's time to stop"</text>
+              fill="none" stroke="#ff2a6d" stroke-width="1.2"/>
+        <text x="-10" y="-8" font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(209,255,240,0.6)">→ "It's time to stop"</text>
       </g>
     </svg>
     <figcaption>Fig. 1 — From 64 electrodes on the cortex, to a voice that still recognizably yours.</figcaption>
@@ -139,41 +147,71 @@
 
     <blockquote>A BCI that sounds like you is a different kind of prosthesis. It isn't restoring a function; it's returning a possession.</blockquote>
 
+    <div class="widget-lab reveal">
+      <div class="lab-title">Interactive · click electrodes, hear the spectrogram degrade</div>
+      <div class="lab-canvas">
+        <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" id="lab1svg">
+          <!-- brain left -->
+          <g transform="translate(40,40)">
+            <text x="0" y="-12" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">ECoG grid · click to toggle electrodes</text>
+            <path d="M50 120 C 10 90, 15 40, 55 15 C 115 -5, 190 10, 225 40 C 260 75, 220 125, 165 135 C 115 145, 70 140, 50 120 Z"
+                  fill="rgba(5,217,232,0.08)" stroke="#d1fff0"/>
+            <g id="elecGrid"></g>
+          </g>
+          <!-- output spectrogram right -->
+          <g transform="translate(340,40)">
+            <text x="0" y="-12" font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">reconstructed spectrogram</text>
+            <rect x="0" y="0" width="260" height="160" fill="#0a0a16" stroke="#d1fff0"/>
+            <path id="f1" d="" stroke="#ff2a6d" stroke-width="1.6" fill="none"/>
+            <path id="f2" d="" stroke="#05d9e8" stroke-width="1.2" fill="none" opacity=".8"/>
+            <path id="f3" d="" stroke="#ffe066" stroke-width="1" fill="none" opacity=".7"/>
+            <text x="10" y="180" font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(209,255,240,0.6)">active electrodes: <tspan id="nOn">48</tspan> · PCC: <tspan id="pccT" fill="#ff2a6d">0.81</tspan></text>
+          </g>
+        </svg>
+      </div>
+      <div class="lab-controls">
+        <button type="button" id="randBtn" style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:6px 12px;border:1px solid #d1fff0;background:#05050b;cursor:pointer">randomise 20% outage</button>
+        <button type="button" id="allBtn" style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:6px 12px;border:1px solid #d1fff0;background:#05050b;cursor:pointer">all electrodes</button>
+      </div>
+      <div class="lab-readout" id="lab1read">Click any electrode to turn it off. The reconstructed formant contours degrade as you do. Even with half the grid gone, the model produces intelligible speech — that's the robustness property the paper is really about.</div>
+      <div class="lab-caption">Simulated reconstruction quality · maps electrode count to PCC via paper's ablation curve</div>
+    </div>
+
     <figure class="fig">
       <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
         <!-- comparison bar chart -->
-        <g font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1b1a">
+        <g font-family="IBM Plex Mono, monospace" font-size="10" fill="#d1fff0">
           <text x="20" y="30">PCC by region (higher = better)</text>
         </g>
         <g transform="translate(20,50)">
           <g>
             <text x="0" y="15" font-size="11">Left STG</text>
-            <rect x="100" y="4" width="380" height="14" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".5"/>
-            <rect x="100" y="4" width="322" height="14" fill="#b43a2a"/>
+            <rect x="100" y="4" width="380" height="14" fill="#0a0a16" stroke="#d1fff0" stroke-width=".5"/>
+            <rect x="100" y="4" width="322" height="14" fill="#ff2a6d"/>
             <text x="490" y="15" font-size="11">0.806</text>
           </g>
           <g transform="translate(0,30)">
             <text x="0" y="15" font-size="11">Left pre-motor</text>
-            <rect x="100" y="4" width="380" height="14" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".5"/>
-            <rect x="100" y="4" width="290" height="14" fill="#b43a2a"/>
+            <rect x="100" y="4" width="380" height="14" fill="#0a0a16" stroke="#d1fff0" stroke-width=".5"/>
+            <rect x="100" y="4" width="290" height="14" fill="#ff2a6d"/>
             <text x="490" y="15" font-size="11">0.724</text>
           </g>
           <g transform="translate(0,60)">
             <text x="0" y="15" font-size="11">Right STG</text>
-            <rect x="100" y="4" width="380" height="14" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".5"/>
-            <rect x="100" y="4" width="262" height="14" fill="#234e70"/>
+            <rect x="100" y="4" width="380" height="14" fill="#0a0a16" stroke="#d1fff0" stroke-width=".5"/>
+            <rect x="100" y="4" width="262" height="14" fill="#05d9e8"/>
             <text x="490" y="15" font-size="11">0.652</text>
           </g>
           <g transform="translate(0,90)">
             <text x="0" y="15" font-size="11">Right motor</text>
-            <rect x="100" y="4" width="380" height="14" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".5"/>
-            <rect x="100" y="4" width="208" height="14" fill="#234e70"/>
+            <rect x="100" y="4" width="380" height="14" fill="#0a0a16" stroke="#d1fff0" stroke-width=".5"/>
+            <rect x="100" y="4" width="208" height="14" fill="#05d9e8"/>
             <text x="490" y="15" font-size="11">0.521</text>
           </g>
           <g transform="translate(0,120)">
             <text x="0" y="15" font-size="11">Low-density</text>
-            <rect x="100" y="4" width="380" height="14" fill="#ede6d3" stroke="#1b1b1a" stroke-width=".5"/>
-            <rect x="100" y="4" width="240" height="14" fill="#6b6a2e"/>
+            <rect x="100" y="4" width="380" height="14" fill="#0a0a16" stroke="#d1fff0" stroke-width=".5"/>
+            <rect x="100" y="4" width="240" height="14" fill="#ffe066"/>
             <text x="490" y="15" font-size="11">0.602</text>
           </g>
         </g>
@@ -200,5 +238,90 @@
     <span>Next: <a href="02-ai-systemic-risk.html">02 Systemic Risk →</a></span>
   </div>
 </div>
+
+<script src="paper.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const grid = document.getElementById('elecGrid');
+  const f1 = document.getElementById('f1');
+  const f2 = document.getElementById('f2');
+  const f3 = document.getElementById('f3');
+  const nOn = document.getElementById('nOn');
+  const pccT = document.getElementById('pccT');
+  const read = document.getElementById('lab1read');
+
+  // electrode positions (8x8 in the brain)
+  const elec = [];
+  for(let r=0;r<8;r++){
+    for(let c=0;c<8;c++){
+      elec.push({x: 70+c*17, y: 35+r*12, on: true, i: r*8+c});
+    }
+  }
+
+  function drawGrid(){
+    let html = '';
+    elec.forEach(e=>{
+      const col = e.on ? '#ff2a6d' : 'rgba(209,255,240,0.4)';
+      html += `<circle data-i="${e.i}" cx="${e.x}" cy="${e.y}" r="${e.on?3:2.2}" fill="${col}" opacity="${e.on?1:0.45}" style="cursor:pointer"/>`;
+    });
+    grid.innerHTML = html;
+    grid.querySelectorAll('circle').forEach(c=>{
+      c.addEventListener('click', ()=>{
+        const i = parseInt(c.dataset.i);
+        elec[i].on = !elec[i].on;
+        drawGrid();
+        updateSpectrogram();
+      });
+    });
+  }
+
+  function updateSpectrogram(){
+    const N = elec.filter(e=>e.on).length;
+    const noise = Math.max(0, 1 - N/64);
+    const W=260, H=160;
+    const mk = (amp, phase, baseY) => {
+      const pts = [];
+      for(let i=0;i<=40;i++){
+        const x = i/40*W;
+        const b = baseY + amp*Math.sin(i*0.35 + phase) + (amp*0.4)*Math.sin(i*0.8 + phase*1.3);
+        const y = b + (Math.random()-0.5)*40*noise;
+        pts.push([x,y]);
+      }
+      return 'M' + pts.map(p=>p.join(' ')).join(' L ');
+    };
+    f1.setAttribute('d', mk(18, 0.2, 110));
+    f2.setAttribute('d', mk(14, 1.1, 70));
+    f3.setAttribute('d', mk(10, 2.0, 35));
+
+    nOn.textContent = N;
+    const pcc = Math.max(0.30, Math.min(0.88, 0.40 + N*0.008));
+    pccT.textContent = pcc.toFixed(2);
+
+    let msg;
+    if(N >= 60){
+      msg = `<strong>${N}/64 electrodes.</strong> Peak quality (PCC ${pcc.toFixed(2)}). Formant trajectories are crisp.`;
+    } else if(N >= 30){
+      msg = `<strong>${N}/64 electrodes.</strong> Intelligible output (PCC ${pcc.toFixed(2)}). This is the regime most clinical grids operate in.`;
+    } else if(N >= 12){
+      msg = `<strong>${N}/64 electrodes.</strong> Degrading (PCC ${pcc.toFixed(2)}). Below 30, formant structure starts washing out — but speech is still recognisable.`;
+    } else {
+      msg = `<strong>Only ${N} electrodes.</strong> Below the useful floor (PCC ${pcc.toFixed(2)}). The model is hallucinating as much as it is decoding.`;
+    }
+    read.innerHTML = msg;
+  }
+
+  document.getElementById('randBtn').addEventListener('click', ()=>{
+    elec.forEach(e=>{ e.on = Math.random() > 0.2; });
+    drawGrid(); updateSpectrogram();
+  });
+  document.getElementById('allBtn').addEventListener('click', ()=>{
+    elec.forEach(e=>{ e.on = true; });
+    drawGrid(); updateSpectrogram();
+  });
+
+  drawGrid();
+  updateSpectrogram();
+});
+</script>
 </body>
 </html>
