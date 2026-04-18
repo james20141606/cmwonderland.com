@@ -165,7 +165,9 @@ Research interests: multimodal large language models, LLM reasoning / alignment,
 15. Emami, N., Khalilian-Gourtani, A., Qian, J., Ratouchniak, A., **Chen, X.**, Wang, Y., Flinker, A. [*Machine Learning-Based Prediction of Speech Arrest During Direct Cortical Stimulation Mapping.*](https://arxiv.org/abs/2509.08703) arXiv (2025).
 16. Yang, K., **Chen, X.**, He, J. [*Multimodal Fusion of Skeleton Dynamics and Clinical Gait Features for Video-Based Cerebral Palsy Severity Assessment.*](https://arxiv.org/abs/2603.22371) arXiv (2026).
 17. Meng, S., **Chen, X.** [*Artificial Intelligence and Systemic Risk: A Unified Model of Performative Prediction, Algorithmic Herding, and Cognitive Dependency in Financial Markets.*](https://arxiv.org/abs/2604.03272) arXiv (2026).
-18. Chen, Y., **Chen, X.**, Wang, F., Jiao, N., Liu, J. [*VANGUARD: Vehicle-Anchored Ground Sample Distance Estimation for UAVs in GPS-Denied Environments.*](https://arxiv.org/abs/2603.04277) arXiv (2026).
+18. **Chen, X.** [*Abundant Intelligence and Deficient Demand: A Macro-Financial Stress Test of Rapid AI Adoption.*](https://arxiv.org/abs/2603.09209) arXiv (2026).
+19. **Chen, X.**, Meng, S. [*When AI Levels the Playing Field: Skill Homogenization, Asset Concentration, and Two Regimes of Inequality.*](https://arxiv.org/abs/2603.05565) arXiv (2026).
+20. Chen, Y., **Chen, X.**, Wang, F., Jiao, N., Liu, J. [*VANGUARD: Vehicle-Anchored Ground Sample Distance Estimation for UAVs in GPS-Denied Environments.*](https://arxiv.org/abs/2603.04277) arXiv (2026).
 
 See also [Google Scholar](https://scholar.google.com/citations?user=d3HfTOsAAAAJ).
 
