@@ -7,8 +7,11 @@ title: "About Me"
 
 **My name is Xupeng Chen, born in CHINA in 1995.**
 
-I major in biology and minor in statistics in [Tsinghua University](https://www.tsinghua.edu.cn/en/) during my undergraduate study.
-I changed my study field to EE and start my Ph.D. study in [NYU Tandon School](https://engineering.nyu.edu/), mentored by [Prof. Yao Wang](https://engineering.nyu.edu/faculty/yao-wang) in [NYU Video Lab](https://wp.nyu.edu/videolab/).
+I'm currently a Research Scientist at [TikTok](https://www.tiktok.com/) in Seattle, working on LLM / multimodal AI for e-commerce — SFT and reinforcement learning for multimodal LLMs, grounding and alignment strategies (verifiable rewards, retrieval-augmented reasoning, semantic consistency), and multimarket multimodal models for large-scale governance and content moderation.
+
+I completed my Ph.D. in Electrical Engineering at [NYU Tandon](https://engineering.nyu.edu/) in May 2025, advised by [Prof. Yao Wang](https://engineering.nyu.edu/faculty/yao-wang) in [NYU Video Lab](https://wp.nyu.edu/videolab/), and co-advised by [Prof. Adeen Flinker](https://med.nyu.edu/faculty/adeen-flinker) on neural speech decoding. Before that I studied biology (XueTang program) and minored in statistics at [Tsinghua University](https://www.tsinghua.edu.cn/en/).
+
+Research interests: multimodal large language models, LLM reasoning / alignment, neural speech decoding from ECoG/sEEG, and healthcare & brain–computer interface applications.
 
 ---
 
@@ -16,76 +19,99 @@ I changed my study field to EE and start my Ph.D. study in [NYU Tandon School](h
 
 - [Download PDF Version](/about/xupeng_chen_resume_cv.pdf)
 
-<iframe src="/about/xupeng_chen_resume_cv.pdf" width="100%" height="600px"></iframe>
-
-(It has some mistakes showing the second page if you are using browser on the phone.)
+<iframe src="/about/xupeng_chen_resume_cv.pdf" width="100%" height="900px"></iframe>
 
 ---
 
-### Xupeng Chen
+### Contact
 
-New York, NY 11201 | [xupeng.chen@nyu.edu](mailto:xupeng.chen@nyu.edu) | [GitHub](https://github.com/james20141606) | [LinkedIn](https://www.linkedin.com/in/xupeng-chen-1a3b3b1a3/)
+Bellevue, WA 98004 · 347-889-0528 · [xc1490@nyu.edu](mailto:xc1490@nyu.edu) · [xupengchen.notion.site](https://xupengchen.notion.site) · [GitHub](https://github.com/james20141606) · [LinkedIn](https://www.linkedin.com/in/xupeng-chen-1a3b3b1a3/)
+
+---
+
+### Work
+
+**TikTok** — Seattle, WA
+*Research Scientist, LLM / Multimodal AI for E-commerce* | Jun 2025 – Present
+- Trained multimodal LLMs with SFT + RL (RLHF / reward modeling variants), focusing on reasoning quality and uncertainty calibration.
+- Researched grounding & alignment methods including verifiable reward design, retrieval-augmented reasoning (RAG), and semantic consistency regularization.
+- Built production-grade multimodal moderation systems for e-commerce, supporting multi-market deployment with improved precision/recall trade-offs and reduced labeling cost.
 
 ---
 
 ### Education
 
-**New York University** — Brooklyn, NY
-*Ph.D. in Electrical and Computer Engineering* | Sep 2019 – Present
+**New York University**, Tandon School of Engineering — Brooklyn, NY
+*Ph.D. in Electrical Engineering* | Sep 2019 – May 2025
 - Advisor: Prof. Yao Wang (Video Lab)
+- Multimodal LLMs for medical imaging and LLM reasoning / alignment. Neural speech decoding with applications in healthcare and brain–computer interfaces.
 
-**Tsinghua University** — Beijing, China
-*B.S. in Biological Sciences (Xuetang Program), Minor in Statistics* | Sep 2014 – Jul 2018
-- Advisor: Prof. Zhi Lu (Bioinformatics Division, BNRIST)
-
----
-
-### Research Experience
-
-**NYU Wireless & Video Lab, New York University** — Research Assistant | Sep 2019 – Present
-- Working on deep learning for medical image segmentation problems in electron microscopy (EM) neuron images
-- Proposed a deep learning based method for synapse detection, segmentation, and partner assignment
-- Published at ISBI 2020 on synaptic partner assignment in EM images
-
-**Bioinformatics Division, Tsinghua University** — Research Assistant | Sep 2016 – Jul 2018
-- Developed **DeepShape**: RNA structural motif finding using deep learning
-- Used variational autoencoders (VAE) and graph convolutional networks (GCN) for RNA structure analysis
-- Developed mixture models for position weight matrix (PWM) optimization
-- Contributed to **eMAIZE**: a comprehensive database for maize multi-omics (published in *Molecular Plant*)
-
-**Janelia Research Campus, HHMI** — Summer Intern | Jun 2018 – Aug 2018
-- Worked on neuromuscular junction (NMJ) segmentation in electron microscopy images
-- Synaptic partner prediction using deep learning approaches
-- Synaptic cluster analysis project
+**Tsinghua University**, School of Life Science — Beijing, China
+*B.Sc. in Life Science (XueTang Program), Minor in Statistics* | Sep 2014 – Jun 2019
+- XueTang program for top research-track students.
 
 ---
 
 ### Publications
 
-1. **Xupeng Chen**, Yinda Zhang, Wei Huang, Yun Wang, Yao Wang, Toufiq Parag. *Synapse Detection, Segmentation, and Partner Assignment with Deep Learning.* **ISBI 2020**.
-2. Zijian Ding, ..., **Xupeng Chen**, et al. *eMAIZE: A comprehensive database integrating genetic, genomic, and transcriptomic data for maize.* **Molecular Plant**, 2019.
+1. **Chen, X.**, Wang, R., Khalilian-Gourtani, A., Yu, L., Dugan, P., Friedman, D., Doyle, W., Devinsky, O., Wang, Y., Flinker, A. [*A Neural Speech Decoding Framework Leveraging Deep Learning and Speech Synthesis.*](https://doi.org/10.1038/s42256-024-00824-8) **Nature Machine Intelligence** (2024).
+2. Wang, R., **Chen, X.**, Khalilian-Gourtani, A., Yu, L., Dugan, P., Friedman, D., Doyle, W., Devinsky, O., Wang, Y., Flinker, A. [*Distributed feedforward and feedback cortical processing supports human speech production.*](https://www.pnas.org/doi/10.1073/pnas.2300255120) **PNAS** (2023).
+3. **Chen, X.**, Lai, Z., Ruan, K., Chen, S., Liu, J., Liu, Z. [*R-LLaVA: Improving Med-VQA Understanding through Visual Region of Interest.*](https://arxiv.org/abs/2410.20327) **IJCNN** (2025).
+4. Li, X., **Chen, X.**, Fan, J., Jiang, E.H., Gao, M. [*ENCORE: Entropy-guided Reward Composition for Multi-head Safety Reward Models.*](https://arxiv.org/abs/2503.20995) **AAAI** (2026).
+5. Li, X., Yu, Z., Zhang, Z., **Chen, X.**, Zhang, Z., Zhuang, Y., Sadagopan, N., Beniwal, A. [*When Thinking Fails: The Pitfalls of Reasoning for Instruction-Following in LLMs.*](https://arxiv.org/abs/2505.11423) **NeurIPS** (2026).
+6. **Chen, X.**, Chen, J., Wang, R., Le, C., Khalilian-Gourtani, A., Jensen, E., Dugan, P., Doyle, W., Devinsky, O., Friedman, D., Flinker, A., Wang, Y. [*Transformer-based neural speech decoding from surface and depth electrode signals.*](https://iopscience.iop.org/article/10.1088/1741-2552/adab21) **Journal of Neural Engineering** (2025).
+7. Wang, R., **Chen, X.**, Khalilian-Gourtani, A., Chen, Z., Yu, L., Flinker, A., Wang, Y. [*Stimulus speech decoding from human cortex with generative adversarial network transfer learning.*](https://doi.org/10.1109/ISBI45749.2020.9098589) **ISBI** (Best Paper Finalist) (2020).
+8. Christou, P., Chen, S., **Chen, X.**, Dube, P. [*Test Time Learning for Time Series Forecasting.*](https://openreview.net/pdf?id=pS51u41uwi) **NeurIPS 2024 Workshop** on Time Series in the Age of Large Models (2024).
+9. Lin, Z., Wei, D., Jang, W.D., Zhou, S., **Chen, X.**, Wang, X., Schalek, R., Berger, D., Matejek, B., Kamentsky, L., Peleg, A. [*Two stream active query suggestion for active learning in connectomics.*](https://pmc.ncbi.nlm.nih.gov/articles/PMC7746018/) **ECCV** (2020).
+10. Khalilian-Gourtani, A., Wang, R., **Chen, X.**, Yu, L., Dugan, P., Friedman, D., Doyle, W., Devinsky, O., Wang, Y., Flinker, A. [*A corollary discharge circuit in human speech.*](https://www.pnas.org/doi/10.1073/pnas.2404121121) **PNAS** (2024).
+11. Ni, H., Meng, S., **Chen, X.**, Zhao, Z., Chen, A., Li, P., Zhang, S., Yin, Q., Wang, Y., Chan, Y. [*Harnessing Earnings Reports for Stock Predictions: A QLoRA-Enhanced LLM Approach.*](https://arxiv.org/abs/2408.06634) arXiv (2024).
+12. Meng, S., Chen, A., Wang, C., Zheng, M., Wu, F., **Chen, X.**, Ni, H., Li, P. [*Enhancing Exchange Rate Forecasting with Explainable Deep Learning Models.*](https://arxiv.org/abs/2410.19241) arXiv (2024).
+13. Le, C., Gong, Z., Wang, C., Ni, H., Li, P., **Chen, X.** [*Instruction Tuning and CoT Prompting for Contextual Medical QA with LLMs.*](https://arxiv.org/abs/2506.12182) **ICAHN** (2025).
+14. Le, C., Zhao, Y., Emami, N., Yadav, K., Liu, T., **Chen, X.** [*VoxelFormer: Parameter-Efficient Multi-Subject Visual Decoding from fMRI.*](https://arxiv.org/abs/2509.09015) arXiv (2025).
+15. Emami, N., Khalilian-Gourtani, A., Qian, J., Ratouchniak, A., **Chen, X.**, Wang, Y., Flinker, A. [*Machine Learning-Based Prediction of Speech Arrest During Direct Cortical Stimulation Mapping.*](https://arxiv.org/abs/2509.08703) arXiv (2025).
+16. Yang, K., **Chen, X.**, He, J. [*Multimodal Fusion of Skeleton Dynamics and Clinical Gait Features for Video-Based Cerebral Palsy Severity Assessment.*](https://arxiv.org/abs/2603.22371) arXiv (2026).
+
+See also [Google Scholar](https://scholar.google.com/citations?user=d3HfTOsAAAAJ).
 
 ---
 
-### Teaching & Activities
+### Research and Work Experience
 
-- 2020 — **Teaching Assistant for Medical Imaging** Lecturer: Prof. Jonathan Mamou — *New York University*
-- 2018 — **Teaching Assistant for Bioinformatics Basic Course** Lecturer: Prof. Zhi Lu — *Tsinghua University*
-- 2015-2018 — **Scholarship** XueTang scholarship — *Tsinghua University*
-- 2017 — **Second prize** The First National College Students' Brain Computation and Application Competition — *International*
-- 2017 — **First Prize** eMaize Challenge: Machine learning in breeding — *National*
-- 2018 — **Meritorious Winner** Mathematical Contest in Modeling (MCM) — *International*
-- 2016-2018 — **Xuetang Research Funding** $10,000 for Research in Lu lab — *Tsinghua University*
-- 2016-2018 — **Initiative Scientific Research Program** $8,000 for Research in Biomedical Image analysis — *Tsinghua University*
-- 2015 — **Golden Prize** Social practice award for investigation on e-cycling — *Tsinghua University*
+**Large Language-and-Vision Assistant for BioMedicine with Vision Prompts** — New York University
+- Developed a multimodal LLM for disease diagnosis from medical images, focusing on regions of interest (ROI). Pretrained on a large-scale medical image question-answering dataset, then instruction fine-tuned using ROI-labeled medical images and QA pairs.
+- Outperformed LLaVA-Med on four evaluation datasets in medical question answering and ROI localization with **3–8%** accuracy and recall improvement.
+
+**Harnessing Earnings Reports for Stock Predictions with LLMs** — New York University
+- Developed a QLoRA-enhanced LLM for stock predictions by integrating financial metrics, earnings transcripts, and other factors. Outperformed GPT-4 with a **19%** accuracy increase and **7%** weighted F1 improvement.
+- Implemented instruction-based fine-tuning for precise next-day stock movement predictions following earnings reports.
+
+**Radar and LiDAR Point Cloud Classification and Object Detection** — NXP Semiconductors, Autonomous Driving Group | Summer 2022
+- Developed Radar and LiDAR point cloud classification and object detection models using PointNet++, PointPillar, and Point Transformer.
+- Implemented a semantic-information-guided sampling strategy; achieved **1–3%** mAP improvement on KITTI and private datasets while reducing inference time by **20%**.
+
+**Neural Speech Decoding and Synthesizing from sEEG/ECoG signals** — Video Lab, New York University | 2020–2025
+*Supervisors: Yao Wang and Adeen Flinker · Grants: NSF IIS-2309057, NSF IIS-1912286*
+- Developed differentiable and quantized speech re-synthesis frameworks for overt and imagined speech decoding, achieving **17–30%** higher accuracy and fidelity than baselines.
+- Designed multi-subject neural decoding models with spatial–temporal attention for robust cross-participant generalization and improved intelligibility.
+- Proposed a disentangled contrastive learning approach to capture semantic and instance-level features from neural signals.
+
+**Efficient Instance Annotation for Connectomics** — Lichtman Lab, Harvard University | Summer 2018
+*Supervisors: Hanspeter Pfister and Jeff Lichtman*
+- Built a 3D U-Net for synapse detection on CREMI dataset — ranked **1st** in CREMI contest.
+- Built 3D U-Net and 3D-CNN for synaptic connections and intracellular structures (e.g. mitochondria); constructed an active-learning annotation framework for proofreading.
 
 ---
 
-### Skills
+### Activities & Awards
 
-- Proficient in Python, MATLAB, R, Bash, LaTeX
-- Familiar with Machine Learning, Deep Learning (Tensorflow, Keras, Pytorch), and Computer Vision tools
-- Familiar with Linux, MacOS, Windows
+- 2025 — **Dr. Li Annual Publication Award in Electrical Engineering** — *New York University*
+- 2024 — **Dante Youla Award for Graduate Research Excellence in Electrical Engineering** — *New York University*
+- 2018–2022 — **Teaching Assistant** for Image and Video Processing, Medical Imaging, and Bioinformatics — *NYU / Tsinghua*
+- 2015–2019 — **XueTang Scholarship** ($10,000 for research) — *Tsinghua University*
+- 2017 — **First Prize**, The First National College Students' Brain Computation and Application Competition — *International*
+- 2017 — **First Prize**, eMaize Challenge: Machine learning in genetic variation prediction — *National*
+- 2018 — **Meritorious Winner**, Mathematical Contest in Modeling (MCM) — *International*
+- 2016–2018 — **Initiative Scientific Research Program** ($8,000 for biomedical image analysis) — *Tsinghua University*
 
 ---
 
