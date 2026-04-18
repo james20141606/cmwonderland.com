@@ -1,277 +1,261 @@
 ---
-// Reusable Neural Flow shader hero — subtle, restrained version
+// Cyberpunk Hero — mirrors homepage aesthetic:
+// synthwave grid + warm sun + CRT scanlines + terminal frame + gradient name
 export interface Props {
   kicker?: string;
   title: string;
   subtitle?: string;
   subtitleZh?: string;
   height?: string;
+  terminalPath?: string;
 }
 const {
-  kicker = 'NEURAL FLOW',
+  kicker = 'WONDERLAND OS',
   title,
   subtitle,
   subtitleZh,
-  height = 'clamp(340px, 56vh, 520px)',
+  height = 'clamp(420px, 64vh, 620px)',
+  terminalPath = '~/wonderland',
 } = Astro.props;
-
-// unique id per instance
 const uid = Math.random().toString(36).slice(2, 9);
 ---
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
-  href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
+  href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap"
   rel="stylesheet"
 />
 
-<section class={`nf-hero nf-${uid}`}>
-  <canvas id={`nfCanvas-${uid}`} class="nf-canvas"></canvas>
-  <div class="nf-fade-bot"></div>
+<section class={`cy-hero cy-${uid}`} style={`--cy-height: ${height}`}>
+  <!-- synthwave grid floor -->
+  <div class="cy-grid-floor">
+    <div class={`cy-grid-inner`} id={`cyGrid-${uid}`}></div>
+  </div>
+  <!-- warm sun -->
+  <div class="cy-sun"></div>
+  <div class="cy-sun-slits"></div>
+  <!-- overlays -->
+  <div class="cy-scanlines"></div>
+  <div class="cy-vignette"></div>
 
-  <div class="nf-meta">
+  <!-- top meta -->
+  <div class="cy-meta">
     <span class="dot"></span>
-    <span>{kicker}</span>
+    <b>{kicker}</b>
   </div>
 
-  <div class="nf-copy">
-    <h1 class="nf-title" set:html={title} />
-    {subtitle && <p class="nf-sub" set:html={subtitle} />}
-    {subtitleZh && <p class="nf-sub-zh" set:html={subtitleZh} />}
+  <!-- terminal title card -->
+  <div class="cy-terminal">
+    <div class="cy-term-head">
+      <span>{terminalPath} — zsh</span>
+      <span>▢ ▢ ◯</span>
+    </div>
+    <div class="cy-term-body">
+      <h1 class="cy-title" set:html={title} />
+      {subtitle && <div class="cy-sub"><span class="prompt">$</span> <span set:html={subtitle} /></div>}
+      {subtitleZh && <div class="cy-sub-zh" set:html={subtitleZh} />}
+    </div>
   </div>
 </section>
 
 <style define:vars={{ heightVar: height }}>
-  .nf-hero {
+  .cy-hero {
     position: relative;
     width: 100%;
     height: var(--heightVar);
     overflow: hidden;
-    background: #030512;
+    background: #05050b;
+    color: #d1fff0;
     isolation: isolate;
   }
-  .nf-canvas {
+
+  /* synthwave grid floor */
+  .cy-grid-floor {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    cursor: crosshair;
-  }
-  .nf-fade-bot {
-    position: absolute;
-    inset: auto 0 0 0;
-    height: 140px;
-    background: linear-gradient(0deg, #1a2b52 5%, rgba(26, 43, 82, 0.6) 60%, transparent);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 60%;
+    perspective: 600px;
     pointer-events: none;
+    z-index: 0;
+  }
+  .cy-grid-inner {
+    position: absolute;
+    left: -20%;
+    right: -20%;
+    top: 0;
+    bottom: 0;
+    background-image:
+      linear-gradient(#ff2a6d 1px, transparent 1px),
+      linear-gradient(90deg, #05d9e8 1px, transparent 1px);
+    background-size: 80px 80px;
+    transform: rotateX(62deg);
+    opacity: 0.55;
+    animation: cyGridScroll 2.5s linear infinite;
+    mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 90%, transparent 100%);
+  }
+  @keyframes cyGridScroll {
+    from { background-position: 0 0, 0 0; }
+    to { background-position: 0 80px, 0 0; }
   }
 
-  .nf-meta {
+  /* warm sun */
+  .cy-sun {
+    position: absolute;
+    left: 50%;
+    top: 42%;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, #ffe066 0%, #ff6d2a 25%, #ff2a6d 50%, transparent 70%);
+    filter: blur(4px);
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .cy-sun-slits {
+    position: absolute;
+    left: 50%;
+    top: 42%;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    background: repeating-linear-gradient(0deg, #05050b 0 3px, transparent 3px 14px);
+    opacity: 0.55;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    mask-image: linear-gradient(0deg, #000 30%, transparent 100%);
+    -webkit-mask-image: linear-gradient(0deg, #000 30%, transparent 100%);
+    z-index: 0;
+  }
+
+  /* CRT scanlines + vignette */
+  .cy-scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background-image: repeating-linear-gradient(0deg, rgba(5, 217, 232, 0.06) 0 1px, transparent 1px 3px);
+  }
+  .cy-vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.75) 100%);
+  }
+
+  /* top meta */
+  .cy-meta {
     position: absolute;
     top: 22px;
     left: 28px;
-    z-index: 3;
+    z-index: 5;
     display: flex;
     align-items: center;
     gap: 10px;
     font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 0.22em;
-    color: rgba(200, 220, 250, 0.55);
+    color: rgba(255, 255, 255, 0.55);
     text-transform: uppercase;
+    mix-blend-mode: difference;
   }
-  .nf-meta .dot {
-    width: 6px;
-    height: 6px;
+  .cy-meta .dot {
+    width: 7px;
+    height: 7px;
     border-radius: 999px;
-    background: #5fd3ff;
-    box-shadow: 0 0 10px #5fd3ff;
-    animation: nfPulse 2.4s ease-in-out infinite;
+    background: #05d9e8;
+    box-shadow: 0 0 12px #05d9e8;
+    animation: cyPulse 2s ease-in-out infinite;
   }
-  @keyframes nfPulse {
-    0%, 100% { opacity: 0.55; }
+  .cy-meta b { color: #fff; font-weight: 500; letter-spacing: 0.22em; }
+  @keyframes cyPulse {
+    0%, 100% { opacity: 0.6; }
     50% { opacity: 1; }
   }
 
-  .nf-copy {
+  /* terminal card */
+  .cy-terminal {
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 52%;
     transform: translate(-50%, -50%);
-    z-index: 3;
-    text-align: center;
-    color: #eaf0fb;
-    width: min(780px, 92%);
-    padding: 0 20px;
+    z-index: 4;
+    width: min(640px, 92%);
+    border: 1px solid rgba(5, 217, 232, 0.45);
+    background: rgba(5, 5, 11, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 0 0 1px rgba(255, 42, 109, 0.25), 0 0 60px rgba(5, 217, 232, 0.25);
   }
-  .nf-title {
+  .cy-term-head {
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(5, 217, 232, 0.25);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #05d9e8;
+    letter-spacing: 0.2em;
+  }
+  .cy-term-body {
+    padding: 30px 28px 26px;
+    text-align: center;
+  }
+
+  /* gradient animated title (multi-color like homepage name) */
+  .cy-title {
+    margin: 0 0 14px;
     font-family: 'Instrument Serif', 'Times New Roman', serif;
     font-weight: 400;
-    font-size: clamp(48px, 8vw, 96px);
+    font-size: clamp(40px, 7vw, 80px);
     line-height: 0.98;
-    letter-spacing: -0.02em;
-    margin: 0;
-    color: #f1f5ff;
+    letter-spacing: -0.015em;
+    color: #f7f7f0;
+    background: linear-gradient(90deg, #ff2bd6 0%, #ffea3a 25%, #4dc5ff 50%, #9effb2 75%, #ff2bd6 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: cyGrad 6s linear infinite;
     text-wrap: balance;
   }
-  .nf-title em {
-    font-style: italic;
-    color: #9fc8ff;
+  @keyframes cyGrad {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
   }
-  .nf-sub {
-    margin: 22px auto 0;
-    max-width: 520px;
-    font-family: 'Instrument Serif', serif;
+  .cy-title em {
     font-style: italic;
-    font-size: clamp(15px, 1.4vw, 18px);
-    color: rgba(210, 220, 245, 0.75);
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* tagline */
+  .cy-sub {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: #9ef5e5;
+    margin-top: 6px;
     line-height: 1.5;
   }
-  .nf-sub-zh {
-    margin: 8px auto 0;
-    font-family: 'Noto Serif SC', 'PingFang SC', 'Microsoft YaHei', serif;
-    font-size: clamp(13px, 1.1vw, 15px);
-    color: rgba(180, 200, 235, 0.55);
+  .cy-sub .prompt { color: #ff2a6d; margin-right: 4px; }
+  .cy-sub-zh {
+    margin-top: 6px;
+    font-family: 'Noto Serif SC', 'PingFang SC', serif;
+    font-size: 12.5px;
+    color: rgba(180, 210, 230, 0.55);
     letter-spacing: 0.04em;
   }
 
   @media (max-width: 720px) {
-    .nf-meta { top: 14px; left: 16px; font-size: 9px; }
+    .cy-meta { top: 14px; left: 16px; font-size: 9px; }
+    .cy-sun { width: 280px; height: 280px; }
+    .cy-sun-slits { width: 280px; height: 280px; }
   }
 </style>
-
-<script is:inline define:vars={{ uid }}>
-  (function () {
-    const canvas = document.getElementById('nfCanvas-' + uid);
-    if (!canvas) return;
-    const gl = canvas.getContext('webgl', { antialias: false, premultipliedAlpha: false });
-    if (!gl) return;
-
-    const VS = `attribute vec2 a_pos; void main(){ gl_Position = vec4(a_pos,0.0,1.0); }`;
-    // Toned-down shader: gentler filaments, more mood
-    const FS = `
-precision highp float;
-uniform vec2 u_res; uniform float u_time; uniform vec2 u_mouseN;
-
-vec2 hash2(vec2 p){ p = vec2(dot(p, vec2(127.1,311.7)), dot(p, vec2(269.5,183.3))); return -1.0 + 2.0*fract(sin(p)*43758.5453); }
-float noise(vec2 p){
-  vec2 i = floor(p); vec2 f = fract(p);
-  vec2 u = f*f*(3.0-2.0*f);
-  return mix(mix(dot(hash2(i+vec2(0,0)), f-vec2(0,0)),
-                 dot(hash2(i+vec2(1,0)), f-vec2(1,0)), u.x),
-             mix(dot(hash2(i+vec2(0,1)), f-vec2(0,1)),
-                 dot(hash2(i+vec2(1,1)), f-vec2(1,1)), u.x), u.y);
-}
-float fbm(vec2 p){
-  float v = 0.0; float a = 0.5;
-  for(int i=0;i<5;i++){ v += a*noise(p); p *= 2.02; a *= 0.5; }
-  return v;
-}
-
-void main(){
-  vec2 uv = gl_FragCoord.xy / u_res;
-  float ar = u_res.x/u_res.y;
-  vec2 p = (uv - 0.5) * vec2(ar, 1.0);
-  vec2 m = (u_mouseN - 0.5) * vec2(ar, 1.0);
-
-  float t = u_time * 0.08;
-
-  float md = length(p - m);
-  vec2 pull = (m - p) * exp(-md*2.5) * 0.18;
-  vec2 pp = p + pull;
-
-  vec2 q = vec2(fbm(pp*1.4 + t), fbm(pp*1.4 + vec2(5.2,1.3) - t));
-  vec2 r = vec2(fbm(pp*1.4 + 2.8*q + vec2(1.7,9.2) + t*0.6),
-                fbm(pp*1.4 + 2.8*q + vec2(8.3,2.8) - t*0.5));
-  float f = fbm(pp*1.4 + 2.8*r);
-
-  // gentler filaments
-  float fil = pow(1.0 - abs(sin(f*7.0 + t*1.2)), 12.0);
-  float ridge = smoothstep(0.35, 0.55, f) - smoothstep(0.55, 0.8, f);
-
-  // palette — darker, silkier
-  vec3 deep = vec3(0.008, 0.018, 0.055);
-  vec3 midn = vec3(0.028, 0.070, 0.160);
-  vec3 teal = vec3(0.08, 0.40, 0.70);
-  vec3 silk = vec3(0.55, 0.82, 1.00);
-
-  vec3 col = mix(deep, midn, smoothstep(-0.3, 0.6, f));
-  col = mix(col, teal, ridge * 0.38);
-  col += silk * fil * 0.55;
-
-  col += exp(-md*4.0) * vec3(0.22, 0.45, 0.70) * 0.22;
-
-  float grain = fract(sin(dot(gl_FragCoord.xy, vec2(12.98,78.23))) * 43758.5453);
-  col += (grain - 0.5) * 0.02;
-
-  col *= 1.0 - 0.55*pow(length(uv-0.5), 1.8);
-
-  gl_FragColor = vec4(col, 1.0);
-}
-`;
-
-    function compile(type, src) {
-      const s = gl.createShader(type);
-      gl.shaderSource(s, src);
-      gl.compileShader(s);
-      return s;
-    }
-    const prog = gl.createProgram();
-    gl.attachShader(prog, compile(gl.VERTEX_SHADER, VS));
-    gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FS));
-    gl.linkProgram(prog);
-
-    const a_pos = gl.getAttribLocation(prog, 'a_pos');
-    const u_res = gl.getUniformLocation(prog, 'u_res');
-    const u_time = gl.getUniformLocation(prog, 'u_time');
-    const u_mouseN = gl.getUniformLocation(prog, 'u_mouseN');
-
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-
-    function resize() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = Math.floor(rect.width * dpr);
-      canvas.height = Math.floor(rect.height * dpr);
-      gl.viewport(0, 0, canvas.width, canvas.height);
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    const mouse = { tx: 0.5, ty: 0.5, nx: 0.5, ny: 0.5 };
-    canvas.addEventListener('pointermove', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.tx = (e.clientX - rect.left) / rect.width;
-      mouse.ty = 1 - (e.clientY - rect.top) / rect.height;
-    });
-
-    const t0 = performance.now();
-    let visible = true;
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver((entries) => {
-        visible = entries[0].isIntersecting;
-      });
-      io.observe(canvas);
-    }
-
-    function frame() {
-      if (visible) {
-        mouse.nx += (mouse.tx - mouse.nx) * 0.1;
-        mouse.ny += (mouse.ty - mouse.ny) * 0.1;
-        gl.useProgram(prog);
-        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-        gl.enableVertexAttribArray(a_pos);
-        gl.vertexAttribPointer(a_pos, 2, gl.FLOAT, false, 0, 0);
-        gl.uniform2f(u_res, canvas.width, canvas.height);
-        gl.uniform1f(u_time, (performance.now() - t0) / 1000);
-        gl.uniform2f(u_mouseN, mouse.nx, mouse.ny);
-        gl.drawArrays(gl.TRIANGLES, 0, 3);
-      }
-      requestAnimationFrame(frame);
-    }
-    requestAnimationFrame(frame);
-  })();
-</script>

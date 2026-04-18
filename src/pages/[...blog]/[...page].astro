@@ -33,54 +33,20 @@ const metadata = {
 
 <Layout metadata={metadata}>
   <NeuralFlowHero
-    kicker="NEURAL FLOW · BLOG"
+    kicker="WONDERLAND OS · /blog"
     title={`WonderLand <em>Notebook</em>`}
     subtitle="Research, AI, biology — and the strange tissue between them."
     subtitleZh="研究、AI、生命，以及它们之间那些奇异的组织。"
+    terminalPath="~/blog"
   />
 
   <div class="nf-continue">
-    <!-- Ambient decorative backdrop: HUD marks + floating nodes -->
-    <div class="nf-amb" aria-hidden="true">
-      <svg class="nf-amb-svg" viewBox="0 0 1200 1600" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <radialGradient id="nfDot" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#5fd3ff" stop-opacity="0.9" />
-            <stop offset="100%" stop-color="#5fd3ff" stop-opacity="0" />
-          </radialGradient>
-          <pattern id="nfGrid" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
-            <path d="M 80 0 L 0 0 0 80" fill="none" stroke="rgba(95,211,255,0.05)" stroke-width="1"/>
-          </pattern>
-        </defs>
-        <rect width="1200" height="1600" fill="url(#nfGrid)" />
-        <!-- drifting nodes -->
-        <g class="nf-nodes">
-          <circle cx="120" cy="200" r="2.5" fill="url(#nfDot)"><animate attributeName="opacity" values="0.2;1;0.2" dur="4s" repeatCount="indefinite"/></circle>
-          <circle cx="980" cy="340" r="3" fill="url(#nfDot)"><animate attributeName="opacity" values="0.3;1;0.3" dur="5.5s" repeatCount="indefinite"/></circle>
-          <circle cx="60" cy="560" r="2" fill="url(#nfDot)"><animate attributeName="opacity" values="0.1;0.8;0.1" dur="6s" repeatCount="indefinite"/></circle>
-          <circle cx="1120" cy="700" r="2.5" fill="url(#nfDot)"><animate attributeName="opacity" values="0.2;0.9;0.2" dur="4.8s" repeatCount="indefinite"/></circle>
-          <circle cx="200" cy="900" r="2" fill="url(#nfDot)"><animate attributeName="opacity" values="0.2;0.7;0.2" dur="5s" repeatCount="indefinite"/></circle>
-          <circle cx="900" cy="1080" r="3" fill="url(#nfDot)"><animate attributeName="opacity" values="0.3;1;0.3" dur="4.2s" repeatCount="indefinite"/></circle>
-          <circle cx="50" cy="1240" r="2" fill="url(#nfDot)"><animate attributeName="opacity" values="0.1;0.8;0.1" dur="5.6s" repeatCount="indefinite"/></circle>
-          <circle cx="1080" cy="1400" r="2.5" fill="url(#nfDot)"><animate attributeName="opacity" values="0.2;0.9;0.2" dur="4.4s" repeatCount="indefinite"/></circle>
-        </g>
-        <!-- schematic diagonal lines -->
-        <g stroke="rgba(95,211,255,0.08)" stroke-width="1" fill="none">
-          <line x1="0" y1="280" x2="220" y2="180"/>
-          <line x1="1020" y1="260" x2="1200" y2="380"/>
-          <line x1="0" y1="900" x2="200" y2="820"/>
-          <line x1="1100" y1="1200" x2="1200" y2="1280"/>
-        </g>
-        <!-- HUD crosshair marks at corners -->
-        <g stroke="rgba(95,211,255,0.25)" stroke-width="1" fill="none">
-          <path d="M 40 40 L 40 60 M 40 40 L 60 40"/>
-          <path d="M 1160 40 L 1160 60 M 1160 40 L 1140 40"/>
-          <path d="M 40 1560 L 40 1540 M 40 1560 L 60 1560"/>
-          <path d="M 1160 1560 L 1160 1540 M 1160 1560 L 1140 1560"/>
-        </g>
-      </svg>
-    </div>
+    <!-- synthwave grid continuation -->
+    <div class="nf-grid-continue" aria-hidden="true"></div>
+    <!-- CRT scanlines -->
+    <div class="nf-crt" aria-hidden="true"></div>
 
+    <!-- Fun & Curious Papers shelf promo -->
     <section class="nf-shelfwrap">
       <a href="/fun-pages/" class="nf-shelf">
         <div class="nf-shelf-label">
@@ -143,284 +109,55 @@ const metadata = {
 </Layout>
 
 <style is:global>
-  /* ======== Neural Flow continuation backdrop (brighter twilight) ======== */
+  /* ======== Cyberpunk continuation backdrop ======== */
   .nf-continue {
     background:
-      radial-gradient(ellipse 60% 40% at 10% 5%, rgba(130, 200, 255, 0.22), transparent 60%),
-      radial-gradient(ellipse 50% 50% at 92% 25%, rgba(170, 130, 255, 0.16), transparent 65%),
-      radial-gradient(ellipse 70% 50% at 50% 90%, rgba(255, 110, 160, 0.10), transparent 70%),
-      radial-gradient(ellipse 40% 30% at 85% 70%, rgba(100, 220, 255, 0.14), transparent 60%),
-      linear-gradient(180deg, #1a2b52 0%, #1e3260 50%, #17264a 100%);
+      radial-gradient(ellipse 60% 40% at 12% 4%, rgba(5, 217, 232, 0.12), transparent 60%),
+      radial-gradient(ellipse 50% 45% at 90% 18%, rgba(255, 42, 109, 0.10), transparent 65%),
+      radial-gradient(ellipse 60% 50% at 50% 80%, rgba(255, 42, 109, 0.08), transparent 70%),
+      radial-gradient(ellipse 40% 30% at 85% 62%, rgba(5, 217, 232, 0.08), transparent 60%),
+      linear-gradient(180deg, #05070f 0%, #07091a 50%, #05060f 100%);
     min-height: 70vh;
     position: relative;
-    color: #e4ecfb;
+    color: #d1fff0;
     overflow: hidden;
   }
-  .nf-continue::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image: repeating-linear-gradient(
-      0deg,
-      rgba(95, 211, 255, 0.025) 0 1px,
-      transparent 1px 5px
-    );
-    opacity: 0.5;
-    z-index: 0;
-  }
-  /* ambient decoration layer */
-  .nf-amb {
+
+  /* subtle synthwave grid */
+  .nf-grid-continue {
     position: absolute;
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    opacity: 0.8;
-  }
-  .nf-amb-svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-  /* slow drift on the whole svg */
-  .nf-amb .nf-nodes {
-    animation: nfDrift 18s ease-in-out infinite alternate;
-    transform-origin: center;
-  }
-  @keyframes nfDrift {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(-12px, 8px); }
-  }
-  .nf-listwrap {
-    position: relative;
-    z-index: 1;
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 56px 24px 96px;
+    background-image:
+      linear-gradient(rgba(255, 42, 109, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(5, 217, 232, 0.07) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 90% 100% at 50% 50%, #000, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 90% 100% at 50% 50%, #000, transparent 70%);
+    opacity: 0.7;
   }
 
-  /* ======== Fun Pages shelf card ======== */
+  /* CRT scanlines */
+  .nf-crt {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: repeating-linear-gradient(0deg, rgba(5, 217, 232, 0.045) 0 1px, transparent 1px 4px);
+    opacity: 0.6;
+  }
+
+  .nf-listwrap,
   .nf-shelfwrap {
     position: relative;
     z-index: 1;
-    max-width: 980px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 56px 24px 0;
   }
-  .nf-shelf {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    position: relative;
-    padding: 28px 30px 24px;
-    border: 1px solid rgba(95, 211, 255, 0.28);
-    border-radius: 2px;
-    background:
-      linear-gradient(135deg, rgba(95, 211, 255, 0.04), rgba(170, 130, 255, 0.03)),
-      rgba(10, 20, 40, 0.55);
-    backdrop-filter: blur(6px);
-    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s, background 0.25s;
-    overflow: hidden;
-  }
-  .nf-shelf::before,
-  .nf-shelf::after {
-    content: '';
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    border: 1px solid rgba(95, 211, 255, 0.4);
-    pointer-events: none;
-  }
-  .nf-shelf::before {
-    top: 8px; left: 8px;
-    border-right: none; border-bottom: none;
-  }
-  .nf-shelf::after {
-    bottom: 8px; right: 8px;
-    border-left: none; border-top: none;
-  }
-  .nf-shelf:hover {
-    border-color: rgba(95, 211, 255, 0.55);
-    transform: translateY(-2px);
-    box-shadow: 0 24px 48px rgba(20, 40, 80, 0.3),
-                0 0 40px rgba(95, 211, 255, 0.1);
-  }
-  .nf-shelf:hover::before,
-  .nf-shelf:hover::after {
-    border-color: #5fd3ff;
-  }
+  .nf-listwrap { padding: 32px 24px 96px; }
 
-  .nf-shelf-label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: rgba(95, 211, 255, 0.85);
-    margin-bottom: 16px;
-  }
-  .nf-shelf-label .dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #5fd3ff;
-    box-shadow: 0 0 8px #5fd3ff, 0 0 3px #5fd3ff;
-    animation: shelfPulse 1.8s ease-in-out infinite;
-    flex-shrink: 0;
-  }
-  @keyframes shelfPulse {
-    0%, 100% { opacity: 0.6; transform: scale(0.9); }
-    50% { opacity: 1; transform: scale(1.15); }
-  }
-
-  .nf-shelf-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 24px;
-    align-items: start;
-  }
-  @media (min-width: 860px) {
-    .nf-shelf-grid {
-      grid-template-columns: 1.1fr 1fr;
-      gap: 32px;
-    }
-  }
-
-  .nf-shelf-title {
-    font-family: 'Instrument Serif', 'Times New Roman', serif !important;
-    font-weight: 400 !important;
-    font-size: clamp(32px, 4vw, 44px) !important;
-    line-height: 1.02 !important;
-    letter-spacing: -0.015em !important;
-    color: #f1f5ff !important;
-    margin: 0 0 12px !important;
-  }
-  .nf-shelf-title em {
-    color: #5fd3ff;
-    font-style: italic;
-    font-weight: 400;
-  }
-  .nf-shelf-sub {
-    font-family: 'Instrument Serif', 'Times New Roman', serif !important;
-    font-style: italic !important;
-    font-size: 15.5px !important;
-    line-height: 1.6 !important;
-    color: rgba(210, 220, 245, 0.8) !important;
-    margin: 0 0 18px !important;
-    max-width: 56ch;
-  }
-  .nf-shelf-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .nf-shelf-tags span {
-    display: inline-block;
-    padding: 3px 8px;
-    border: 1px solid rgba(95, 211, 255, 0.22);
-    background: rgba(95, 211, 255, 0.05);
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    color: rgba(160, 200, 240, 0.75);
-    text-transform: lowercase;
-  }
-
-  .nf-shelf-mini {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-  @media (min-width: 520px) {
-    .nf-shelf-mini {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-  .nf-mini-card {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: baseline;
-    gap: 10px;
-    padding: 10px 12px;
-    border: 1px solid rgba(95, 211, 255, 0.12);
-    background: rgba(10, 20, 40, 0.45);
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 11.5px;
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .nf-mini-card .no {
-    color: #ff7eb6;
-    font-weight: 700;
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    min-width: 18px;
-  }
-  .nf-mini-card .ttl {
-    color: rgba(220, 230, 250, 0.88);
-    font-family: 'Instrument Serif', 'Times New Roman', serif;
-    font-style: italic;
-    font-size: 14px;
-    letter-spacing: 0;
-    line-height: 1.2;
-    min-width: 0;
-  }
-  .nf-mini-card .pg {
-    font-size: 8.5px;
-    color: rgba(95, 211, 255, 0.55);
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .nf-shelf:hover .nf-mini-card {
-    border-color: rgba(95, 211, 255, 0.22);
-  }
-  .nf-mini-card.accent {
-    border-color: rgba(255, 126, 182, 0.25);
-    background: rgba(30, 10, 25, 0.5);
-  }
-  .nf-mini-card.accent .ttl {
-    color: #ffd0e1;
-  }
-  .nf-mini-card.accent .pg {
-    color: rgba(255, 126, 182, 0.7);
-  }
-
-  .nf-shelf-cta {
-    margin-top: 22px;
-    padding-top: 16px;
-    border-top: 1px dashed rgba(95, 211, 255, 0.15);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: #5fd3ff;
-  }
-  .nf-shelf-cta-arr {
-    font-size: 16px;
-    transition: transform 0.25s;
-    display: inline-block;
-  }
-  .nf-shelf:hover .nf-shelf-cta-arr {
-    transform: translateX(6px);
-  }
-  .nf-shelf-cta::before {
-    content: '';
-    flex: 1;
-    max-width: 60px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(95, 211, 255, 0.35));
-    margin-right: 14px;
-    order: 1;
-  }
-  .nf-shelf-cta-text { order: 2; }
-  .nf-shelf-cta-arr { order: 3; margin-left: 10px; }
   .nf-section-head {
     display: flex;
     justify-content: center;
@@ -429,7 +166,7 @@ const metadata = {
     font-family: 'JetBrains Mono', ui-monospace, monospace;
     font-size: 10px;
     letter-spacing: 0.28em;
-    color: rgba(160, 185, 225, 0.55);
+    color: rgba(5, 217, 232, 0.65);
     text-transform: uppercase;
     margin-bottom: 40px;
   }
@@ -437,15 +174,168 @@ const metadata = {
     flex: 1;
     max-width: 120px;
     height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(95, 211, 255, 0.35),
-      transparent
-    );
+    background: linear-gradient(90deg, transparent, rgba(5, 217, 232, 0.45), transparent);
   }
 
-  /* ======== Nuke AstroWind ListItem card, replace with editorial row ======== */
+  /* ======== FUN PAPERS SHELF ======== */
+  .nf-shelf {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    border: 1px solid rgba(5, 217, 232, 0.3);
+    background:
+      linear-gradient(180deg, rgba(5, 217, 232, 0.03), rgba(255, 42, 109, 0.03)),
+      rgba(5, 5, 11, 0.5);
+    backdrop-filter: blur(4px);
+    padding: 28px 28px 22px;
+    transition: all 0.25s;
+    overflow: hidden;
+  }
+  .nf-shelf::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 14px; height: 14px;
+    border-top: 1px solid #05d9e8;
+    border-left: 1px solid #05d9e8;
+  }
+  .nf-shelf::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 14px; height: 14px;
+    border-bottom: 1px solid #ff2a6d;
+    border-right: 1px solid #ff2a6d;
+  }
+  .nf-shelf:hover {
+    border-color: #05d9e8;
+    box-shadow: 0 0 40px rgba(5, 217, 232, 0.2), 4px 4px 0 rgba(255, 42, 109, 0.4);
+    transform: translate(-2px, -2px);
+  }
+  .nf-shelf-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.26em;
+    color: rgba(5, 217, 232, 0.75);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .nf-shelf-label .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #05d9e8;
+    box-shadow: 0 0 8px #05d9e8;
+  }
+  .nf-shelf-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+  .nf-shelf-title {
+    font-family: 'Instrument Serif', serif;
+    font-weight: 400;
+    font-size: clamp(32px, 4.6vw, 52px);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    margin: 0 0 12px 0;
+    color: #f1f5ff;
+  }
+  .nf-shelf-title em {
+    font-style: italic;
+    background: linear-gradient(90deg, #ff2bd6, #ffea3a, #4dc5ff);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: cyGrad2 6s linear infinite;
+  }
+  @keyframes cyGrad2 { 0%{background-position:0 0} 100%{background-position:200% 0} }
+  .nf-shelf-sub {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 16px;
+    line-height: 1.55;
+    color: rgba(209, 255, 240, 0.7);
+    margin: 0 0 14px 0;
+  }
+  .nf-shelf-tags {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .nf-shelf-tags span {
+    display: inline-block;
+    padding: 3px 8px;
+    border: 1px solid rgba(5, 217, 232, 0.25);
+    background: rgba(5, 217, 232, 0.04);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: rgba(5, 217, 232, 0.8);
+    text-transform: uppercase;
+  }
+  .nf-shelf-mini { display: grid; gap: 6px; }
+  .nf-mini-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 10px;
+    align-items: baseline;
+    padding: 8px 10px;
+    border: 1px solid rgba(5, 217, 232, 0.15);
+    background: rgba(5, 5, 11, 0.4);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    transition: all 0.2s;
+  }
+  .nf-mini-card .no {
+    color: rgba(5, 217, 232, 0.55);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+  }
+  .nf-mini-card .ttl {
+    color: #d1fff0;
+    font-family: 'Instrument Serif', serif;
+    font-size: 14px;
+    font-style: italic;
+  }
+  .nf-mini-card .pg {
+    color: rgba(5, 217, 232, 0.55);
+    font-size: 8.5px;
+    letter-spacing: 0.16em;
+  }
+  .nf-mini-card.accent {
+    border-color: rgba(255, 42, 109, 0.35);
+    background: rgba(255, 42, 109, 0.05);
+  }
+  .nf-mini-card.accent .no,
+  .nf-mini-card.accent .pg { color: rgba(255, 42, 109, 0.8); }
+  .nf-shelf:hover .nf-mini-card { border-color: rgba(5, 217, 232, 0.35); }
+
+  .nf-shelf-cta {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px dashed rgba(5, 217, 232, 0.22);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.26em;
+    color: #05d9e8;
+    text-transform: uppercase;
+  }
+  .nf-shelf-cta-arr { transition: transform 0.25s; font-size: 16px; }
+  .nf-shelf:hover .nf-shelf-cta-arr { transform: translateX(6px); }
+
+  @media (max-width: 720px) {
+    .nf-shelf-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ======== Nuke AstroWind ListItem card ======== */
   .nf-continue article {
     display: block !important;
     max-width: none !important;
@@ -453,7 +343,6 @@ const metadata = {
     padding: 0 !important;
     background: transparent !important;
   }
-  /* the inner <div> that had bg-white/slate-800 & rounded-xl */
   .nf-continue article > div {
     background: transparent !important;
     border: 0 !important;
@@ -463,7 +352,6 @@ const metadata = {
     margin: 0 !important;
     transition: none !important;
   }
-  /* image block — hidden for editorial simplicity (most posts don't have images anyway) */
   .nf-continue article > a,
   .nf-continue article > div.relative {
     display: none !important;
@@ -472,19 +360,17 @@ const metadata = {
     grid-template-columns: none !important;
   }
 
-  /* list row spacing */
+  /* ======== Editorial rows in cyberpunk palette ======== */
   .nf-continue ul { padding: 0; list-style: none; }
   .nf-continue ul > li {
     margin: 0 !important;
     padding: 36px 0 !important;
-    border-bottom: 1px solid rgba(95, 211, 255, 0.1);
+    border-bottom: 1px solid rgba(5, 217, 232, 0.1);
     transition: padding 0.3s;
   }
   .nf-continue ul > li:first-child { padding-top: 0 !important; }
   .nf-continue ul > li:last-child { border-bottom: none; }
-  .nf-continue ul > li:hover {
-    padding-left: 8px !important;
-  }
+  .nf-continue ul > li:hover { padding-left: 8px !important; }
 
   /* meta line (date · author · category) */
   .nf-continue article header .mb-1 {
@@ -496,24 +382,24 @@ const metadata = {
   }
   .nf-continue article header .mb-1 span,
   .nf-continue article header .mb-1 time {
-    color: rgba(160, 185, 225, 0.7) !important;
+    color: rgba(180, 220, 230, 0.7) !important;
     font-size: 10px !important;
   }
   .nf-continue article header .mb-1 a {
-    color: #5fd3ff !important;
+    color: #ff2a6d !important;
     text-decoration: none !important;
-    border-bottom: 1px dotted rgba(95, 211, 255, 0.4);
+    border-bottom: 1px dotted rgba(255, 42, 109, 0.45) !important;
     padding-bottom: 1px;
   }
   .nf-continue article header .mb-1 a:hover {
-    color: #9fe5ff !important;
-    border-bottom-color: #9fe5ff;
+    color: #ff5a90 !important;
+    border-bottom-color: #ff5a90 !important;
   }
   .nf-continue article header .mb-1 svg {
-    color: rgba(160, 185, 225, 0.5) !important;
+    color: rgba(5, 217, 232, 0.5) !important;
   }
 
-  /* post title — big serif editorial */
+  /* post title — big serif with cyan glow */
   .nf-continue article h2 {
     font-family: 'Instrument Serif', 'Times New Roman', serif !important;
     font-weight: 400 !important;
@@ -530,26 +416,26 @@ const metadata = {
     background: none !important;
   }
   .nf-continue article h2 a:hover {
-    color: #bfe5ff !important;
-    text-shadow: 0 0 18px rgba(95, 211, 255, 0.45);
+    color: #9fe8ff !important;
+    text-shadow: 0 0 18px rgba(5, 217, 232, 0.5);
   }
   .nf-continue article h2 .text-amber-600,
   .nf-continue article h2 [class*='amber'] {
     color: #ffe066 !important;
   }
 
-  /* excerpt — italic serif, subtle */
+  /* excerpt — italic serif */
   .nf-continue article p {
     font-family: 'Instrument Serif', 'Times New Roman', serif !important;
     font-style: italic !important;
     font-size: 18px !important;
     line-height: 1.6 !important;
-    color: rgba(210, 220, 245, 0.78) !important;
+    color: rgba(209, 255, 240, 0.72) !important;
     margin: 0 !important;
     max-width: 64ch;
   }
 
-  /* tags row — flat, monospace chips */
+  /* tags — clipped-corner chips like homepage nav buttons */
   .nf-continue article footer {
     margin-top: 16px !important;
   }
@@ -567,22 +453,25 @@ const metadata = {
   .nf-continue article footer ul li a,
   .nf-continue article footer span {
     display: inline-block !important;
-    padding: 3px 8px !important;
-    border: 1px solid rgba(95, 211, 255, 0.2) !important;
-    border-radius: 2px !important;
-    background: rgba(95, 211, 255, 0.04) !important;
+    padding: 4px 10px !important;
+    border: 1px solid rgba(5, 217, 232, 0.25) !important;
+    background: rgba(5, 217, 232, 0.04) !important;
     font-family: 'JetBrains Mono', ui-monospace, monospace !important;
     font-size: 10px !important;
-    letter-spacing: 0.12em !important;
+    letter-spacing: 0.14em !important;
     text-transform: lowercase !important;
-    color: rgba(160, 200, 240, 0.75) !important;
+    color: rgba(5, 217, 232, 0.8) !important;
     text-decoration: none !important;
-    transition: all 0.2s !important;
+    transition: all 0.15s !important;
+    border-radius: 0 !important;
   }
   .nf-continue article footer ul li a:hover {
-    border-color: #5fd3ff !important;
-    color: #9fe5ff !important;
-    background: rgba(95, 211, 255, 0.12) !important;
+    color: #05050b !important;
+    background: #05d9e8 !important;
+    border-color: #05d9e8 !important;
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px)) !important;
+    box-shadow: 3px 3px 0 #ff2a6d !important;
+    transform: translate(-1px, -1px);
   }
 
   /* pagination */
@@ -590,11 +479,11 @@ const metadata = {
   .nf-continue .pagination {
     margin-top: 56px !important;
     padding-top: 32px !important;
-    border-top: 1px solid rgba(95, 211, 255, 0.15) !important;
+    border-top: 1px solid rgba(5, 217, 232, 0.15) !important;
   }
   .nf-continue nav a,
   .nf-continue .pagination a {
-    color: #bfd7ff !important;
+    color: rgba(5, 217, 232, 0.8) !important;
     font-family: 'JetBrains Mono', monospace !important;
     font-size: 11px !important;
     letter-spacing: 0.2em !important;
@@ -602,11 +491,12 @@ const metadata = {
   }
   .nf-continue nav a:hover,
   .nf-continue .pagination a:hover {
-    color: #5fd3ff !important;
+    color: #9fe8ff !important;
   }
 
   @media (max-width: 640px) {
-    .nf-listwrap { padding: 40px 18px 64px; }
+    .nf-listwrap { padding: 32px 18px 64px; }
+    .nf-shelfwrap { padding: 40px 18px 0; }
     .nf-continue ul > li { padding: 28px 0 !important; }
     .nf-continue article h2 { font-size: 24px !important; }
     .nf-continue article p { font-size: 16px !important; }

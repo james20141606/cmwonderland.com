@@ -125,19 +125,30 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '' } = Ast
 <style is:global>
   .nf-footer {
     position: relative;
-    background: #17264a;
-    color: #e4ecfb;
+    background: #05070f;
+    color: #d1fff0;
     overflow: hidden;
-    border-top: 1px solid rgba(130, 200, 255, 0.18);
+    border-top: 1px solid rgba(5, 217, 232, 0.18);
   }
   .nf-footer-bg {
     position: absolute;
     inset: 0;
     pointer-events: none;
     background:
-      radial-gradient(ellipse at 18% -10%, rgba(130, 200, 255, 0.18), transparent 55%),
-      radial-gradient(ellipse at 85% 110%, rgba(255, 110, 160, 0.14), transparent 60%),
-      radial-gradient(ellipse at 50% 50%, rgba(170, 130, 255, 0.08), transparent 70%);
+      radial-gradient(ellipse at 18% -10%, rgba(5, 217, 232, 0.14), transparent 55%),
+      radial-gradient(ellipse at 85% 110%, rgba(255, 42, 109, 0.12), transparent 60%),
+      radial-gradient(ellipse at 50% 50%, rgba(255, 224, 102, 0.04), transparent 70%);
+  }
+  .nf-footer-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 42, 109, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(5, 217, 232, 0.05) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 100%, #000, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 100%, #000, transparent 70%);
   }
   .nf-footer-bg::after {
     content: '';

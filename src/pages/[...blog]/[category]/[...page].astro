@@ -51,11 +51,12 @@ const tag = taglines[slug] || { en: 'Entries filed under this stream.', zh: '这
 
 <Layout metadata={metadata}>
   <NeuralFlowHero
-    kicker={`NEURAL FLOW · ${String(category.title).toUpperCase()}`}
+    kicker={`WONDERLAND OS · /${slug}`}
     title={String(category.title)}
     subtitle={tag.en}
     subtitleZh={tag.zh}
-    height="clamp(280px, 44vh, 420px)"
+    height="clamp(340px, 52vh, 480px)"
+    terminalPath={`~/categories/${slug}`}
   />
 
   <div class="nf-continue">
