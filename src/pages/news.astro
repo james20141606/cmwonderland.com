@@ -3,272 +3,413 @@ import Layout from "~/layouts/PageLayout.astro";
 ---
 
 <Layout metadata={{ title: "Finance News Feed" }}>
-  <main class="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
+  <!-- news-specific backdrop -->
+  <div class="news-bg" aria-hidden="true">
+    <div class="news-bg-grid"></div>
+    <div class="news-bg-glow g1"></div>
+    <div class="news-bg-glow g2"></div>
+    <div class="news-bg-scan"></div>
+  </div>
+
+  <main class="news-main mx-auto max-w-6xl px-4 pb-20 sm:px-6">
     <!-- Hero Header -->
-    <div class="mt-6 mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
-          <span class="bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">Finance</span>
-          <span class="text-default"> News</span>
+    <header class="news-hero">
+      <div class="news-hero-left">
+        <div class="news-eyebrow">
+          <span class="live-dot"></span>
+          <span>TERMINAL · FEED.LIVE · UPDATED 2&times;/DAY</span>
+        </div>
+        <h1 class="news-title">
+          <span class="news-title-accent">Finance</span> <span>Briefing</span>
         </h1>
-        <p class="mt-1 text-sm text-muted">Global financial headlines &middot; Updated twice daily</p>
+        <p class="news-sub">Global markets, sector rotations, and the headlines that moved them &middot; auto-refreshed from the <code>ai_finance_news</code> pipeline.</p>
       </div>
-      <div class="flex items-center gap-3">
-        <a href="https://raw.githubusercontent.com/james20141606/ai_finance_news/main/news-feed.xml" target="_blank" rel="noopener"
-          class="inline-flex items-center gap-1.5 rounded-lg bg-orange-500/10 px-3 py-1.5 text-xs font-bold text-orange-600 dark:text-orange-400 hover:bg-orange-500/20 transition-colors ring-1 ring-orange-500/20">
+      <div class="news-hero-right">
+        <a href="https://raw.githubusercontent.com/james20141606/ai_finance_news/main/news-feed.xml" target="_blank" rel="noopener" class="news-btn ghost">
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
           RSS
         </a>
-        <button id="subscribe-toggle"
-          class="inline-flex items-center gap-1.5 rounded-lg bg-indigo-500/10 px-3 py-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 transition-colors ring-1 ring-indigo-500/20">
+        <button id="subscribe-toggle" class="news-btn primary">
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
           Subscribe
         </button>
       </div>
-    </div>
+    </header>
 
     <!-- Subscribe Form (hidden by default) -->
-    <div id="subscribe-panel" class="hidden mb-6 rounded-xl border border-indigo-200 dark:border-indigo-800/50 bg-indigo-50/50 dark:bg-indigo-950/20 p-4">
+    <div id="subscribe-panel" class="news-sub-panel hidden">
       <form id="subscribe-form" class="flex flex-col gap-2 sm:flex-row">
-        <input type="email" id="subscribe-email" placeholder="your@email.com" required
-          class="flex-1 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none" />
-        <button type="submit" class="rounded-lg bg-indigo-600 px-5 py-2 text-sm font-bold text-white hover:bg-indigo-700 transition-colors">Subscribe</button>
+        <input type="email" id="subscribe-email" placeholder="your@email.com" required class="news-sub-input" />
+        <button type="submit" class="news-btn primary solid">Subscribe</button>
       </form>
       <p id="subscribe-msg" class="hidden mt-2 text-sm"></p>
     </div>
 
-    <div id="feed-loading" class="flex flex-col items-center justify-center py-20 text-muted">
-      <div class="mb-3 h-8 w-8 animate-spin rounded-full border-2 border-indigo-200 border-t-indigo-600 dark:border-indigo-800 dark:border-t-indigo-400"></div>
-      <span class="text-sm">Loading latest news...</span>
+    <div id="feed-loading" class="news-loading">
+      <div class="news-loading-spin"></div>
+      <span>Loading latest briefing…</span>
     </div>
-    <div id="feed-error" class="hidden py-12 text-center">
-      <p class="text-red-500 font-semibold">Failed to load news feed.</p>
-      <p class="text-sm text-muted mt-1">Please try refreshing the page.</p>
+    <div id="feed-error" class="hidden news-error">
+      <p class="news-error-big">Failed to load news feed.</p>
+      <p class="news-error-small">Refresh the page or check back in a few minutes.</p>
     </div>
     <div id="feed-container" class="hidden space-y-3"></div>
   </main>
 </Layout>
 
 <style is:global>
-  /* ── Card ── */
-  .nc {
-    border-radius: 14px;
-    border: 1px solid rgba(148,163,184,0.15);
-    background: white;
-    overflow: hidden;
+  /* ════════ page-scoped backdrop ════════ */
+  .news-bg{
+    position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(56,189,248,0.06), transparent 55%),
+      radial-gradient(ellipse at 80% 100%, rgba(168,85,247,0.05), transparent 55%),
+      linear-gradient(180deg, #050814 0%, #080d1f 50%, #050814 100%);
   }
-  .dark .nc {
-    background: rgba(15,23,42,0.6);
-    border-color: rgba(148,163,184,0.1);
+  html:not(.dark) .news-bg{
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(99,102,241,0.08), transparent 55%),
+      radial-gradient(ellipse at 80% 100%, rgba(236,72,153,0.05), transparent 55%),
+      linear-gradient(180deg, #f8fafc 0%, #eef2f7 50%, #f8fafc 100%);
   }
-  .nc-head {
-    padding: 14px 18px 10px;
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1.8px;
-    font-weight: 800;
-    color: #6366f1;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+  .news-bg-grid{
+    position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(148,163,184,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148,163,184,0.04) 1px, transparent 1px);
+    background-size:44px 44px;
+    mask-image:radial-gradient(ellipse at center, #000 0%, transparent 75%);
+    -webkit-mask-image:radial-gradient(ellipse at center, #000 0%, transparent 75%);
   }
-  .dark .nc-head { color: #818cf8; }
-  .nc-head::before {
-    content: "";
-    display: inline-block;
-    width: 3px; height: 14px;
-    border-radius: 2px;
-    background: currentColor;
+  html:not(.dark) .news-bg-grid{
+    background-image:
+      linear-gradient(rgba(71,85,105,0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(71,85,105,0.08) 1px, transparent 1px);
   }
-  .nc-body { padding: 0 18px 16px; }
-
-  /* ── Market Cards Grid ── */
-  .mkt-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 8px;
+  .news-bg-glow{
+    position:absolute;width:520px;height:520px;border-radius:50%;filter:blur(80px);opacity:.5;
   }
-  .mkt-card {
-    border-radius: 10px;
-    padding: 10px 12px;
-    border: 1px solid rgba(148,163,184,0.1);
-    background: linear-gradient(135deg, rgba(249,250,251,0.8), rgba(241,245,249,0.5));
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-  .dark .mkt-card {
-    background: linear-gradient(135deg, rgba(30,41,59,0.5), rgba(15,23,42,0.5));
-    border-color: rgba(148,163,184,0.08);
-  }
-  .mkt-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
-  .mkt-name { font-size: 10px; font-weight: 700; opacity: 0.55; text-transform: uppercase; letter-spacing: 0.3px; }
-  .mkt-price { font-size: 17px; font-weight: 800; margin-top: 2px; letter-spacing: -0.3px; }
-  .mkt-chg { font-size: 11px; font-weight: 600; margin-top: 2px; display: flex; align-items: center; gap: 2px; }
-  .mkt-section-label {
-    font-size: 11px; font-weight: 700; opacity: 0.4;
-    margin: 12px 0 6px; padding-bottom: 4px;
-    border-bottom: 1px solid rgba(148,163,184,0.08);
-  }
-  .mkt-section-label:first-child { margin-top: 0; }
-
-  /* ── Sector Ranking ── */
-  .sec-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px 0;
-    font-size: 13px;
-  }
-  .sec-row + .sec-row { border-top: 1px solid rgba(148,163,184,0.06); }
-  .sec-rank { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 5px; font-size: 10px; font-weight: 800; background: rgba(99,102,241,0.08); color: #6366f1; margin-right: 8px; flex-shrink: 0; }
-  .dark .sec-rank { background: rgba(129,140,248,0.12); color: #818cf8; }
-  .sec-pct { font-weight: 800; font-size: 13px; font-variant-numeric: tabular-nums; }
-  .sec-pct-small { font-weight: 600; font-size: 11px; font-variant-numeric: tabular-nums; opacity: 0.7; }
-  .sec-trend-nums { display: flex; align-items: center; gap: 12px; }
-  .sec-label { font-size: 9px; font-weight: 600; opacity: 0.5; text-transform: uppercase; }
-
-  /* ── News Rows ── */
-  .nr {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(148,163,184,0.07);
-  }
-  .nr:last-child { border-bottom: none; }
-  .nr:hover { background: rgba(99,102,241,0.02); margin: 0 -18px; padding-left: 18px; padding-right: 18px; }
-  .nr-time {
-    font-size: 11px;
-    font-weight: 600;
-    color: rgba(100,116,139,0.6);
-    min-width: 42px;
-    padding-top: 2px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    font-variant-numeric: tabular-nums;
-  }
-  .nr-body { flex: 1; min-width: 0; }
-  .nr-title {
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.45;
-    color: inherit;
-    text-decoration: none;
-    display: block;
-    transition: color 0.15s;
-  }
-  .nr-title:hover { color: #6366f1; }
-  .dark .nr-title:hover { color: #818cf8; }
-  .nr-zh {
-    font-size: 12.5px;
-    color: rgba(100,116,139,0.65);
-    margin-top: 1px;
-    line-height: 1.4;
-  }
-  .nr-src {
-    display: inline-block;
-    font-size: 9px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 2px 7px;
-    border-radius: 4px;
-    background: rgba(99,102,241,0.07);
-    color: #6366f1;
-    white-space: nowrap;
-    flex-shrink: 0;
-    margin-top: 3px;
-  }
-  .dark .nr-src { background: rgba(129,140,248,0.1); color: #818cf8; }
-
-  /* ── Summary Text ── */
-  .summary-text {
-    font-size: 14px;
-    line-height: 1.8;
-    white-space: pre-line;
-    color: var(--aw-color-text-default);
+  .news-bg-glow.g1{top:-10%;left:-8%;background:radial-gradient(circle, rgba(34,211,238,0.18), transparent 65%);animation:newsFloat 18s ease-in-out infinite}
+  .news-bg-glow.g2{bottom:-10%;right:-8%;background:radial-gradient(circle, rgba(236,72,153,0.14), transparent 65%);animation:newsFloat 22s ease-in-out infinite reverse}
+  html:not(.dark) .news-bg-glow{opacity:.35}
+  @keyframes newsFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-20px) scale(1.08)}}
+  .news-bg-scan{
+    position:absolute;inset:0;
+    background-image:repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 3px);
+    opacity:.5;
   }
 
-  /* ── Date Divider ── */
-  .date-divider {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin: 28px 0 16px;
-    cursor: pointer;
-    user-select: none;
+  /* ════════ hero ════════ */
+  .news-main{padding-top:40px;position:relative;z-index:1}
+  .news-hero{
+    display:flex;flex-direction:column;gap:18px;margin-bottom:28px;
+    padding:22px 24px;border-radius:16px;
+    background:linear-gradient(180deg, rgba(14,22,48,0.58), rgba(10,16,32,0.35));
+    border:1px solid rgba(71,85,105,0.2);
+    backdrop-filter:blur(10px);
   }
-  .date-divider:first-child { margin-top: 0; }
-  .date-divider-label {
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-    color: var(--aw-color-text-default, #0f172a);
+  html:not(.dark) .news-hero{
+    background:linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,255,255,0.55));
+    border-color:rgba(99,102,241,0.15);
   }
-  .dark .date-divider-label { color: var(--aw-color-text-default, #e2e8f0); }
-  .date-divider-line { flex: 1; height: 1px; background: rgba(148,163,184,0.2); }
-  .date-divider-meta {
-    font-size: 11px;
-    font-weight: 500;
-    opacity: 0.4;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .date-divider-arrow { font-size: 9px; opacity: 0.5; transition: transform 0.2s; display: inline-block; }
-  .date-divider-arrow.open { transform: rotate(90deg); }
-  .date-today {
-    display: inline-block;
-    font-size: 9px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 2px 8px;
-    border-radius: 4px;
-    background: rgba(99,102,241,0.1);
-    color: #6366f1;
-    margin-left: 8px;
-  }
-  .dark .date-today { background: rgba(129,140,248,0.12); color: #818cf8; }
+  @media(min-width:700px){.news-hero{flex-direction:row;align-items:flex-end;justify-content:space-between}}
 
-  /* ── Edition sub-label within a day ── */
-  .ed-sub {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    font-weight: 700;
-    color: rgba(100,116,139,0.6);
-    margin: 12px 0 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
+  .news-eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:700;
+    letter-spacing:.26em;text-transform:uppercase;
+    color:#22d3ee;padding:5px 10px;border-radius:6px;
+    background:rgba(34,211,238,0.08);border:1px solid rgba(34,211,238,0.2);
+    margin-bottom:12px;
   }
-  .ed-sub::before {
-    content: "";
-    display: inline-block;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: rgba(99,102,241,0.3);
+  html:not(.dark) .news-eyebrow{color:#0e7490;background:rgba(34,211,238,0.08);border-color:rgba(34,211,238,0.25)}
+  .live-dot{
+    width:7px;height:7px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 10px #22c55e, 0 0 4px #22c55e;
+    animation:livePulse 1.6s ease-in-out infinite;
   }
-  .dark .ed-sub::before { background: rgba(129,140,248,0.3); }
+  @keyframes livePulse{0%,100%{opacity:.6;transform:scale(.9)}50%{opacity:1;transform:scale(1.2)}}
 
-  /* ── Day body collapsible ── */
-  .day-body { overflow: hidden; transition: max-height 0.4s ease; }
-  .day-body.collapsed { max-height: 0 !important; }
-
-  /* ── Two-column layout for market + sectors ── */
-  @media (min-width: 768px) {
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .two-col > .nc { min-width: 0; }
+  .news-title{
+    font-size:clamp(32px,4.6vw,46px);line-height:1.04;letter-spacing:-.015em;font-weight:800;
+    color:#e2e8f0;margin:0;
   }
+  html:not(.dark) .news-title{color:#0f172a}
+  .news-title-accent{
+    background:linear-gradient(90deg, #22d3ee 0%, #818cf8 50%, #f472b6 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    background-size:200% 100%;animation:newsGrad 8s linear infinite;
+  }
+  @keyframes newsGrad{0%{background-position:0 0}100%{background-position:200% 0}}
+
+  .news-sub{
+    font-size:13.5px;line-height:1.6;color:rgba(148,163,184,0.85);margin-top:8px;max-width:620px;
+  }
+  html:not(.dark) .news-sub{color:#64748b}
+  .news-sub code{
+    font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;
+    padding:1px 6px;border-radius:4px;background:rgba(148,163,184,0.1);color:#a5b4fc;
+  }
+  html:not(.dark) .news-sub code{background:rgba(99,102,241,0.08);color:#6366f1}
+
+  .news-hero-right{display:flex;gap:10px;align-items:center;flex-shrink:0}
+  .news-btn{
+    display:inline-flex;align-items:center;gap:6px;cursor:pointer;text-decoration:none;
+    padding:8px 14px;border-radius:8px;
+    font-size:11.5px;font-weight:700;letter-spacing:.05em;
+    transition:all .18s;border:1px solid transparent;
+  }
+  .news-btn.ghost{
+    background:rgba(251,146,60,0.1);color:#fb923c;border-color:rgba(251,146,60,0.25);
+  }
+  .news-btn.ghost:hover{background:rgba(251,146,60,0.18);transform:translateY(-1px)}
+  .news-btn.primary{
+    background:rgba(129,140,248,0.12);color:#a5b4fc;border-color:rgba(129,140,248,0.28);
+  }
+  .news-btn.primary:hover{background:rgba(129,140,248,0.22);transform:translateY(-1px)}
+  .news-btn.primary.solid{
+    background:linear-gradient(180deg, #818cf8, #6366f1);color:#fff;border:none;
+    padding:10px 20px;box-shadow:0 4px 12px rgba(99,102,241,0.3);
+  }
+  .news-btn.primary.solid:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(99,102,241,0.4)}
+  html:not(.dark) .news-btn.ghost{color:#ea580c;background:rgba(251,146,60,0.1)}
+  html:not(.dark) .news-btn.primary{color:#6366f1;background:rgba(129,140,248,0.1)}
+
+  .news-sub-panel{
+    margin-bottom:20px;padding:16px 18px;border-radius:14px;
+    background:rgba(129,140,248,0.05);border:1px solid rgba(129,140,248,0.2);
+  }
+  html:not(.dark) .news-sub-panel{background:rgba(129,140,248,0.04);border-color:rgba(129,140,248,0.2)}
+  .news-sub-input{
+    flex:1;padding:9px 14px;border-radius:8px;font-size:13px;
+    background:rgba(15,23,42,0.4);border:1px solid rgba(71,85,105,0.3);color:#e2e8f0;
+  }
+  html:not(.dark) .news-sub-input{background:#fff;border-color:#cbd5e1;color:#0f172a}
+  .news-sub-input:focus{outline:none;border-color:#818cf8;box-shadow:0 0 0 3px rgba(129,140,248,0.2)}
+
+  /* ════════ loading / error ════════ */
+  .news-loading{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:80px 0;gap:14px;color:rgba(148,163,184,0.8);font-size:13px;letter-spacing:.08em;
+  }
+  .news-loading-spin{
+    width:36px;height:36px;border-radius:50%;
+    border:2px solid rgba(129,140,248,0.15);border-top-color:#818cf8;
+    animation:newsSpin .9s linear infinite;
+  }
+  @keyframes newsSpin{to{transform:rotate(360deg)}}
+  .news-error{padding:50px 0;text-align:center}
+  .news-error-big{color:#f87171;font-weight:700;font-size:15px}
+  .news-error-small{color:rgba(148,163,184,0.7);font-size:13px;margin-top:4px}
+
+  /* ════════ cards ════════ */
+  .nc{
+    border-radius:14px;
+    border:1px solid rgba(71,85,105,0.22);
+    background:linear-gradient(180deg, rgba(14,22,48,0.62), rgba(10,16,32,0.42));
+    overflow:hidden;backdrop-filter:blur(8px);
+    box-shadow:0 1px 0 rgba(255,255,255,0.04) inset, 0 20px 40px rgba(0,0,0,0.15);
+    transition:border-color .2s;
+  }
+  .nc:hover{border-color:rgba(129,140,248,0.35)}
+  html:not(.dark) .nc{
+    background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.72));
+    border-color:rgba(148,163,184,0.22);
+    box-shadow:0 1px 0 rgba(255,255,255,1) inset, 0 10px 24px rgba(15,23,42,0.04);
+  }
+
+  .nc-head{
+    padding:14px 18px 10px;
+    font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:700;
+    letter-spacing:.22em;text-transform:uppercase;
+    color:#818cf8;
+    display:flex;align-items:center;gap:8px;
+    border-bottom:1px solid rgba(71,85,105,0.15);
+  }
+  html:not(.dark) .nc-head{color:#6366f1;border-bottom-color:rgba(99,102,241,0.1)}
+  .nc-head::before{
+    content:"";display:inline-block;width:4px;height:14px;border-radius:2px;
+    background:linear-gradient(180deg, #22d3ee, #818cf8);
+  }
+  .nc-body{padding:14px 18px 16px}
+
+  /* ════════ market grid ════════ */
+  .mkt-grid{
+    display:grid;grid-template-columns:repeat(auto-fill, minmax(148px,1fr));gap:8px;
+  }
+  .mkt-card{
+    border-radius:10px;padding:10px 12px;
+    background:rgba(15,23,42,0.42);
+    border:1px solid rgba(71,85,105,0.15);
+    transition:transform .15s, border-color .15s;position:relative;overflow:hidden;
+  }
+  .mkt-card::before{
+    content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:rgba(129,140,248,0.4);
+    opacity:0;transition:opacity .15s;
+  }
+  .mkt-card:hover{transform:translateY(-1px);border-color:rgba(129,140,248,0.3)}
+  .mkt-card:hover::before{opacity:1}
+  html:not(.dark) .mkt-card{
+    background:linear-gradient(180deg, rgba(248,250,252,0.85), rgba(241,245,249,0.65));
+    border-color:rgba(148,163,184,0.18);
+  }
+  .mkt-name{
+    font-family:'JetBrains Mono',ui-monospace,monospace;font-size:9.5px;font-weight:700;
+    letter-spacing:.1em;text-transform:uppercase;color:rgba(148,163,184,0.8);
+  }
+  html:not(.dark) .mkt-name{color:#64748b}
+  .mkt-price{
+    font-size:18px;font-weight:800;margin-top:3px;letter-spacing:-.02em;
+    color:#e2e8f0;font-variant-numeric:tabular-nums;
+  }
+  html:not(.dark) .mkt-price{color:#0f172a}
+  .mkt-chg{font-size:11.5px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:3px}
+  .mkt-section-label{
+    font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:700;
+    letter-spacing:.15em;text-transform:uppercase;color:rgba(148,163,184,0.65);
+    margin:14px 0 8px;padding-bottom:5px;
+    border-bottom:1px solid rgba(71,85,105,0.15);
+  }
+  html:not(.dark) .mkt-section-label{color:#64748b;border-bottom-color:rgba(148,163,184,0.15)}
+  .mkt-section-label:first-child{margin-top:0}
+
+  /* ════════ sector rows ════════ */
+  .sec-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:8px 0;font-size:13px;
+    color:#cbd5e1;
+  }
+  html:not(.dark) .sec-row{color:#334155}
+  .sec-row + .sec-row{border-top:1px solid rgba(71,85,105,0.1)}
+  html:not(.dark) .sec-row + .sec-row{border-top-color:rgba(148,163,184,0.1)}
+  .sec-rank{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:22px;height:22px;border-radius:6px;
+    font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:800;
+    background:linear-gradient(180deg, rgba(129,140,248,0.2), rgba(99,102,241,0.1));
+    color:#a5b4fc;margin-right:10px;flex-shrink:0;
+    border:1px solid rgba(129,140,248,0.2);
+  }
+  html:not(.dark) .sec-rank{color:#6366f1;background:linear-gradient(180deg, rgba(129,140,248,0.15), rgba(99,102,241,0.08))}
+  .sec-pct{font-weight:800;font-size:13px;font-variant-numeric:tabular-nums}
+  .sec-pct-small{font-weight:600;font-size:11px;font-variant-numeric:tabular-nums;opacity:.7}
+  .sec-trend-nums{display:flex;align-items:center;gap:14px}
+  .sec-label{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:9px;font-weight:600;opacity:.55;text-transform:uppercase;margin-left:2px}
+
+  /* ════════ news rows ════════ */
+  .nr{
+    display:flex;align-items:flex-start;gap:12px;
+    padding:11px 0;border-bottom:1px solid rgba(71,85,105,0.1);
+    transition:background .15s;
+  }
+  html:not(.dark) .nr{border-bottom-color:rgba(148,163,184,0.12)}
+  .nr:last-child{border-bottom:none}
+  .nr:hover{background:rgba(129,140,248,0.04);margin:0 -18px;padding-left:18px;padding-right:18px;border-radius:6px}
+  html:not(.dark) .nr:hover{background:rgba(99,102,241,0.03)}
+  .nr-time{
+    font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;font-weight:700;
+    color:rgba(148,163,184,0.55);min-width:44px;padding-top:2px;white-space:nowrap;flex-shrink:0;
+    font-variant-numeric:tabular-nums;letter-spacing:.02em;
+  }
+  html:not(.dark) .nr-time{color:rgba(100,116,139,0.7)}
+  .nr-body{flex:1;min-width:0}
+  .nr-title{
+    font-size:14px;font-weight:600;line-height:1.5;color:#e2e8f0;
+    text-decoration:none;display:block;transition:color .15s;
+  }
+  html:not(.dark) .nr-title{color:#1e293b}
+  .nr-title:hover{color:#a5b4fc}
+  html:not(.dark) .nr-title:hover{color:#6366f1}
+  .nr-zh{font-size:12.5px;color:rgba(148,163,184,0.7);margin-top:2px;line-height:1.45}
+  html:not(.dark) .nr-zh{color:#64748b}
+  .nr-src{
+    display:inline-block;font-family:'JetBrains Mono',ui-monospace,monospace;
+    font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    padding:3px 7px;border-radius:5px;
+    background:rgba(129,140,248,0.12);color:#a5b4fc;
+    white-space:nowrap;flex-shrink:0;margin-top:3px;
+    border:1px solid rgba(129,140,248,0.18);
+  }
+  html:not(.dark) .nr-src{background:rgba(99,102,241,0.08);color:#6366f1;border-color:rgba(99,102,241,0.15)}
+
+  /* ════════ summary text ════════ */
+  .summary-text{
+    font-size:14px;line-height:1.75;white-space:pre-line;
+    color:#cbd5e1;
+  }
+  html:not(.dark) .summary-text{color:#334155}
+
+  /* ════════ date divider ════════ */
+  .date-divider{
+    display:flex;align-items:center;gap:14px;margin:28px 0 16px;cursor:pointer;user-select:none;
+  }
+  .date-divider:first-child{margin-top:0}
+  .date-divider-label{
+    font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13px;font-weight:800;
+    letter-spacing:.06em;white-space:nowrap;color:#e2e8f0;
+  }
+  html:not(.dark) .date-divider-label{color:#0f172a}
+  .date-divider-line{
+    flex:1;height:1px;
+    background:linear-gradient(90deg, rgba(129,140,248,0.35), rgba(71,85,105,0.15));
+  }
+  html:not(.dark) .date-divider-line{background:linear-gradient(90deg, rgba(99,102,241,0.25), rgba(148,163,184,0.15))}
+  .date-divider-meta{
+    font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;
+    color:rgba(148,163,184,0.55);white-space:nowrap;
+    display:flex;align-items:center;gap:6px;letter-spacing:.05em;
+  }
+  .date-divider-arrow{font-size:9px;opacity:.55;transition:transform .2s;display:inline-block}
+  .date-divider-arrow.open{transform:rotate(90deg)}
+  .date-today{
+    display:inline-flex;align-items:center;gap:5px;
+    font-family:'JetBrains Mono',ui-monospace,monospace;font-size:9px;font-weight:800;
+    text-transform:uppercase;letter-spacing:.14em;
+    padding:2px 8px;border-radius:5px;margin-left:8px;
+    background:linear-gradient(180deg, rgba(34,197,94,0.2), rgba(34,197,94,0.1));
+    color:#4ade80;border:1px solid rgba(34,197,94,0.3);
+  }
+  html:not(.dark) .date-today{color:#15803d;background:linear-gradient(180deg, rgba(34,197,94,0.15), rgba(34,197,94,0.08))}
+  .date-today::before{
+    content:'';width:5px;height:5px;border-radius:50%;background:#4ade80;
+    box-shadow:0 0 6px #4ade80;animation:livePulse 1.6s ease-in-out infinite;
+  }
+
+  /* ════════ edition sub-label ════════ */
+  .ed-sub{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;font-weight:700;
+    color:rgba(148,163,184,0.75);margin:14px 0 10px;
+    text-transform:uppercase;letter-spacing:.16em;
+  }
+  html:not(.dark) .ed-sub{color:#64748b}
+  .ed-sub::before{
+    content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:rgba(129,140,248,0.5);
+  }
+
+  /* ════════ collapsible day body ════════ */
+  .day-body{overflow:hidden;transition:max-height .4s ease}
+  .day-body.collapsed{max-height:0 !important}
+
+  /* ════════ responsive two-col ════════ */
+  @media(min-width:780px){
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .two-col > .nc{min-width:0}
+  }
+
+  /* ════════ feed container spacing ════════ */
+  #feed-container > div{margin-bottom:14px}
+
+  /* hide utility leftovers */
+  .hidden{display:none !important}
 </style>
 
 <script is:inline>
 var FEED_URL = "https://raw.githubusercontent.com/james20141606/ai_finance_news/main/news-feed.json";
 
 function fmt(n) {
-  if (n == null) return "N/A";
+  if (n == null) return "—";
   if (Math.abs(n) >= 1000) return n.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
   return n.toFixed(2);
 }
@@ -292,20 +433,26 @@ function fmtTime(iso) {
   var d = new Date(iso);
   return d.toLocaleTimeString("en-US", {hour:"2-digit", minute:"2-digit"});
 }
+function nonEmpty(v){
+  if (v == null) return false;
+  if (typeof v === 'string') return v.trim().length > 0;
+  if (Array.isArray(v)) return v.length > 0;
+  return true;
+}
 
 function renderEdition(ed) {
   var html = "";
 
-  // Outlook + Picks
-  var hasOutlook = ed.summary_cn || ed.market_hotspots_cn;
-  var hasPicks = ed.sector_recommendation;
+  // Outlook + Picks — only render when the pipeline actually produced them
+  var hasOutlook = nonEmpty(ed.summary_cn) || nonEmpty(ed.market_hotspots_cn);
+  var hasPicks = nonEmpty(ed.sector_recommendation);
   if (hasOutlook || hasPicks) {
     var cols = (hasOutlook && hasPicks) ? ' two-col' : '';
     html += '<div class="' + cols + '">';
     if (hasOutlook) {
       html += '<div class="nc"><div class="nc-head">Daily Outlook</div><div class="nc-body"><div class="summary-text">';
-      if (ed.summary_cn) html += esc(ed.summary_cn);
-      if (ed.market_hotspots_cn) html += (ed.summary_cn ? '\n\n' : '') + esc(ed.market_hotspots_cn);
+      if (nonEmpty(ed.summary_cn)) html += esc(ed.summary_cn);
+      if (nonEmpty(ed.market_hotspots_cn)) html += (nonEmpty(ed.summary_cn) ? '\n\n' : '') + esc(ed.market_hotspots_cn);
       html += '</div></div></div>';
     }
     if (hasPicks) {
@@ -315,18 +462,19 @@ function renderEdition(ed) {
   }
 
   // Market + Sectors
-  var hasMarket = ed.market_snapshot && ed.market_snapshot.length;
-  var hasSectors = ed.sector_rankings && ed.sector_rankings.length;
+  var hasMarket = nonEmpty(ed.market_snapshot);
+  var hasSectors = nonEmpty(ed.sector_rankings);
   if (hasMarket || hasSectors) {
     html += '<div class="two-col">';
     if (hasMarket) {
       html += '<div class="nc"><div class="nc-head">Market Snapshot</div><div class="nc-body">';
       for (var s = 0; s < ed.market_snapshot.length; s++) {
         var sec = ed.market_snapshot[s];
+        if (!nonEmpty(sec.items)) continue;
         html += '<div class="mkt-section-label">' + esc(sec.title) + '</div><div class="mkt-grid">';
         for (var i = 0; i < sec.items.length; i++) {
           var m = sec.items[i];
-          var co = m.change_color || (m.change >= 0 ? "#16a34a" : "#dc2626");
+          var co = m.change_color || (m.change >= 0 ? "#4ade80" : "#f87171");
           html += '<div class="mkt-card"><div class="mkt-name">' + esc(m.name) + '</div>';
           html += '<div class="mkt-price">' + fmt(m.price) + '</div>';
           if (m.change != null && m.change_percent != null) {
@@ -339,12 +487,13 @@ function renderEdition(ed) {
       html += '</div></div>';
     }
     if (hasSectors) {
-      html += '<div class="nc"><div class="nc-head">Sector Rankings (Today)</div><div class="nc-body">';
+      html += '<div class="nc"><div class="nc-head">Sector Rankings · Today</div><div class="nc-body">';
       for (var rr = 0; rr < ed.sector_rankings.length; rr++) {
         var rk = ed.sector_rankings[rr];
+        if (!nonEmpty(rk.items)) continue;
         if (ed.sector_rankings.length > 1) html += '<div class="mkt-section-label">' + esc(rk.title) + '</div>';
         for (var ri = 0; ri < rk.items.length; ri++) {
-          var si = rk.items[ri], sc = si.change_color || (si.change_percent >= 0 ? "#16a34a" : "#dc2626");
+          var si = rk.items[ri], sc = si.change_color || (si.change_percent >= 0 ? "#4ade80" : "#f87171");
           html += '<div class="sec-row"><span><span class="sec-rank">' + (ri + 1) + '</span>' + esc(si.name) + '</span><span class="sec-pct" style="color:' + sc + '">' + (si.change_percent >= 0 ? "+" : "") + si.change_percent.toFixed(2) + '%</span></div>';
         }
       }
@@ -354,22 +503,22 @@ function renderEdition(ed) {
   }
 
   // Weekly Sector Trends
-  var hasWeekly = ed.weekly_sector_rankings && ed.weekly_sector_rankings.length;
-  if (hasWeekly) {
-    html += '<div class="nc"><div class="nc-head">Weekly Sector Trends (5-Day)</div><div class="nc-body">';
+  if (nonEmpty(ed.weekly_sector_rankings)) {
+    html += '<div class="nc"><div class="nc-head">Weekly Sector Trends · 5-Day</div><div class="nc-body">';
     for (var wr = 0; wr < ed.weekly_sector_rankings.length; wr++) {
       var wk = ed.weekly_sector_rankings[wr];
+      if (!nonEmpty(wk.items)) continue;
       html += '<div class="mkt-section-label">' + esc(wk.title) + '</div>';
       for (var wi = 0; wi < wk.items.length; wi++) {
         var wsi = wk.items[wi];
-        var wc = wsi.weekly_change_color || (wsi.weekly_change_percent >= 0 ? "#16a34a" : "#dc2626");
-        var dc = wsi.change_color || (wsi.change_percent >= 0 ? "#16a34a" : "#dc2626");
+        var wc = wsi.weekly_change_color || (wsi.weekly_change_percent >= 0 ? "#4ade80" : "#f87171");
+        var dc = wsi.change_color || (wsi.change_percent >= 0 ? "#4ade80" : "#f87171");
         var wp = wsi.weekly_change_percent != null ? wsi.weekly_change_percent : 0;
         html += '<div class="sec-row">';
         html += '<span><span class="sec-rank">' + (wi + 1) + '</span>' + esc(wsi.name) + '</span>';
         html += '<span class="sec-trend-nums">';
-        html += '<span class="sec-pct-small" style="color:' + dc + '">' + (wsi.change_percent >= 0 ? "+" : "") + wsi.change_percent.toFixed(2) + '% <span class="sec-label">1d</span></span>';
-        html += '<span class="sec-pct" style="color:' + wc + '">' + (wp >= 0 ? "+" : "") + wp.toFixed(2) + '% <span class="sec-label">5d</span></span>';
+        html += '<span class="sec-pct-small" style="color:' + dc + '">' + (wsi.change_percent >= 0 ? "+" : "") + wsi.change_percent.toFixed(2) + '%<span class="sec-label">1d</span></span>';
+        html += '<span class="sec-pct" style="color:' + wc + '">' + (wp >= 0 ? "+" : "") + wp.toFixed(2) + '%<span class="sec-label">5d</span></span>';
         html += '</span></div>';
       }
     }
@@ -377,13 +526,13 @@ function renderEdition(ed) {
   }
 
   // Social summary
-  if (ed.social_summary_cn) {
+  if (nonEmpty(ed.social_summary_cn)) {
     html += '<div class="nc"><div class="nc-head">Social Media Digest</div><div class="nc-body"><div class="summary-text">' + esc(ed.social_summary_cn) + '</div></div></div>';
   }
 
   // News items
-  if (ed.items && ed.items.length) {
-    html += '<div class="nc"><div class="nc-head">Top Briefing (' + ed.items.length + ')</div><div class="nc-body">';
+  if (nonEmpty(ed.items)) {
+    html += '<div class="nc"><div class="nc-head">Top Briefing · ' + ed.items.length + '</div><div class="nc-body">';
     for (var j = 0; j < ed.items.length; j++) {
       var it = ed.items[j];
       var tEn = it.title_en || it.title || "";
@@ -398,23 +547,26 @@ function renderEdition(ed) {
     html += '</div></div>';
   }
 
-  // Social media links
-  if (ed.social_media && ed.social_media.length) {
-    html += '<div class="nc"><div class="nc-head">Social Media</div><div class="nc-body">';
+  // Social media links — only if non-empty with at least one item in a group
+  if (nonEmpty(ed.social_media)) {
+    var socialHtml = '';
     for (var sg = 0; sg < ed.social_media.length; sg++) {
       var grp = ed.social_media[sg];
-      html += '<div class="mkt-section-label">' + esc(grp.platform) + '</div>';
+      if (!nonEmpty(grp.items)) continue;
+      socialHtml += '<div class="mkt-section-label">' + esc(grp.platform) + '</div>';
       for (var gi = 0; gi < grp.items.length; gi++) {
         var sit = grp.items[gi];
         var stEn = sit.title_en || sit.title || "";
         var stZh = sit.title_zh || "";
-        html += '<div class="nr"><div class="nr-body">';
-        html += '<a class="nr-title" href="' + esc(sit.link) + '" target="_blank" rel="noopener">' + esc(stEn) + '</a>';
-        if (stZh && stZh !== stEn) html += '<div class="nr-zh">' + esc(stZh) + '</div>';
-        html += '</div></div>';
+        socialHtml += '<div class="nr"><div class="nr-body">';
+        socialHtml += '<a class="nr-title" href="' + esc(sit.link) + '" target="_blank" rel="noopener">' + esc(stEn) + '</a>';
+        if (stZh && stZh !== stEn) socialHtml += '<div class="nr-zh">' + esc(stZh) + '</div>';
+        socialHtml += '</div></div>';
       }
     }
-    html += '</div></div>';
+    if (socialHtml) {
+      html += '<div class="nc"><div class="nc-head">Social Media</div><div class="nc-body">' + socialHtml + '</div></div>';
+    }
   }
 
   return html;
@@ -458,7 +610,7 @@ async function loadFeed() {
       html += '<div class="date-divider" data-day="' + dayId + '">';
       html += '<span class="date-divider-label">' + fmtDate(day) + (today ? '<span class="date-today">Live</span>' : '') + '</span>';
       html += '<span class="date-divider-line"></span>';
-      html += '<span class="date-divider-meta">' + dayEditions.length + (dayEditions.length > 1 ? ' editions' : ' edition') + ' &middot; ' + totalItems + ' items <span class="date-divider-arrow' + (expanded ? ' open' : '') + '">&#9654;</span></span>';
+      html += '<span class="date-divider-meta">' + dayEditions.length + (dayEditions.length > 1 ? ' editions' : ' edition') + ' · ' + totalItems + ' items <span class="date-divider-arrow' + (expanded ? ' open' : '') + '">&#9654;</span></span>';
       html += '</div>';
 
       // Day content
@@ -472,7 +624,7 @@ async function loadFeed() {
 
         // Show sub-label if multiple editions in one day
         if (dayEditions.length > 1) {
-          html += '<div class="ed-sub">' + esc(label) + ' &middot; ' + time + ' &middot; ' + itemCnt + ' items</div>';
+          html += '<div class="ed-sub">' + esc(label) + ' · ' + time + ' · ' + itemCnt + ' items</div>';
         }
 
         html += renderEdition(ed);
