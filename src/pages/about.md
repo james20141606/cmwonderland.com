@@ -25,7 +25,101 @@ Research interests: multimodal large language models, LLM reasoning / alignment,
 
 ### Contact
 
-Bellevue, WA 98004 · 347-889-0528 · [xc1490@nyu.edu](mailto:xc1490@nyu.edu) · [xupengchen.notion.site](https://xupengchen.notion.site) · [GitHub](https://github.com/james20141606) · [LinkedIn](https://www.linkedin.com/in/xupeng-chen-1a3b3b1a3/)
+<div class="contact-grid">
+  <div class="contact-item">
+    <span class="contact-icon">📍</span>
+    <div>
+      <div class="contact-label">Location</div>
+      <div class="contact-value">Bellevue, WA 98004</div>
+    </div>
+  </div>
+  <div class="contact-item">
+    <span class="contact-icon">☎︎</span>
+    <div>
+      <div class="contact-label">Phone</div>
+      <div class="contact-value">347-889-0528</div>
+    </div>
+  </div>
+  <div class="contact-item">
+    <span class="contact-icon">✉︎</span>
+    <div>
+      <div class="contact-label">Email</div>
+      <div class="contact-value"><a href="mailto:xc1490@nyu.edu">xc1490@nyu.edu</a></div>
+    </div>
+  </div>
+  <div class="contact-item">
+    <span class="contact-icon">🌐</span>
+    <div>
+      <div class="contact-label">Notion</div>
+      <div class="contact-value"><a href="https://xupengchen.notion.site" target="_blank" rel="noopener">xupengchen.notion.site</a></div>
+    </div>
+  </div>
+  <div class="contact-item">
+    <span class="contact-icon">💻</span>
+    <div>
+      <div class="contact-label">GitHub</div>
+      <div class="contact-value"><a href="https://github.com/james20141606" target="_blank" rel="noopener">james20141606</a></div>
+    </div>
+  </div>
+  <div class="contact-item">
+    <span class="contact-icon">💼</span>
+    <div>
+      <div class="contact-label">LinkedIn</div>
+      <div class="contact-value"><a href="https://www.linkedin.com/in/xupeng-chen-1a3b3b1a3/" target="_blank" rel="noopener">xupeng-chen</a></div>
+    </div>
+  </div>
+</div>
+
+<style>
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+  not-prose: true;
+}
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.85rem 1rem;
+  background: rgba(95, 211, 255, 0.05);
+  border: 1px solid rgba(95, 211, 255, 0.15);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+.contact-item:hover {
+  background: rgba(95, 211, 255, 0.09);
+  border-color: rgba(95, 211, 255, 0.3);
+  transform: translateY(-1px);
+}
+.contact-icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  opacity: 0.85;
+  line-height: 1;
+}
+.contact-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(200, 215, 240, 0.55);
+  margin-bottom: 0.15rem;
+}
+.contact-value {
+  font-size: 0.95rem;
+  color: #f1f5ff;
+  font-weight: 500;
+  line-height: 1.3;
+}
+.contact-value a {
+  color: #7fb8ff !important;
+  text-decoration: none !important;
+}
+.contact-value a:hover {
+  color: #9fd3ff !important;
+}
+</style>
 
 ---
 
@@ -70,6 +164,8 @@ Bellevue, WA 98004 · 347-889-0528 · [xc1490@nyu.edu](mailto:xc1490@nyu.edu) ·
 14. Le, C., Zhao, Y., Emami, N., Yadav, K., Liu, T., **Chen, X.** [*VoxelFormer: Parameter-Efficient Multi-Subject Visual Decoding from fMRI.*](https://arxiv.org/abs/2509.09015) arXiv (2025).
 15. Emami, N., Khalilian-Gourtani, A., Qian, J., Ratouchniak, A., **Chen, X.**, Wang, Y., Flinker, A. [*Machine Learning-Based Prediction of Speech Arrest During Direct Cortical Stimulation Mapping.*](https://arxiv.org/abs/2509.08703) arXiv (2025).
 16. Yang, K., **Chen, X.**, He, J. [*Multimodal Fusion of Skeleton Dynamics and Clinical Gait Features for Video-Based Cerebral Palsy Severity Assessment.*](https://arxiv.org/abs/2603.22371) arXiv (2026).
+17. Meng, S., **Chen, X.** [*Artificial Intelligence and Systemic Risk: A Unified Model of Performative Prediction, Algorithmic Herding, and Cognitive Dependency in Financial Markets.*](https://arxiv.org/abs/2604.03272) arXiv (2026).
+18. Chen, Y., **Chen, X.**, Wang, F., Jiao, N., Liu, J. [*VANGUARD: Vehicle-Anchored Ground Sample Distance Estimation for UAVs in GPS-Denied Environments.*](https://arxiv.org/abs/2603.04277) arXiv (2026).
 
 See also [Google Scholar](https://scholar.google.com/citations?user=d3HfTOsAAAAJ).
 
