@@ -73,51 +73,61 @@ Research interests: multimodal large language models, LLM reasoning / alignment,
 <style>
 .contact-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 0.75rem;
   margin: 1.5rem 0;
-  not-prose: true;
 }
-.contact-item {
+.contact-grid .contact-item {
   display: flex;
   align-items: center;
-  gap: 0.9rem;
+  gap: 0.85rem;
   padding: 0.85rem 1rem;
   background: rgba(95, 211, 255, 0.05);
   border: 1px solid rgba(95, 211, 255, 0.15);
   border-radius: 10px;
   transition: all 0.2s ease;
+  min-width: 0;
 }
-.contact-item:hover {
+.contact-grid .contact-item:hover {
   background: rgba(95, 211, 255, 0.09);
   border-color: rgba(95, 211, 255, 0.3);
   transform: translateY(-1px);
 }
-.contact-icon {
-  font-size: 1.3rem;
+.contact-grid .contact-item > div {
+  min-width: 0;
+  flex: 1;
+}
+.contact-grid .contact-icon {
+  font-size: 1.25rem !important;
   flex-shrink: 0;
   opacity: 0.85;
   line-height: 1;
 }
-.contact-label {
-  font-size: 0.72rem;
+.contact-grid .contact-label {
+  font-size: 0.7rem !important;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: rgba(200, 215, 240, 0.55);
   margin-bottom: 0.15rem;
+  font-weight: 500;
+  line-height: 1.2;
 }
-.contact-value {
-  font-size: 0.95rem;
+.contact-grid .contact-value {
+  font-size: 0.88rem !important;
   color: #f1f5ff;
   font-weight: 500;
   line-height: 1.3;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
-.contact-value a {
+.contact-grid .contact-value a {
   color: #7fb8ff !important;
   text-decoration: none !important;
+  background-image: none !important;
 }
-.contact-value a:hover {
+.contact-grid .contact-value a:hover {
   color: #9fd3ff !important;
+  background-size: 0 !important;
 }
 </style>
 
