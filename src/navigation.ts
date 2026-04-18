@@ -32,6 +32,23 @@ export const headerData = {
       ],
     },
     {
+      text: 'Fun',
+      links: [
+        {
+          text: 'Fun & Curious Papers',
+          href: getPermalink('/fun-pages/'),
+        },
+        {
+          text: 'Quantum Entanglement',
+          href: getPermalink('/quantum/'),
+        },
+        {
+          text: 'Anniversary Clock',
+          href: getPermalink('/anniversary/'),
+        },
+      ],
+    },
+    {
       text: 'About',
       href: getPermalink('/about'),
     },
