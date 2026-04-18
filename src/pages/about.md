@@ -73,9 +73,15 @@ Research interests: multimodal large language models, LLM reasoning / alignment,
 <style>
 .contact-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: 1fr;
   gap: 0.75rem;
   margin: 1.5rem 0;
+}
+@media (min-width: 640px) {
+  .contact-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 860px) {
+  .contact-grid { grid-template-columns: repeat(3, 1fr); }
 }
 .contact-grid .contact-item {
   display: flex;
