@@ -69,7 +69,7 @@ export const footerData = {
   secondaryLinks: [],
   socialLinks: [
     { ariaLabel: 'Github', icon: 'tabler:brand-github', href: 'https://github.com/james20141606' },
-    { ariaLabel: 'LinkedIn', icon: 'tabler:brand-linkedin', href: 'https://www.linkedin.com/in/xupeng-chen-1a3b3b1a3/' },
+    { ariaLabel: 'LinkedIn', icon: 'tabler:brand-linkedin', href: 'https://www.linkedin.com/in/xupeng-chen-9b8024b7/' },
     { ariaLabel: 'Mail', icon: 'tabler:mail', href: 'mailto:xupeng.chen@nyu.edu' },
     { ariaLabel: 'RSS', icon: 'tabler:rss', href: getAsset('/rss.xml') },
   ],
