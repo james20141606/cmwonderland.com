@@ -2,8 +2,64 @@
 import { SITE } from 'astrowind:config';
 ---
 
-<span
-  class="self-center ml-2 rtl:ml-0 rtl:mr-2 text-2xl md:text-xl font-bold whitespace-nowrap"
->
-  <span class="bg-gradient-to-r from-indigo-600 via-blue-500 to-purple-600 dark:from-indigo-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent">{SITE?.name}</span>
+<link
+  href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap"
+  rel="stylesheet"
+/>
+
+<span class="cy-logo">
+  <span class="dot" aria-hidden="true"></span>
+  <span class="name">{SITE?.name}</span>
+  <span class="os" aria-hidden="true">/OS</span>
 </span>
+
+<style>
+  .cy-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    white-space: nowrap;
+  }
+  .cy-logo .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #05d9e8;
+    box-shadow: 0 0 10px #05d9e8;
+    animation: cyLogoPulse 2s ease-in-out infinite;
+  }
+  @keyframes cyLogoPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+  }
+  .cy-logo .name {
+    font-family: 'Instrument Serif', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 24px;
+    letter-spacing: 0.01em;
+    background: linear-gradient(90deg, #ff2bd6 0%, #ffea3a 25%, #4dc5ff 50%, #9effb2 75%, #ff2bd6 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: cyLogoGrad 6s linear infinite;
+  }
+  @keyframes cyLogoGrad {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+  }
+  .cy-logo .os {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: rgba(5, 217, 232, 0.55);
+    text-transform: uppercase;
+    margin-left: 2px;
+    margin-top: 2px;
+  }
+  @media (max-width: 640px) {
+    .cy-logo .name { font-size: 20px; }
+    .cy-logo .os { display: none; }
+  }
+</style>
