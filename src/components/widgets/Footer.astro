@@ -47,9 +47,15 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '' } = Ast
         <span class="nf-corner bl"></span>
         <span class="nf-corner br"></span>
 
-        <div class="nf-map-holder" id="nfMap">
-          <script is:inline type="text/javascript" id="clustrmaps" src="//cdn.clustrmaps.com/map_v2.js?cl=ffffff&w=720&t=n&d=MGAfMNv-Snrv0Yg1d2t2EH3ATBUCJtdgbna_qHvb4AI&co=302dad"></script>
-        </div>
+        <a class="nf-map-holder nf-raw" id="nfMap" href="https://clustrmaps.com/site/1c21v" rel="noopener" target="_blank" title="ClustrMaps — where visitors come from">
+          <img
+            src="//www.clustrmaps.com/map_v2.png?d=MGAfMNv-Snrv0Yg1d2t2EH3ATBUCJtdgbna_qHvb4AI&cl=ffffff&w=720&co=302dad"
+            alt="World map of site visitors"
+            loading="lazy"
+            decoding="async"
+            width="720"
+          />
+        </a>
 
         <div class="nf-stats">
           <div class="nf-stat">
@@ -214,17 +220,22 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '' } = Ast
   .nf-map-holder {
     display: flex;
     justify-content: center;
-    min-height: 380px;
     margin: 0 auto;
     max-width: 720px;
     overflow: hidden;
+    aspect-ratio: 720 / 360;
+    background: rgba(5, 5, 11, 0.2);
+    border-radius: 2px;
   }
-  /* ClustrMap canvas sizing */
-  .nf-map-holder > * { max-width: 100% !important; }
-  .nf-map-holder canvas,
-  .nf-map-holder img,
-  .nf-map-holder div {
-    max-width: 100% !important;
+  .nf-map-holder img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: opacity 0.3s;
+  }
+  .nf-map-holder:hover img {
+    opacity: 0.92;
   }
 
   .nf-stats {
