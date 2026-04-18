@@ -81,6 +81,55 @@ const metadata = {
       </svg>
     </div>
 
+    <section class="nf-shelfwrap">
+      <a href="/fun-pages/" class="nf-shelf">
+        <div class="nf-shelf-label">
+          <span class="dot"></span>
+          <span>SHELF · 13 ENTRIES · CURATED</span>
+        </div>
+        <div class="nf-shelf-grid">
+          <div class="nf-shelf-main">
+            <h2 class="nf-shelf-title">Fun &amp; <em>Curious</em> Papers</h2>
+            <p class="nf-shelf-sub">A separate room of the notebook — the papers I most enjoyed making, laid out like an editorial shelf. Brains &amp; speech, AI &amp; the world, vision &amp; the edges, and one small love game.</p>
+            <div class="nf-shelf-tags">
+              <span>Nat. Mach. Intell.</span>
+              <span>PNAS</span>
+              <span>Nat. Comm.</span>
+              <span>arXiv ×8</span>
+              <span>essay</span>
+              <span>toy</span>
+            </div>
+          </div>
+          <div class="nf-shelf-mini">
+            <div class="nf-mini-card">
+              <span class="no">01</span>
+              <span class="ttl">Neural speech decoding</span>
+              <span class="pg">NAT.MACH.INTELL</span>
+            </div>
+            <div class="nf-mini-card">
+              <span class="no">02</span>
+              <span class="ttl">AI &amp; systemic risk</span>
+              <span class="pg">ARXIV · 26</span>
+            </div>
+            <div class="nf-mini-card">
+              <span class="no">07</span>
+              <span class="ttl">Subject-agnostic transformer</span>
+              <span class="pg">NAT.COMM.</span>
+            </div>
+            <div class="nf-mini-card accent">
+              <span class="no">13</span>
+              <span class="ttl">MengMeng 2048</span>
+              <span class="pg">INTERLUDE</span>
+            </div>
+          </div>
+        </div>
+        <div class="nf-shelf-cta">
+          <span class="nf-shelf-cta-text">OPEN THE SHELF</span>
+          <span class="nf-shelf-cta-arr">→</span>
+        </div>
+      </a>
+    </section>
+
     <section class="nf-listwrap">
       <div class="nf-section-head">
         <span class="bar"></span>
@@ -149,6 +198,229 @@ const metadata = {
     margin: 0 auto;
     padding: 56px 24px 96px;
   }
+
+  /* ======== Fun Pages shelf card ======== */
+  .nf-shelfwrap {
+    position: relative;
+    z-index: 1;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 56px 24px 0;
+  }
+  .nf-shelf {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    padding: 28px 30px 24px;
+    border: 1px solid rgba(95, 211, 255, 0.28);
+    border-radius: 2px;
+    background:
+      linear-gradient(135deg, rgba(95, 211, 255, 0.04), rgba(170, 130, 255, 0.03)),
+      rgba(10, 20, 40, 0.55);
+    backdrop-filter: blur(6px);
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s, background 0.25s;
+    overflow: hidden;
+  }
+  .nf-shelf::before,
+  .nf-shelf::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border: 1px solid rgba(95, 211, 255, 0.4);
+    pointer-events: none;
+  }
+  .nf-shelf::before {
+    top: 8px; left: 8px;
+    border-right: none; border-bottom: none;
+  }
+  .nf-shelf::after {
+    bottom: 8px; right: 8px;
+    border-left: none; border-top: none;
+  }
+  .nf-shelf:hover {
+    border-color: rgba(95, 211, 255, 0.55);
+    transform: translateY(-2px);
+    box-shadow: 0 24px 48px rgba(20, 40, 80, 0.3),
+                0 0 40px rgba(95, 211, 255, 0.1);
+  }
+  .nf-shelf:hover::before,
+  .nf-shelf:hover::after {
+    border-color: #5fd3ff;
+  }
+
+  .nf-shelf-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(95, 211, 255, 0.85);
+    margin-bottom: 16px;
+  }
+  .nf-shelf-label .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #5fd3ff;
+    box-shadow: 0 0 8px #5fd3ff, 0 0 3px #5fd3ff;
+    animation: shelfPulse 1.8s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes shelfPulse {
+    0%, 100% { opacity: 0.6; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.15); }
+  }
+
+  .nf-shelf-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  @media (min-width: 860px) {
+    .nf-shelf-grid {
+      grid-template-columns: 1.1fr 1fr;
+      gap: 32px;
+    }
+  }
+
+  .nf-shelf-title {
+    font-family: 'Instrument Serif', 'Times New Roman', serif !important;
+    font-weight: 400 !important;
+    font-size: clamp(32px, 4vw, 44px) !important;
+    line-height: 1.02 !important;
+    letter-spacing: -0.015em !important;
+    color: #f1f5ff !important;
+    margin: 0 0 12px !important;
+  }
+  .nf-shelf-title em {
+    color: #5fd3ff;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .nf-shelf-sub {
+    font-family: 'Instrument Serif', 'Times New Roman', serif !important;
+    font-style: italic !important;
+    font-size: 15.5px !important;
+    line-height: 1.6 !important;
+    color: rgba(210, 220, 245, 0.8) !important;
+    margin: 0 0 18px !important;
+    max-width: 56ch;
+  }
+  .nf-shelf-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .nf-shelf-tags span {
+    display: inline-block;
+    padding: 3px 8px;
+    border: 1px solid rgba(95, 211, 255, 0.22);
+    background: rgba(95, 211, 255, 0.05);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: rgba(160, 200, 240, 0.75);
+    text-transform: lowercase;
+  }
+
+  .nf-shelf-mini {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  @media (min-width: 520px) {
+    .nf-shelf-mini {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .nf-mini-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid rgba(95, 211, 255, 0.12);
+    background: rgba(10, 20, 40, 0.45);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11.5px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .nf-mini-card .no {
+    color: #ff7eb6;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    min-width: 18px;
+  }
+  .nf-mini-card .ttl {
+    color: rgba(220, 230, 250, 0.88);
+    font-family: 'Instrument Serif', 'Times New Roman', serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0;
+    line-height: 1.2;
+    min-width: 0;
+  }
+  .nf-mini-card .pg {
+    font-size: 8.5px;
+    color: rgba(95, 211, 255, 0.55);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .nf-shelf:hover .nf-mini-card {
+    border-color: rgba(95, 211, 255, 0.22);
+  }
+  .nf-mini-card.accent {
+    border-color: rgba(255, 126, 182, 0.25);
+    background: rgba(30, 10, 25, 0.5);
+  }
+  .nf-mini-card.accent .ttl {
+    color: #ffd0e1;
+  }
+  .nf-mini-card.accent .pg {
+    color: rgba(255, 126, 182, 0.7);
+  }
+
+  .nf-shelf-cta {
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px dashed rgba(95, 211, 255, 0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #5fd3ff;
+  }
+  .nf-shelf-cta-arr {
+    font-size: 16px;
+    transition: transform 0.25s;
+    display: inline-block;
+  }
+  .nf-shelf:hover .nf-shelf-cta-arr {
+    transform: translateX(6px);
+  }
+  .nf-shelf-cta::before {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(95, 211, 255, 0.35));
+    margin-right: 14px;
+    order: 1;
+  }
+  .nf-shelf-cta-text { order: 2; }
+  .nf-shelf-cta-arr { order: 3; margin-left: 10px; }
   .nf-section-head {
     display: flex;
     justify-content: center;
