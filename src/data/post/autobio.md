@@ -38,7 +38,23 @@ I spent a lot of time typing the words, formatting them and organize them in a g
 [回忆录 关于正义的故事 | James Chen’s Blogs](https://www.cmwonderland.com/2018/04/11/auto11/) <br>
 [回忆录 年表 | James Chen’s Blogs](https://www.cmwonderland.com/2018/04/11/auto12/)
 
-### Book preview
+### 下载完整 PDF（最新版）
+
+**最新版（2026 年重新排版，78 页）：** [📖 下载《陈炳林回忆录》PDF](/chenbinglin-memoir.pdf)
+
+---
+
+### 旧版与其他格式（存档）
+
+**Read on Gitbook**
+
+[爷爷回忆录](https://james20141606.gitbooks.io/grandpa-autobiography/content/)
+
+**Download PDF（旧版 A4 / B5 排版）**
+
+[GitHub 下载](https://github.com/james20141606/somethingmore/tree/master/grandpa_autobiography)
+
+**Book preview**
 
 **A4**
 
@@ -47,19 +63,6 @@ I spent a lot of time typing the words, formatting them and organize them in a g
 **B5**
 
 <iframe src=" https://drive.google.com/file/d/18-WA9WnxuCwaK4wWSOmV04Iv3gNcnxHu/preview" width="100%" height="600px"></iframe>
-
-### Read on Gitbook
-
-
-[爷爷回忆录](https://james20141606.gitbooks.io/grandpa-autobiography/content/)
-
-
-
-### Download PDF
-
-**最新版（2026 年重新排版，78 页）：** [📖 下载《陈炳林回忆录》PDF](/chenbinglin-memoir.pdf)
-
-旧版（A4 / B5 两种排版）：[GitHub 下载](https://github.com/james20141606/somethingmore/tree/master/grandpa_autobiography)
 
 
 
