@@ -8,6 +8,8 @@ category: "book"
 draft: false
 ---
 
+> 二〇二六年五月二十四日，爷爷陈炳林离世，享年八十六岁。我重新整理排版了这本回忆录，并写下了一篇追忆：[追忆我的爷爷](/posts/remember-grandpa)。
+
 I've spent a lot of my time and energy into this project. I encourage grandpa for many times to write down his experience. I always love and respects my grandpa and grandma for their contribution and sacrifice to the whole family. Their brave, diligent characteristics always give me strength from the deepest of my heart. I typed all my grandpa's manuscripts into word. Grandpa said he always cried when writing down the hard time, I was also deeply touched, about the kindness, wisdom, friendship fifty year ago, they taught me a lot.
 
 I consider the organizing work as a informative and precious course for me. I compose it in gitbook, later in this website, and print it to send to grandparents. To treasure the glorious old days.
@@ -54,7 +56,10 @@ I spent a lot of time typing the words, formatting them and organize them in a g
 
 
 ### Download PDF
-[A4及B5两种排版pdf下载](https://github.com/james20141606/somethingmore/tree/master/grandpa_autobiography)
+
+**最新版（2026 年重新排版，78 页）：** [📖 下载《陈炳林回忆录》PDF](/chenbinglin-memoir.pdf)
+
+旧版（A4 / B5 两种排版）：[GitHub 下载](https://github.com/james20141606/somethingmore/tree/master/grandpa_autobiography)
 
 
 
