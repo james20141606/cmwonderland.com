@@ -9,10 +9,10 @@ const { label, title, lede, ledeZh } = Astro.props;
 ---
 
 <header class="wl-intro">
-  {label && <p class="wl-label wl-rise" style="--i:0">{label}</p>}
-  <h1 class="wl-rise" style="--i:1" set:html={title} />
+  {label && <p class="wl-label">{label}</p>}
+  <h1 set:html={title} />
   {(lede || ledeZh) && (
-    <p class="wl-intro-lede wl-rise" style="--i:2">
+    <p class="wl-intro-lede">
       {lede}
       {ledeZh && <span lang="zh">{ledeZh}</span>}
     </p>

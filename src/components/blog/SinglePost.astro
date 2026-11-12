@@ -22,14 +22,14 @@ const isZh = /[一-鿿]/.test(post.title);
 
 <article class="wl-wrap" lang={isZh ? 'zh' : undefined}>
   <header class="wl-article-head">
-    <p class="wl-label wl-article-meta wl-rise" style="--i:0">
+    <p class="wl-label wl-article-meta">
       <time datetime={post.publishDate.toISOString()}>{date}</time>
       {post.category && <a href={getPermalink(post.category.slug, 'category')}>{post.category.title}</a>}
       {post.readingTime && <span>{post.readingTime} min read</span>}
       <span><span id="busuanzi_value_page_pv">–</span> views</span>
     </p>
-    <h1 class="wl-rise" style="--i:1">{post.title}</h1>
-    {post.excerpt && <p class="wl-article-dek wl-rise" style="--i:2">{post.excerpt}</p>}
+    <h1>{post.title}</h1>
+    {post.excerpt && <p class="wl-article-dek">{post.excerpt}</p>}
   </header>
 
   <div class="wl-article-body" data-article-body>

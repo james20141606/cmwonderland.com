@@ -51,9 +51,9 @@ const work = [
 
 const rooms = [
   { title: 'Fun & Curious Papers', zh: '', kind: 'Shelf', desc: 'The papers I most enjoyed making, laid out like an editorial shelf.', href: '/fun-pages/', reload: true },
-  { title: 'Quantum Entanglement', zh: '量子纠缠', kind: 'Interactive', desc: 'Bloch spheres, Bell states, CHSH and the double slit — to play with.', href: '/quantum/', reload: true },
-  { title: 'Finance Briefing', zh: '', kind: 'Daily', desc: 'Global markets and sector rotations, refreshed by an automated pipeline.', href: '/news', reload: false },
-  { title: '陈炳林回忆录', zh: '', kind: 'Memoir', desc: '追忆我的爷爷——他亲笔写下的回忆录，重新排版成书。', href: '/posts/remember-grandpa', reload: false },
+  { title: 'Quantum Entanglement', zh: '量子纠缠', kind: 'Interactive', desc: 'Bloch spheres, Bell states, CHSH and the double slit, all interactive.', href: '/quantum/', reload: true },
+  { title: 'Finance Briefing', zh: '', kind: 'Daily', desc: 'Global markets and sector moves, updated twice a day by an automated pipeline.', href: '/news', reload: false },
+  { title: '陈炳林回忆录', zh: '', kind: 'Memoir', desc: '爷爷亲笔写下的回忆录，我重新排版印成了书，附一篇追忆。', href: '/posts/remember-grandpa', reload: false },
   { title: 'Projects', zh: '', kind: 'Category', desc: 'Built things. Broken things. Occasionally useful.', href: '/categories/projects', reload: false },
   { title: 'Anniversary Clock', zh: '致孟孟', kind: 'Personal', desc: '时光里的每一秒。', href: '/anniversary', reload: true },
 ];
@@ -62,31 +62,31 @@ const metadata = {
   title: 'Xupeng Chen — WonderLand',
   ignoreTitleTemplate: true,
   description:
-    'Xupeng Chen — research scientist working on large language and multimodal models, and on decoding speech from the human brain. Papers, notes and a notebook kept since 2018.',
+    'Xupeng Chen is a research scientist working on large language and multimodal models and on decoding speech from the human brain. Papers, and a notebook kept since 2018.',
 };
 ---
 
 <Layout metadata={metadata}>
   <div class="wl-wrap">
     <section class="hero">
-      <p class="wl-label wl-rise hero-eyebrow" style="--i:0"><span lang="zh">陈旭鹏</span><span>Brain &amp; AI in Future</span></p>
-      <h1 class="wl-rise" style="--i:1">
+      <p class="wl-label hero-eyebrow"><span lang="zh">陈旭鹏</span><span>Brain &amp; AI in Future</span></p>
+      <h1>
         Xupeng <em>Chen</em>
       </h1>
       <div class="hero-grid">
-        <p class="hero-lede wl-rise" style="--i:2">
+        <p class="hero-lede">
           I work on large language and multimodal models, and on decoding speech from the human brain.
-          Research scientist at TikTok in Seattle; Ph.D. in electrical engineering from NYU, and a
-          biologist at Tsinghua before that.
+          Research scientist at TikTok in Seattle. Ph.D. in electrical engineering from NYU; before that, a
+          biology undergraduate at Tsinghua.
         </p>
-        <ul class="hero-links wl-rise" style="--i:3">
+        <ul class="hero-links">
           <li><a class="wl-arrow" href="/about">About &amp; CV</a></li>
           <li><a class="wl-arrow" href="https://scholar.google.com/citations?user=d3HfTOsAAAAJ" rel="me noopener">Google Scholar</a></li>
           <li><a class="wl-arrow" href="https://github.com/james20141606" rel="me noopener">GitHub</a></li>
           <li><a class="wl-arrow" href="mailto:xupeng.chen@nyu.edu">Email</a></li>
         </ul>
       </div>
-      <div class="hero-fig wl-rise" style="--i:4">
+      <div class="hero-fig wl-fade">
         <CortexTraces />
       </div>
     </section>

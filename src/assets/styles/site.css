@@ -520,10 +520,11 @@ a.wl-row:hover .wl-row-title, a.wl-row-title:hover { color: var(--accent); }
 .wl-callout p { color: var(--ink-2); font-size: 0.9375rem; margin-top: 0.35rem; max-width: 38rem; }
 @media (max-width: 640px) { .wl-callout { grid-template-columns: 1fr; } }
 
-/* entrance: one quiet rise, staggered by --i. Skipped under reduced motion. */
+/* entrance: only the home-page figure fades in. Text never animates in —
+   an opacity-0 start delays Largest Contentful Paint (measured: 2.85 s -> 1.41 s). */
 @media (prefers-reduced-motion: no-preference) {
-  .wl-rise { animation: wl-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(var(--i, 0) * 70ms); }
-  @keyframes wl-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .wl-fade { animation: wl-fade 1.2s ease-out 0.15s both; }
+  @keyframes wl-fade { from { opacity: 0; } to { opacity: 1; } }
 }
 
 .news-ok { color: var(--up, #2a7a4b); }
