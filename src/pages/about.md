@@ -2,18 +2,22 @@
 layout: ~/layouts/MarkdownLayout.astro
 title: "About"
 label: "Xupeng Chen · 陈旭鹏"
-subtitle: "Research scientist working on large language and multimodal models, and on decoding speech from the human brain."
+subtitle: "CTO of Dimension Gate (维度之门). I work on large language and multimodal models, and on decoding speech from the human brain."
 ---
 
 ## About me
 
 **My name is Xupeng Chen, born in CHINA in 1995.**
 
-I'm currently a Research Scientist at [TikTok](https://www.tiktok.com/) in Seattle, working on LLM / multimodal AI for e-commerce — SFT and reinforcement learning for multimodal LLMs, grounding and alignment strategies (verifiable rewards, retrieval-augmented reasoning, semantic consistency), and multimarket multimodal models for large-scale governance and content moderation.
+I'm the CTO of [Dimension Gate (维度之门)](https://dimension-gate.com/about), the company behind MinuteX, Readoow, EduMindX and Consoult.
+
+Before that I was a Research Scientist at [TikTok](https://www.tiktok.com/) in Seattle, working on LLM / multimodal AI for e-commerce — SFT and reinforcement learning for multimodal LLMs, grounding and alignment strategies (verifiable rewards, retrieval-augmented reasoning, semantic consistency), and multimarket multimodal models for large-scale governance and content moderation.
 
 I completed my Ph.D. in Electrical Engineering at [NYU Tandon](https://engineering.nyu.edu/) in May 2025, advised by [Prof. Yao Wang](https://engineering.nyu.edu/faculty/yao-wang) in [NYU Video Lab](https://wp.nyu.edu/videolab/), and co-advised by [Prof. Adeen Flinker](https://med.nyu.edu/faculty/adeen-flinker) on neural speech decoding. Before that I studied biology (XueTang program) and minored in statistics at [Tsinghua University](https://www.tsinghua.edu.cn/en/).
 
 Research interests: multimodal large language models, LLM reasoning / alignment, neural speech decoding from ECoG/sEEG, and healthcare & brain–computer interface applications.
+
+I married Mengmeng on 25 May 2025. Our [anniversary clock](/anniversary) keeps count.
 
 ---
 
@@ -77,8 +81,12 @@ Research interests: multimodal large language models, LLM reasoning / alignment,
 
 ### Work
 
+**Dimension Gate (维度之门)** — [dimension-gate.com](https://dimension-gate.com/about)
+*CTO*
+- Products: MinuteX, Readoow, EduMindX, Consoult.
+
 **TikTok** — Seattle, WA
-*Research Scientist, LLM / Multimodal AI for E-commerce* | Jun 2025 – Present
+*Research Scientist, LLM / Multimodal AI for E-commerce* | joined Jun 2025
 - Trained multimodal LLMs with SFT + RL (RLHF / reward modeling variants), focusing on reasoning quality and uncertainty calibration.
 - Researched grounding & alignment methods including verifiable reward design, retrieval-augmented reasoning (RAG), and semantic consistency regularization.
 - Built production-grade multimodal moderation systems for e-commerce, supporting multi-market deployment with improved precision/recall trade-offs and reduced labeling cost.
