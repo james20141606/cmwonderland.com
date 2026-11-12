@@ -3,7 +3,8 @@
 ## 2026-11 视觉重构（分支 `redesign-2026`，读这一节就够，下面的旧总结部分已过时）
 
 - **设计系统**：`src/assets/styles/site.css`。所有颜色、字体、间距都是 `:root` / `.dark` 里的变量（`--paper` `--ink` `--accent` 等），组件只读变量，不写颜色字面量。类名一律 `wl-` 前缀。改配色只改这两个变量块。
-- **字体**：Newsreader（英文衬线）+ Noto Serif SC（中文）+ Inter（UI）+ JetBrains Mono（元数据），全部经 fontsource 自托管，在 `src/components/CustomStyles.astro` 引入。不要引 Google Fonts（国内被墙）。Noto Serif SC 必须用切片版 `400.css` / `600.css`，不要用 `chinese-simplified-*.css`（那是 1.5MB 的整包）。
+- **字体**：Newsreader（英文衬线）+ Inter（UI）+ JetBrains Mono（元数据），经 fontsource 自托管，在 `src/components/CustomStyles.astro` 引入。中文用系统宋体（`--cjk` 变量）。不要引 Google Fonts（国内被墙），也不要加中文 webfont：试过 Noto Serif SC，一页要拉 20 多个切片，线上 LCP 到了 6 秒。
+- **动画**：首屏文字不要用从透明开始的入场动画，LCP 会等它显现（实测首页 2.85s → 1.42s）。只有首页那张图（canvas）保留淡入。
 - **明暗主题**：`src/config.yaml` 里 `ui.theme: system`，页头有切换按钮。
 - **页面骨架**：`PageLayout` → `SiteHeader` / `SiteFooter`；内页标题用 `PageIntro`；列表统一用 `.wl-rows` / `.wl-post`；文章正文用 `.wl-prose`。
 - **首页**：`src/pages/index.astro`，代表作列表是手写的，要和 `/about` 的论文列表保持一致。签名图在 `src/components/CortexTraces.astro`（canvas 脊线图，模拟数据）。
