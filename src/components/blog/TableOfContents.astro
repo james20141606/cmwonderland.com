@@ -1,61 +1,64 @@
 ---
-// Table of Contents component - rendered client-side from headings
+// Table of contents: built client-side from the article headings, shown as a
+// sticky side rail on wide screens, with the section in view marked.
 ---
 
-<nav id="toc-container" class="hidden mx-auto px-6 sm:px-6 max-w-3xl mb-6">
-  <details class="bg-gray-50 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 p-4" open>
-    <summary class="cursor-pointer font-semibold text-default dark:text-slate-300 select-none flex items-center gap-2">
-      <svg class="w-5 h-5 text-primary dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h10M4 18h10" />
-      </svg>
-      Table of Contents
-    </summary>
-    <ul id="toc-list" class="mt-3 space-y-1 text-sm"></ul>
-  </details>
+<nav class="wl-toc" id="toc-container" aria-label="On this page" hidden>
+  <span class="wl-label">On this page</span>
+  <ol id="toc-list"></ol>
 </nav>
 
 <script is:inline>
-(function() {
-  function buildTOC() {
-    var container = document.getElementById('toc-container');
+(function () {
+  if (window.__wlToc) return;
+  window.__wlToc = true;
+  var io = null;
+
+  function build() {
+    if (io) { io.disconnect(); io = null; }
+    var nav = document.getElementById('toc-container');
     var list = document.getElementById('toc-list');
-    if (!container || !list) return;
+    var prose = document.querySelector('[data-prose]');
+    var body = document.querySelector('[data-article-body]');
+    if (!nav || !list || !prose || !body) return;
 
-    var article = document.querySelector('article');
-    if (!article) return;
+    var headings = prose.querySelectorAll('h1, h2, h3, h4');
+    if (headings.length < 3) { nav.hidden = true; body.dataset.toc = 'false'; return; }
 
-    var headings = article.querySelectorAll('h2, h3, h4');
-    if (headings.length < 3) {
-      container.classList.add('hidden');
-      return;
-    }
-
+    var min = 6;
+    headings.forEach(function (h) { min = Math.min(min, +h.tagName[1]); });
     list.innerHTML = '';
-    headings.forEach(function(h) {
+    var links = {};
+    var used = {};
+    headings.forEach(function (h, i) {
       if (!h.id) {
-        h.id = h.textContent.trim().toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+        var base = h.textContent.trim().toLowerCase().replace(/[^\w一-鿿\s-]/g, '').replace(/\s+/g, '-') || 'section';
+        var id = base, n = 2;
+        while (used[id] || document.getElementById(id)) id = base + '-' + n++;
+        h.id = id;
       }
-      var level = parseInt(h.tagName[1]);
+      used[h.id] = true;
       var li = document.createElement('li');
-      var indent = level === 2 ? '' : level === 3 ? 'ml-4' : 'ml-8';
-      li.className = indent;
       var a = document.createElement('a');
       a.href = '#' + h.id;
       a.textContent = h.textContent;
-      a.className = 'text-muted hover:text-primary dark:hover:text-indigo-400 transition-colors duration-200 block py-0.5';
-      li.appendChild(a);
-      list.appendChild(li);
+      a.dataset.depth = String(Math.min(+h.tagName[1] - min + 2, 4));
+      li.appendChild(a); list.appendChild(li);
+      links[h.id] = a;
     });
+    nav.hidden = false; body.dataset.toc = 'true';
 
-    container.classList.remove('hidden');
+    io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        Object.keys(links).forEach(function (k) { links[k].removeAttribute('aria-current'); });
+        links[e.target.id] && links[e.target.id].setAttribute('aria-current', 'true');
+      });
+    }, { rootMargin: '-80px 0px -70% 0px' });
+    headings.forEach(function (h) { io.observe(h); });
   }
 
-  // Run on page load and Astro transitions
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', buildTOC);
-  } else {
-    buildTOC();
-  }
-  document.addEventListener('astro:page-load', buildTOC);
+  document.addEventListener('astro:page-load', build);
+  if (document.readyState !== 'loading') build();
 })();
 </script>

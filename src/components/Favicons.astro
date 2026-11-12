@@ -1,6 +1,7 @@
 ---
-import favIcon from '~/assets/favicons/favicon.ico';
+// The original favicon.ico is a 688px PNG (205 KB); serve a 96px copy instead.
+import favIcon from '~/assets/favicons/favicon-96.png';
 ---
 
-<link rel="shortcut icon" href={favIcon} />
-<link rel="icon" type="image/x-icon" href={favIcon} />
+<link rel="icon" type="image/png" href={favIcon.src} />
+<link rel="apple-touch-icon" href={favIcon.src} />

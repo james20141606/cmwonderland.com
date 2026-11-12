@@ -1,5 +1,7 @@
 ---
 import '~/assets/styles/tailwind.css';
+// KaTeX styles and fonts are bundled (the CDN link had a wrong SRI hash and was being blocked).
+import 'katex/dist/katex.min.css';
 
 import { I18N } from 'astrowind:config';
 
@@ -11,7 +13,6 @@ import Metadata from '~/components/common/Metadata.astro';
 import SiteVerification from '~/components/common/SiteVerification.astro';
 import Analytics from '~/components/common/Analytics.astro';
 import BasicScripts from '~/components/common/BasicScripts.astro';
-import ParticleBackground from '~/components/ParticleBackground.astro';
 import BackToTop from '~/components/BackToTop.astro';
 import ProgressBar from '~/components/ProgressBar.astro';
 import ImageLightbox from '~/components/ImageLightbox.astro';
@@ -30,7 +31,7 @@ const { language, textDirection } = I18N;
 ---
 
 <!doctype html>
-<html lang={language} dir={textDirection} class="dark 2xl:text-[20px]">
+<html lang={language} dir={textDirection}>
   <head>
     <CommonMeta />
     <Favicons />
@@ -40,8 +41,6 @@ const { language, textDirection } = I18N;
     <SiteVerification />
     <Analytics />
 
-    <!-- KaTeX CSS for math rendering -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tQ/R4ZTQT7kNUAATC4oITE1Bf+AMiF+HiW/S6gkIHH/M4sMbCbz" crossorigin="anonymous" />
 
     <!-- Busuanzi visitor counter -->
     <script is:inline async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -50,9 +49,9 @@ const { language, textDirection } = I18N;
     <ClientRouter fallback="swap" />
   </head>
 
-  <body class="antialiased text-default bg-page tracking-tight">
+  <body class="antialiased">
+    <a class="wl-skip" href="#main">Skip to content</a>
     <ProgressBar />
-    <ParticleBackground />
     <slot />
 
     <BackToTop />

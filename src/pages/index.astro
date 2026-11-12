@@ -1,493 +1,196 @@
 ---
-// Landing page — Cyberpunk CRT Glitchwave (B) with Fluid Neon name gradient (A)
+import Layout from '~/layouts/PageLayout.astro';
+import CortexTraces from '~/components/CortexTraces.astro';
+import { fetchPosts } from '~/utils/blog';
+import { getPermalink } from '~/utils/permalinks';
+
+const posts = await fetchPosts();
+const latest = posts.slice(0, 6);
+const firstYear = Math.min(...posts.map((p) => p.publishDate.getFullYear()));
+
+const fmt = new Intl.DateTimeFormat('en', { year: 'numeric', month: 'short', timeZone: 'UTC' });
+
+// Kept in step with the publication list on /about.
+const work = [
+  {
+    year: '2024',
+    title: 'A neural speech decoding framework leveraging deep learning and speech synthesis',
+    venue: 'Nature Machine Intelligence',
+    note: 'First author',
+    href: 'https://doi.org/10.1038/s42256-024-00824-8',
+  },
+  {
+    year: '2025',
+    title: 'Transformer-based neural speech decoding from surface and depth electrode signals',
+    venue: 'Journal of Neural Engineering',
+    note: 'First author',
+    href: 'https://iopscience.iop.org/article/10.1088/1741-2552/adab21',
+  },
+  {
+    year: '2023',
+    title: 'Distributed feedforward and feedback cortical processing supports human speech production',
+    venue: 'PNAS',
+    note: '',
+    href: 'https://www.pnas.org/doi/10.1073/pnas.2300255120',
+  },
+  {
+    year: '2025',
+    title: 'R-LLaVA: improving Med-VQA understanding through visual region of interest',
+    venue: 'IJCNN',
+    note: 'First author',
+    href: 'https://arxiv.org/abs/2410.20327',
+  },
+  {
+    year: '2026',
+    title: 'ENCORE: entropy-guided reward composition for multi-head safety reward models',
+    venue: 'AAAI',
+    note: '',
+    href: 'https://arxiv.org/abs/2503.20995',
+  },
+];
+
+const rooms = [
+  { title: 'Fun & Curious Papers', zh: '', kind: 'Shelf', desc: 'The papers I most enjoyed making, laid out like an editorial shelf.', href: '/fun-pages/', reload: true },
+  { title: 'Quantum Entanglement', zh: '量子纠缠', kind: 'Interactive', desc: 'Bloch spheres, Bell states, CHSH and the double slit — to play with.', href: '/quantum/', reload: true },
+  { title: 'Finance Briefing', zh: '', kind: 'Daily', desc: 'Global markets and sector rotations, refreshed by an automated pipeline.', href: '/news', reload: false },
+  { title: '陈炳林回忆录', zh: '', kind: 'Memoir', desc: '追忆我的爷爷——他亲笔写下的回忆录，重新排版成书。', href: '/posts/remember-grandpa', reload: false },
+  { title: 'Projects', zh: '', kind: 'Category', desc: 'Built things. Broken things. Occasionally useful.', href: '/categories/projects', reload: false },
+  { title: 'Anniversary Clock', zh: '致孟孟', kind: 'Personal', desc: '时光里的每一秒。', href: '/anniversary', reload: true },
+];
+
+const metadata = {
+  title: 'Xupeng Chen — WonderLand',
+  ignoreTitleTemplate: true,
+  description:
+    'Xupeng Chen — research scientist working on large language and multimodal models, and on decoding speech from the human brain. Papers, notes and a notebook kept since 2018.',
+};
 ---
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>WonderLand — Xupeng Chen</title>
-<link rel="shortcut icon" type="image/x-icon" href="/landing/favicon.ico" />
-<meta name="keywords" content="Xupeng Chen, WonderLand, CMwonderland, Biology, AI, Finance" />
-<meta name="description" content="Brain & AI in Future" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<Layout metadata={metadata}>
+  <div class="wl-wrap">
+    <section class="hero">
+      <p class="wl-label wl-rise hero-eyebrow" style="--i:0"><span lang="zh">陈旭鹏</span><span>Brain &amp; AI in Future</span></p>
+      <h1 class="wl-rise" style="--i:1">
+        Xupeng <em>Chen</em>
+      </h1>
+      <div class="hero-grid">
+        <p class="hero-lede wl-rise" style="--i:2">
+          I work on large language and multimodal models, and on decoding speech from the human brain.
+          Research scientist at TikTok in Seattle; Ph.D. in electrical engineering from NYU, and a
+          biologist at Tsinghua before that.
+        </p>
+        <ul class="hero-links wl-rise" style="--i:3">
+          <li><a class="wl-arrow" href="/about">About &amp; CV</a></li>
+          <li><a class="wl-arrow" href="https://scholar.google.com/citations?user=d3HfTOsAAAAJ" rel="me noopener">Google Scholar</a></li>
+          <li><a class="wl-arrow" href="https://github.com/james20141606" rel="me noopener">GitHub</a></li>
+          <li><a class="wl-arrow" href="mailto:xupeng.chen@nyu.edu">Email</a></li>
+        </ul>
+      </div>
+      <div class="hero-fig wl-rise" style="--i:4">
+        <CortexTraces />
+      </div>
+    </section>
+
+    <section class="wl-section" aria-labelledby="h-work">
+      <div class="wl-section-head">
+        <span class="wl-label">01</span>
+        <h2 id="h-work">Selected work</h2>
+      </div>
+      <div>
+        <div class="wl-rows">
+          {work.map((w) => (
+            <a class="wl-row" href={w.href} rel="noopener">
+              <span class="wl-label">{w.year}</span>
+              <span class="wl-row-title">{w.title}</span>
+              <span class="wl-label wl-row-aside">{w.venue}</span>
+              {w.note && <span class="wl-row-sub">{w.note}</span>}
+            </a>
+          ))}
+        </div>
+        <p class="wl-section-foot"><a class="wl-arrow" href="/about#publications">All publications</a></p>
+      </div>
+    </section>
+
+    <section class="wl-section" aria-labelledby="h-writing">
+      <div class="wl-section-head">
+        <span class="wl-label">02</span>
+        <h2 id="h-writing">Notebook</h2>
+      </div>
+      <div>
+        <div class="wl-rows">
+          {latest.map((p) => (
+            <a class="wl-row" href={getPermalink(p.permalink, 'post')}>
+              <time class="wl-label" datetime={p.publishDate.toISOString()}>{fmt.format(p.publishDate)}</time>
+              <span class="wl-row-title">{p.title}</span>
+              {p.category && <span class="wl-label wl-row-aside">{p.category.title}</span>}
+            </a>
+          ))}
+        </div>
+        <p class="wl-section-foot"><a class="wl-arrow" href="/blog">All {posts.length} posts, since {firstYear}</a></p>
+      </div>
+    </section>
+
+    <section class="wl-section" aria-labelledby="h-rooms">
+      <div class="wl-section-head">
+        <span class="wl-label">03</span>
+        <h2 id="h-rooms">Other rooms</h2>
+      </div>
+      <ul class="rooms">
+        {rooms.map((r) => (
+          <li>
+            <a href={r.href} {...(r.reload ? { 'data-astro-reload': true } : {})}>
+              <span class="wl-label">{r.kind}</span>
+              <span class="room-title">{r.title}{r.zh && <span lang="zh"> · {r.zh}</span>}</span>
+              <span class="room-desc">{r.desc}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</Layout>
+
 <style>
-  :root {
-    --cyan: #05d9e8;
-    --magenta: #ff2a6d;
-    --yellow: #ffe066;
-    --green: #d1fff0;
-    --bg: #05050b;
+  .hero { padding-block: clamp(3rem, 9vw, 7.5rem) clamp(3rem, 6vw, 5rem); }
+  .hero h1 {
+    margin-top: 1.25rem;
+    font-size: clamp(3.75rem, 14.5vw, 12.5rem);
+    font-weight: 300; line-height: 0.86; letter-spacing: -0.05em;
+    font-variation-settings: 'opsz' 72;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {
-    height: 100%; background: var(--bg); color: var(--green);
-    font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace;
-    -webkit-font-smoothing: antialiased; overflow: hidden;
+  .hero h1 em { font-style: italic; font-weight: 300; letter-spacing: -0.045em; }
+  .hero-eyebrow { display: flex; align-items: baseline; gap: 1.1rem; }
+  .hero-eyebrow [lang='zh'] { font: 600 0.9375rem/1 'Noto Serif SC', 'Songti SC', serif; letter-spacing: 0.32em; color: var(--ink); }
+  .hero-grid {
+    display: grid; grid-template-columns: minmax(0, 34rem) auto; justify-content: space-between; align-items: end; gap: 2rem 4rem;
+    margin-top: clamp(2rem, 4vw, 3.25rem);
   }
-
-  /* ——— synthwave grid floor ——— */
-  .grid-floor {
-    position: fixed; left: 0; right: 0; bottom: 0; height: 55%;
-    perspective: 600px; pointer-events: none; z-index: 0;
-  }
-  .grid-inner {
-    position: absolute; left: -20%; right: -20%; top: 0; bottom: 0;
-    background-image:
-      linear-gradient(var(--magenta) 1px, transparent 1px),
-      linear-gradient(90deg, var(--cyan) 1px, transparent 1px);
-    background-size: 80px 80px;
-    transform: rotateX(62deg);
-    opacity: .6;
-    mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 90%, transparent 100%);
-    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 90%, transparent 100%);
+  .hero-lede { font-size: clamp(1.1875rem, 1.9vw, 1.5rem); line-height: 1.45; color: var(--ink-2); letter-spacing: -0.008em; text-wrap: pretty; }
+  .hero-links { display: flex; flex-wrap: wrap; gap: 0.9rem 1.75rem; padding-bottom: 0.4rem; }
+  .hero-fig { margin-top: clamp(2.5rem, 6vw, 4.5rem); }
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
   }
 
-  /* ——— glow sun ——— */
-  .sun {
-    position: fixed; left: 50%; top: 42%;
-    width: 360px; height: 360px; border-radius: 50%;
-    background: radial-gradient(circle, #ffe066 0%, #ff6d2a 25%, #ff2a6d 50%, transparent 70%);
-    filter: blur(4px); opacity: .85; pointer-events: none;
-    transition: transform .22s ease-out; z-index: 0;
+  .rooms { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--rule); }
+  .rooms li { border-bottom: 1px solid var(--rule); }
+  .rooms li:nth-child(odd) { border-right: 1px solid var(--rule); }
+  .rooms a {
+    display: grid; gap: 0.5rem; height: 100%;
+    padding: 1.5rem 1.5rem 1.6rem 0; color: inherit; text-decoration: none;
+    transition: background 0.2s, padding 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
-  .sun-slits {
-    position: fixed; left: 50%; top: 42%;
-    width: 360px; height: 360px; border-radius: 50%;
-    background: repeating-linear-gradient(0deg, var(--bg) 0 3px, transparent 3px 14px);
-    opacity: .55; pointer-events: none; mix-blend-mode: multiply;
-    mask-image: linear-gradient(0deg, #000 30%, transparent 100%);
-    -webkit-mask-image: linear-gradient(0deg, #000 30%, transparent 100%);
-    transition: transform .22s ease-out; z-index: 0;
-  }
-
-  /* ——— CRT scanlines + vignette ——— */
-  .scanlines {
-    position: fixed; inset: 0; pointer-events: none; z-index: 1;
-    background-image: repeating-linear-gradient(0deg, rgba(5,217,232,.06) 0 1px, transparent 1px 3px);
-  }
-  .vignette {
-    position: fixed; inset: 0; pointer-events: none; z-index: 1;
-    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.8) 100%);
-  }
-
-  /* ——— cursor glow ——— */
-  .cursor-glow {
-    position: fixed; width: 220px; height: 220px; border-radius: 50%;
-    pointer-events: none; mix-blend-mode: screen; filter: blur(10px);
-    background: radial-gradient(circle, rgba(5,217,232,.3), transparent 60%);
-    opacity: 0; transition: opacity .2s; z-index: 1;
-  }
-  .cursor-glow.active { opacity: 1; }
-
-  /* ——— top bar (Shader OS style) ——— */
-  .topbar {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
-    padding: 18px 24px 0;
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
-    mix-blend-mode: difference; color: #fff;
-  }
-  .brand {
-    display: flex; align-items: center; gap: 10px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-  .brand .dot {
-    width: 7px; height: 7px; border-radius: 999px;
-    background: var(--cyan); box-shadow: 0 0 12px var(--cyan);
-  }
-  .brand b { font-weight: 500; letter-spacing: .22em; }
-  .brand span { color: rgba(255,255,255,.55); }
-  .meta {
-    display: flex; gap: 14px; align-items: center;
-    font-family: 'JetBrains Mono', monospace; font-size: 11px;
-    letter-spacing: .14em; color: rgba(255,255,255,.65);
-  }
-  .meta .chip {
-    padding: 6px 10px; border: 1px solid rgba(255,255,255,.12);
-    border-radius: 999px; background: rgba(8,10,16,.35);
-    backdrop-filter: blur(10px);
-  }
-  .meta .chip b { color: #fff; font-weight: 500; }
-
-  /* ——— main stage ——— */
-  html, body { overflow-y: auto; }
-  .stage {
-    position: relative; z-index: 10;
-    min-height: 100vh;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 80px 20px 60px;
-    gap: 18px;
-  }
-
-  /* ——— terminal frame ——— */
-  .terminal {
-    width: min(620px, 88%);
-    border: 1px solid rgba(5,217,232,.4);
-    background: rgba(5,5,11,.55);
-    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-    box-shadow: 0 0 0 1px rgba(255,42,109,.25), 0 0 60px rgba(5,217,232,.25);
-  }
-  .terminal-head {
-    padding: 8px 12px; border-bottom: 1px solid rgba(5,217,232,.2);
-    display: flex; justify-content: space-between;
-    font-size: 10px; color: var(--cyan); letter-spacing: .2em;
-  }
-  .terminal-body { padding: 28px 28px 22px; text-align: center; }
-
-  /* ——— avatar ——— */
-  .avatar {
-    width: 92px; height: 92px; border-radius: 50%; margin: 0 auto 18px;
-    border: 2px solid var(--cyan); overflow: hidden;
-    box-shadow: 0 0 0 4px var(--bg), 0 0 24px rgba(5,217,232,.7);
-  }
-  .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .avatar.ph {
-    background: linear-gradient(135deg, #00ffd0, #ff00a8 60%, #ffe066);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 30px; color: #000;
-  }
-  .avatar.ph img { display: none; }
-  .avatar.ph::after { content: 'XC'; }
-
-  /* ——— name with A's gradient (fluid neon) ——— */
-  .name {
-    margin: 0 0 8px; font-size: clamp(36px, 6vw, 48px); font-weight: 700;
-    letter-spacing: .04em; color: #f7f7f0; line-height: 1;
-    font-family: 'JetBrains Mono', monospace;
-    background: linear-gradient(90deg, #ff2bd6 0%, #ffea3a 25%, #4dc5ff 50%, #9effb2 75%, #ff2bd6 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-    background-size: 200% 100%;
-    animation: slideGrad 6s linear infinite;
-  }
-  @keyframes slideGrad { 0%{background-position:0% 0%} 100%{background-position:200% 0%} }
-
-  /* ——— tagline ——— */
-  .tagline {
-    font-size: 12px; color: #9ef5e5; letter-spacing: .15em; min-height: 18px;
-  }
-  .tagline .prompt { color: var(--magenta); }
-  .tagline .cursor { animation: blink 1s steps(2) infinite; }
-  @keyframes blink { 50% { opacity: 0; } }
-
-  /* ——— Fun Pages teaser ——— */
-  .fun {
-    width: min(620px, 88%); display: flex; flex-direction: column; align-items: stretch; gap: 10px;
-  }
-  .fun-head {
-    position: relative; overflow: hidden;
-    padding: 14px 18px; cursor: pointer; user-select: none;
-    border: 1px dashed rgba(5,217,232,.35);
-    background: linear-gradient(90deg,
-      rgba(5,217,232,.04) 0%,
-      rgba(255,42,109,.08) 50%,
-      rgba(255,224,102,.06) 100%);
-    background-size: 200% 100%;
-    animation: funShift 8s linear infinite;
-    transition: all .25s;
-    display: grid; grid-template-columns: auto 1fr auto auto; gap: 12px; align-items: center;
-  }
-  @keyframes funShift { 0%{background-position:0% 0} 100%{background-position:200% 0} }
-  .fun-head:hover {
-    border-style: solid; border-color: var(--cyan);
-    box-shadow: 0 0 30px rgba(5,217,232,.25), inset 0 0 24px rgba(5,217,232,.08);
-  }
-  .fun-head .glyph {
-    font-size: 22px; color: var(--magenta);
-    filter: drop-shadow(0 0 8px rgba(255,42,109,.6));
-    animation: funPulse 2.2s ease-in-out infinite;
-  }
-  @keyframes funPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15) rotate(-6deg)} }
-  .fun-head .lbl {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px; letter-spacing: .22em; color: var(--cyan); font-weight: 600;
-    text-transform: uppercase; text-align: left;
-  }
-  .fun-head .lbl .sub {
-    display: block; font-size: 10px; letter-spacing: .12em; color: rgba(209,255,240,.55);
-    font-weight: 400; text-transform: none; margin-top: 3px; font-style: italic;
-  }
-  .fun-head .badge {
-    font-family: 'JetBrains Mono', monospace; font-size: 10px;
-    padding: 4px 9px; border: 1px solid var(--magenta); color: var(--magenta);
-    background: rgba(255,42,109,.08); letter-spacing: .18em;
-    animation: badgeBlink 2s ease-in-out infinite;
-  }
-  @keyframes badgeBlink { 0%,100%{opacity:.75} 50%{opacity:1;box-shadow:0 0 14px rgba(255,42,109,.5)} }
-  .fun-head .chev {
-    font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--cyan);
-    transition: .35s ease;
-  }
-  .fun.open .fun-head .chev { transform: rotate(180deg); }
-  .fun.open .fun-head {
-    border-style: solid; border-color: rgba(5,217,232,.5);
-    animation: none; background-position: 0 0;
-  }
-
-  .fun-list {
-    display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; width: 100%;
-    max-height: 0; overflow: hidden; opacity: 0; transition: .4s ease;
-  }
-  .fun.open .fun-list { max-height: 320px; opacity: 1; }
-  .fun-list a {
-    display: flex; flex-direction: column; gap: 3px;
-    padding: 10px 12px; text-decoration: none; color: var(--green);
-    border: 1px solid rgba(5,217,232,.25); background: rgba(5,5,11,.5);
-    font-size: 10px; transition: .2s;
-  }
-  .fun-list a:hover { border-color: var(--cyan); background: rgba(5,217,232,.1); transform: translateY(-1px); }
-  .fun-list .k { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: rgba(5,217,232,.6); }
-  .fun-list .t { font-size: 14px; font-weight: 500; }
-  .fun-list .t em { color: var(--cyan); font-style: normal; }
-
-  /* ——— nav grid ——— */
-  .nav-grid {
-    display: grid; grid-template-columns: repeat(3, minmax(140px, 1fr));
-    gap: 8px; width: min(620px, 88%);
-  }
-  .nav-grid a {
-    position: relative; padding: 12px 14px; text-decoration: none;
-    color: var(--green); background: rgba(5,5,11,.6);
-    border: 1px solid rgba(5,217,232,.3);
-    font-size: 11px; letter-spacing: .18em; transition: all .12s;
-  }
-  .nav-grid a:hover {
-    color: var(--bg); background: var(--cyan);
-    border-color: var(--cyan);
-    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-    transform: translate(-2px, -2px);
-    box-shadow: 4px 4px 0 var(--magenta);
-  }
-  .nav-grid a .lbl { display: flex; justify-content: space-between; }
-  .nav-grid a .lbl span:first-child { font-weight: 600; }
-  .nav-grid a .sub { font-size: 9px; opacity: .8; margin-top: 4px; letter-spacing: .12em; }
-
-  /* ——— footer ——— */
-  .footer {
-    width: min(620px, 88%); text-align: center;
-    font-size: 9px; letter-spacing: .32em; color: rgba(5,217,232,.5);
-    margin-top: 8px;
-  }
-
-  /* ——— responsive ——— */
-  @media (max-width: 720px) {
-    .nav-grid { grid-template-columns: repeat(2, 1fr); }
-    .fun-list { grid-template-columns: 1fr; }
-    .fun-head { grid-template-columns: auto 1fr auto; }
-    .fun-head .badge { display: none; }
-    .meta { display: none; }
-    .stage { padding: 70px 16px 40px; }
+  .rooms li:nth-child(even) a { padding-left: 1.5rem; }
+  .rooms a:hover { background: var(--paper-2); padding-left: 1.1rem; }
+  .rooms li:nth-child(even) a:hover { padding-left: 2.1rem; }
+  .room-title { font-size: 1.4375rem; line-height: 1.2; letter-spacing: -0.015em; transition: color 0.18s; }
+  .room-title span { color: var(--ink-3); font-size: 0.8em; }
+  .rooms a:hover .room-title { color: var(--accent); }
+  .room-desc { font-size: 0.9375rem; line-height: 1.5; color: var(--ink-3); max-width: 26rem; }
+  @media (max-width: 640px) {
+    .rooms { grid-template-columns: 1fr; }
+    .rooms li:nth-child(odd) { border-right: 0; }
+    .rooms li:nth-child(even) a { padding-left: 0; }
+    .rooms a:hover, .rooms li:nth-child(even) a:hover { padding-left: 0.6rem; }
   }
 </style>
-</head>
-<body>
-
-  <!-- synthwave grid -->
-  <div class="grid-floor"><div class="grid-inner" id="gridInner"></div></div>
-
-  <!-- sun -->
-  <div class="sun" id="sun" style="transform:translate(-50%,-50%)"></div>
-  <div class="sun-slits" id="sunSlits" style="transform:translate(-50%,-50%)"></div>
-
-  <!-- overlays -->
-  <div class="scanlines"></div>
-  <div class="vignette"></div>
-  <div class="cursor-glow" id="cursorGlow"></div>
-
-  <!-- top bar (Shader OS style) -->
-  <div class="topbar">
-    <div class="brand">
-      <span class="dot"></span><b>WonderLand OS</b><span>/ v2.6</span>
-    </div>
-    <div class="meta">
-      <span class="chip">THEME <b>CYBERPUNK</b></span>
-      <span class="chip">FPS <b id="fps">—</b></span>
-      <span class="chip" id="clock">00:00:00</span>
-    </div>
-  </div>
-
-  <div class="stage">
-    <!-- terminal window -->
-    <div class="terminal">
-      <div class="terminal-head">
-        <span>~/XUPENG — zsh</span>
-        <span>▢ ▢ ◯</span>
-      </div>
-      <div class="terminal-body">
-        <div class="avatar">
-          <img id="portrait" alt="Xupeng Chen" onerror="this.parentElement.classList.add('ph')" />
-        </div>
-        <h1 class="name">XUPENG CHEN</h1>
-        <div class="tagline">
-          <span class="prompt">$</span> <span id="typed"></span><span class="cursor">█</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- primary nav: Blog / CV / etc. -->
-    <div class="nav-grid">
-      <a href="/blog/"><div class="lbl"><span>BLOG</span><span>✎</span></div><div class="sub">/blog</div></a>
-      <a href="/about/"><div class="lbl"><span>CV</span><span>◉</span></div><div class="sub">/about</div></a>
-      <a href="/categories/projects/"><div class="lbl"><span>PROJECT</span><span>▤</span></div><div class="sub">/projects</div></a>
-      <a href="https://github.com/james20141606"><div class="lbl"><span>GITHUB</span><span>⎔</span></div><div class="sub">@james20141606</div></a>
-      <a href="/categories/book/"><div class="lbl"><span>BOOK</span><span>❈</span></div><div class="sub">/book</div></a>
-      <a href="/news/"><div class="lbl"><span>NEWS</span><span>⌁</span></div><div class="sub">/news</div></a>
-    </div>
-
-    <!-- Fun Pages — collapsed by default, designed to tease -->
-    <div class="fun" id="fun">
-      <div class="fun-head" onclick="document.getElementById('fun').classList.toggle('open')">
-        <span class="glyph">✦</span>
-        <span class="lbl">Fun Pages
-          <span class="sub">psst... 3 little experiments hidden here →</span>
-        </span>
-        <span class="badge">×3 NEW</span>
-        <span class="chev">▾</span>
-      </div>
-      <div class="fun-list">
-        <a href="/quantum/">
-          <span class="k">01 · Interactive</span>
-          <span class="t">Quantum <em>Entanglement</em></span>
-        </a>
-        <a href="/anniversary/">
-          <span class="k">02 · Personal</span>
-          <span class="t">Anniversary <em>Clock</em></span>
-        </a>
-        <a href="/fun-pages/">
-          <span class="k">03 · Papers</span>
-          <span class="t">Fun <em>&</em> Curious Papers</span>
-        </a>
-      </div>
-    </div>
-
-    <div class="footer">░ POWERED BY XUPENG CHEN · CMWONDERLAND/NULL_SECTOR ░</div>
-  </div>
-
-<script>
-// ——— Portrait fallback ———
-(function(){
-  const img = document.getElementById('portrait');
-  if(!img) return;
-  const paths = ['/landing/css/images/portrait.jpg','landing/css/images/portrait.jpg'];
-  let i = 0;
-  img.addEventListener('error', () => {
-    i++;
-    if(i < paths.length) img.src = paths[i];
-    else img.parentElement.classList.add('ph');
-  });
-  img.src = paths[0];
-})();
-
-// ——— Nav-link fallback for preview ———
-(function(){
-  const isProd = /(^|\.)cmwonderland\.com$/i.test(location.hostname);
-  if(isProd) return;
-  const BASE = 'https://www.cmwonderland.com';
-  document.querySelectorAll('.nav-grid a[href^="/"], .fun-list a[href^="/"]').forEach(a=>{
-    a.href = BASE + a.getAttribute('href');
-    a.target = '_blank'; a.rel = 'noopener';
-  });
-})();
-
-// ——— Typewriter ———
-(function(){
-  const full = 'Brain & AI in Future';
-  const el = document.getElementById('typed');
-  let i = 0;
-  const iv = setInterval(()=>{
-    i++; el.textContent = full.slice(0, i);
-    if(i >= full.length) clearInterval(iv);
-  }, 55);
-})();
-
-// ——— Clock (Shader OS style) ———
-(function(){
-  function clock(){
-    const d = new Date();
-    const pad = n => String(n).padStart(2,'0');
-    document.getElementById('clock').textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-  }
-  setInterval(clock, 500); clock();
-})();
-
-// ——— FPS counter ———
-(function(){
-  let last = performance.now(), fAcc = 0, fCnt = 0;
-  function frame(){
-    const now = performance.now();
-    const dt = (now - last)/1000; last = now;
-    fAcc += dt; fCnt++;
-    if(fAcc > 0.5){ document.getElementById('fps').textContent = Math.round(fCnt/fAcc); fAcc=0; fCnt=0; }
-    requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-})();
-
-// ——— Grid animation + mouse tracking ———
-(function(){
-  let t = 0;
-  const grid = document.getElementById('gridInner');
-  const sun = document.getElementById('sun');
-  const sunSlits = document.getElementById('sunSlits');
-  const glow = document.getElementById('cursorGlow');
-  let mx = 0.5, my = 0.5, active = false;
-
-  document.addEventListener('pointermove', e => {
-    mx = e.clientX / innerWidth;
-    my = e.clientY / innerHeight;
-    active = true;
-
-    // cursor glow
-    glow.style.left = e.clientX + 'px';
-    glow.style.top = e.clientY + 'px';
-    glow.style.transform = 'translate(-50%,-50%)';
-    glow.classList.add('active');
-
-    // sun parallax
-    const ox = (mx - 0.5) * -30;
-    const oy = (my - 0.5) * -20;
-    const sunT = `translate(calc(-50% + ${ox}px), calc(-50% + ${oy}px))`;
-    sun.style.transform = sunT;
-    sunSlits.style.transform = sunT;
-  });
-
-  document.addEventListener('pointerleave', () => {
-    active = false;
-    glow.classList.remove('active');
-  });
-
-  // Nav hover glitch
-  const glitchChars = '█▓▒░╳╱╲╫╬▙▟';
-  document.querySelectorAll('.nav-grid a').forEach(a => {
-    const lblEl = a.querySelector('.lbl span:first-child');
-    const subEl = a.querySelector('.sub');
-    const origLabel = lblEl.textContent;
-    const origSub = subEl.textContent;
-    let gInt;
-    a.addEventListener('mouseenter', () => {
-      subEl.textContent = '> exec ' + origSub;
-      gInt = setInterval(() => {
-        lblEl.textContent = origLabel.split('').map((c,i) =>
-          Math.random() < 0.25 ? glitchChars[Math.floor(Math.random()*glitchChars.length)] : c
-        ).join('');
-      }, 70);
-    });
-    a.addEventListener('mouseleave', () => {
-      clearInterval(gInt);
-      lblEl.textContent = origLabel;
-      subEl.textContent = origSub;
-    });
-  });
-
-  // Grid scroll tick
-  setInterval(() => {
-    t++;
-    grid.style.backgroundPosition = `0 ${t % 80}px, 0 0`;
-  }, 70);
-})();
-</script>
-</body>
-</html>

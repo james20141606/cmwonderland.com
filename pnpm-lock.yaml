@@ -26,6 +26,12 @@ importers:
       '@fontsource-variable/jetbrains-mono':
         specifier: ^5.2.8
         version: 5.2.8
+      '@fontsource-variable/newsreader':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource/noto-serif-sc':
+        specifier: ^5.3.1
+        version: 5.3.1
       astro:
         specifier: ^5.12.9
         version: 5.17.1(@types/node@25.2.3)(jiti@1.21.7)(lightningcss@1.29.3)(rollup@4.57.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2)
@@ -35,6 +41,9 @@ importers:
       astro-icon:
         specifier: ^1.1.5
         version: 1.1.5
+      katex:
+        specifier: ^0.19.1
+        version: 0.19.1
       limax:
         specifier: 4.1.0
         version: 4.1.0
@@ -455,6 +464,12 @@ packages:
 
   '@fontsource-variable/jetbrains-mono@5.2.8':
     resolution: {integrity: sha512-WBA9elru6Jdp5df2mES55wuOO0WIrn3kpXnI4+W2ek5u3ZgLS9XS4gmIlcQhiZOWEKl95meYdvK7xI+ETLCq/Q==}
+
+  '@fontsource-variable/newsreader@5.3.0':
+    resolution: {integrity: sha512-rrzYi43qMpbzwuFtf9OkWH8sxAPVPcQQQEwXpPtwaKYeJ8yVg5aLs5kawmo1f2Q1t1M38TLmEKCkGVDsYwgdFw==}
+
+  '@fontsource/noto-serif-sc@5.3.1':
+    resolution: {integrity: sha512-nIK2HyNGcUi2TGwIfrk2MItkh0O3Y5+TI8iPfPSzoNY6uyXYfQ9qqch8czk3aa1VhV4EU52uwCYCe1UDKJELpg==}
 
   '@iconify-json/flat-color-icons@1.2.3':
     resolution: {integrity: sha512-KcmJ7CY0TKFv5GuBjiS4/v++jEcNXna1jfY+yq014tnw/MN/jMI2oYpoMHGuIpYtUqDu7eove+WySnOYO8nS3w==}
@@ -1286,6 +1301,10 @@ packages:
     resolution: {integrity: sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==}
     engines: {node: '>=18'}
 
+  commander@15.1.0:
+    resolution: {integrity: sha512-cgnQ88TRrWcC7pVq46RzJVRMktu3W2RcbnoidnfBsl1bmDCBwJS/udcIZpKoCrbAYYaCqsz1yZCVIgbIaU3ddQ==}
+    engines: {node: '>=22.12.0'}
+
   commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
 
@@ -1762,6 +1781,10 @@ packages:
 
   katex@0.16.28:
     resolution: {integrity: sha512-YHzO7721WbmAL6Ov1uzN/l5mY5WWWhJBSW+jq4tkfZfsxmo1hu6frS0EOswvjBUnWE6NtjEs48SFn5CQESRLZg==}
+    hasBin: true
+
+  katex@0.19.1:
+    resolution: {integrity: sha512-jG8uKntjSEcm2EpQOh0XturpPuuC9r3Sq5HLHdsFdWZT27E672SF19QEi+of0/YeOy15lDgRhKvr5614uRrEfA==}
     hasBin: true
 
   kleur@3.0.3:
@@ -3424,6 +3447,10 @@ snapshots:
 
   '@fontsource-variable/jetbrains-mono@5.2.8': {}
 
+  '@fontsource-variable/newsreader@5.3.0': {}
+
+  '@fontsource/noto-serif-sc@5.3.1': {}
+
   '@iconify-json/flat-color-icons@1.2.3':
     dependencies:
       '@iconify/types': 2.0.0
@@ -4327,6 +4354,8 @@ snapshots:
 
   commander@13.1.0: {}
 
+  commander@15.1.0: {}
+
   commander@2.20.3: {}
 
   commander@4.1.1: {}
@@ -4892,6 +4921,10 @@ snapshots:
   katex@0.16.28:
     dependencies:
       commander: 8.3.0
+
+  katex@0.19.1:
+    dependencies:
+      commander: 15.1.0
 
   kleur@3.0.3: {}
 

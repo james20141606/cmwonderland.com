@@ -1,0 +1,28 @@
+---
+import { fetchPosts } from '~/utils/blog';
+import { getPermalink, getBlogPermalink } from '~/utils/permalinks';
+
+export interface Props {
+  current?: string; // category slug, or undefined for "all"
+}
+const { current } = Astro.props;
+
+const posts = await fetchPosts();
+const counts = new Map<string, { title: string; n: number }>();
+for (const p of posts) {
+  if (!p.category) continue;
+  const c = counts.get(p.category.slug) ?? { title: p.category.title, n: 0 };
+  c.n += 1;
+  counts.set(p.category.slug, c);
+}
+const cats = [...counts.entries()].sort((a, b) => b[1].n - a[1].n);
+---
+
+<nav class="wl-chips" aria-label="Categories">
+  <a class="wl-chip" href={getBlogPermalink()} aria-current={!current ? 'page' : undefined}>All <small>{posts.length}</small></a>
+  {cats.map(([slug, c]) => (
+    <a class="wl-chip" href={getPermalink(slug, 'category')} aria-current={current === slug ? 'page' : undefined}>
+      {c.title} <small>{c.n}</small>
+    </a>
+  ))}
+</nav>

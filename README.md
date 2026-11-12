@@ -2,7 +2,7 @@
 
 Personal blog of James Chen - [www.cmwonderland.com](https://www.cmwonderland.com)
 
-Built with [Astro](https://astro.build/) + [AstroPaper](https://github.com/satnaing/astro-paper) theme.
+Built with [Astro](https://astro.build/) + [AstroWind](https://github.com/arthelokyo/astrowind) as the base, with a custom design system (`src/assets/styles/site.css`).
 
 ## Development
 

@@ -1,0 +1,88 @@
+---
+import { trimSlash, getAsset } from '~/utils/permalinks';
+
+const path = `/${trimSlash(new URL(Astro.url).pathname)}`;
+const isCurrent = (href: string) =>
+  href === '/blog'
+    ? path === '/blog' || path.startsWith('/blog/') || path.startsWith('/posts/') || path.startsWith('/categories/') || path.startsWith('/tags/')
+    : path === href || path.startsWith(`${href}/`);
+
+const main = [
+  { text: 'Blog', zh: '文章', href: '/blog' },
+  { text: 'About', zh: '关于', href: '/about' },
+  { text: 'Archives', zh: '归档', href: '/archives' },
+  { text: 'News', zh: '财经简报', href: '/news' },
+];
+const rooms = [
+  { text: 'Fun & Curious Papers', href: '/fun-pages/' },
+  { text: 'Quantum Entanglement', href: '/quantum/' },
+  { text: 'Anniversary Clock', href: '/anniversary' },
+];
+---
+
+<header class="wl-header" id="site-header">
+  <div class="wl-wrap wl-header-in">
+    <a class="wl-brand" href="/">
+      <span class="wl-seal" aria-hidden="true">陈</span>
+      <span class="wl-brand-name">WonderLand</span>
+    </a>
+
+    <nav class="wl-nav" aria-label="Primary">
+      <div class="wl-nav wl-nav-links">
+        {main.map((l) => (
+          <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.text}</a>
+        ))}
+        <div class="wl-drop">
+          <button class="wl-nav-btn" type="button" aria-haspopup="true">Fun <span aria-hidden="true">▾</span></button>
+          <div class="wl-drop-menu">
+            {rooms.map((l) => <a href={l.href} data-astro-reload>{l.text}</a>)}
+          </div>
+        </div>
+      </div>
+
+      <a class="wl-icon-btn" href={getAsset('/rss.xml')} aria-label="RSS feed" data-astro-reload>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9" /><path d="M4 4a16 16 0 0 1 16 16" /><circle cx="5" cy="19" r="1" /></svg>
+      </a>
+      <button class="wl-icon-btn wl-theme" type="button" aria-label="Switch between light and dark" data-aw-toggle-color-scheme>
+        <svg class="wl-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
+        <svg class="wl-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" /></svg>
+      </button>
+      <button class="wl-icon-btn wl-menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="wl-sheet" data-wl-menu>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16" /></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<div class="wl-sheet" id="wl-sheet" data-open="false">
+  {main.map((l) => (
+    <a href={l.href}>{l.text}<span lang="zh">{l.zh}</span></a>
+  ))}
+  <span class="wl-label">Fun</span>
+  <div class="wl-sheet-sub">
+    {rooms.map((l) => <a href={l.href} data-astro-reload>{l.text}</a>)}
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    if (window.__wlMenu) return;
+    window.__wlMenu = true;
+    function set(open) {
+      var sheet = document.getElementById('wl-sheet');
+      var btn = document.querySelector('[data-wl-menu]');
+      if (!sheet || !btn) return;
+      sheet.dataset.open = String(open);
+      btn.setAttribute('aria-expanded', String(open));
+      document.documentElement.style.overflow = open ? 'hidden' : '';
+    }
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-wl-menu]');
+      if (btn) return set(btn.getAttribute('aria-expanded') !== 'true');
+      if (e.target.closest('#wl-sheet a')) set(false);
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+    document.addEventListener('astro:after-swap', function () { document.documentElement.style.overflow = ''; });
+    window.matchMedia('(min-width: 821px)').addEventListener('change', function () { set(false); });
+  })();
+</script>

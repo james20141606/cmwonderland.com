@@ -1,0 +1,47 @@
+---
+import { getAsset } from '~/utils/permalinks';
+const year = new Date().getFullYear();
+---
+
+<footer class="wl-footer">
+  <div class="wl-wrap">
+    <div class="wl-footer-in">
+      <div>
+        <p class="wl-footer-mark">WonderLand</p>
+        <p class="wl-footer-note">Xupeng Chen's notebook — research, AI, biology, books and ordinary days. Written since 2018.</p>
+      </div>
+      <div>
+        <h2 class="wl-label">Read</h2>
+        <ul>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/archives">Archives</a></li>
+          <li><a href="/categories/book">Books</a></li>
+          <li><a href="/categories/projects">Projects</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="wl-label">Rooms</h2>
+        <ul>
+          <li><a href="/fun-pages/" data-astro-reload>Fun &amp; Curious Papers</a></li>
+          <li><a href="/quantum/" data-astro-reload>Quantum Entanglement</a></li>
+          <li><a href="/anniversary">Anniversary Clock</a></li>
+          <li><a href="/news">Finance Briefing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="wl-label">Elsewhere</h2>
+        <ul>
+          <li><a href="https://github.com/james20141606" rel="me noopener">GitHub</a></li>
+          <li><a href="https://scholar.google.com/citations?user=d3HfTOsAAAAJ" rel="me noopener">Google Scholar</a></li>
+          <li><a href="https://www.linkedin.com/in/xupeng-chen-9b8024b7/" rel="me noopener">LinkedIn</a></li>
+          <li><a href="mailto:xupeng.chen@nyu.edu">Email</a></li>
+          <li><a href={getAsset('/rss.xml')} data-astro-reload>RSS</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="wl-footer-base">
+      <span class="wl-label">© 2018–{year} Xupeng Chen</span>
+      <span class="wl-label"><span id="busuanzi_container_site_pv" style="display:none"><span id="busuanzi_value_site_pv"></span> visits · </span>Seattle, WA</span>
+    </div>
+  </div>
+</footer>

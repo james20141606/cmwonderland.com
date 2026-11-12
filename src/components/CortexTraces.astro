@@ -1,0 +1,167 @@
+---
+// Signature figure for the home page: a ridgeline of simulated cortical
+// traces, drawn in ink. It nods to the ECoG recordings behind the neural
+// speech decoding work — it is a sketch, not data, and the caption says so.
+---
+
+<figure class="ct">
+  <div class="ct-stage">
+    <canvas class="ct-canvas" data-cortex aria-hidden="true"></canvas>
+    <span class="wl-label ct-y" aria-hidden="true">electrodes ↑</span>
+    <span class="wl-label ct-x" aria-hidden="true">time →</span>
+  </div>
+  <figcaption>
+    <span class="wl-label">Fig. 1</span>
+    <span>
+      Simulated cortical traces — a sketch after the ECoG recordings behind
+      <a class="wl-link" href="https://doi.org/10.1038/s42256-024-00824-8" rel="noopener">A neural speech decoding framework</a>.
+      <span class="ct-hint">Move the pointer across it to speak.</span>
+    </span>
+  </figcaption>
+</figure>
+
+<style>
+  .ct { margin: 0; }
+  .ct-stage { position: relative; height: clamp(13rem, 34vw, 25rem); }
+  .ct-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; }
+  .ct-y { position: absolute; left: 0; top: 0.25rem; }
+  .ct-x { position: absolute; right: 0; bottom: -0.25rem; }
+  figcaption {
+    display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1rem;
+    margin-top: 1.25rem; padding-top: 0.9rem; border-top: 1px solid var(--rule);
+    font: 400 0.8125rem/1.5 var(--sans); color: var(--ink-3);
+    max-width: 44rem;
+  }
+  figcaption .wl-label { padding-top: 0.2em; }
+  @media (hover: none) { .ct-hint { display: none; } }
+</style>
+
+<script is:inline>
+  (function () {
+    if (window.__wlCortex) return;
+    window.__wlCortex = true;
+
+    var state = null;
+
+    function start() {
+      stop();
+      var canvas = document.querySelector('canvas[data-cortex]');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var s = (state = { raf: 0, visible: true, px: null, target: null, canvas: canvas, t0: performance.now() });
+      var W = 0, H = 0, rows = 0, phases = [];
+      var col = {};
+
+      function colours() {
+        var cs = getComputedStyle(document.documentElement);
+        col.ink = cs.getPropertyValue('--ink').trim();
+        col.paper = cs.getPropertyValue('--paper').trim();
+        col.accent = cs.getPropertyValue('--accent').trim();
+      }
+
+      function resize() {
+        var r = canvas.getBoundingClientRect();
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = r.width; H = r.height;
+        canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        rows = W < 640 ? 18 : 30;
+        phases = [];
+        // deterministic per-row phases so the figure looks the same on every load
+        for (var i = 0; i < rows; i++) {
+          var a = Math.sin(i * 12.9898) * 43758.5453;
+          var b = Math.sin(i * 78.233) * 12543.123;
+          phases.push([(a - Math.floor(a)) * 6.283, (b - Math.floor(b)) * 6.283, i * 0.61, i * 1.37]);
+        }
+        if (reduce || !s.visible) draw(0);
+      }
+
+      function draw(t) {
+        ctx.clearRect(0, 0, W, H);
+        var top = H * 0.2, bottom = H - 10;
+        var gap = (bottom - top) / (rows - 1);
+        var amp = Math.min(gap * 5.2, H * 0.34);
+        var step = W < 640 ? 3 : 4;
+        var accentRow = Math.round(rows * 0.63);
+        // the "utterance": a burst sweeping left to right, or pinned to the pointer
+        var sweep = ((t * 0.055) % 1.5) - 0.25;
+        if (s.target != null) s.px = s.px == null ? s.target : s.px + (s.target - s.px) * 0.08;
+        else if (s.px != null) s.px = null;
+        var burstX = s.px != null ? s.px : sweep;
+
+        ctx.lineJoin = 'round';
+        for (var i = 0; i < rows; i++) {
+          var p = phases[i];
+          var base = top + i * gap;
+          var c = 0.5 + 0.13 * Math.sin(p[2] + t * 0.11);
+          var w = 0.15 + 0.05 * Math.sin(p[3]);
+          var lag = (i - rows / 2) * 0.0045;
+          ctx.beginPath();
+          ctx.moveTo(0, base);
+          for (var x = 0; x <= W + step; x += step) {
+            var xn = x / W;
+            var d = (xn - c) / w;
+            var env = Math.exp(-0.5 * d * d);
+            var sig = Math.sin(xn * 38 + p[0] + t * 0.9) * 0.5 + Math.sin(xn * 91 + p[1] - t * 1.35) * 0.3 + Math.sin(xn * 17 + p[2] + t * 0.4) * 0.4;
+            var v = Math.pow(Math.abs(sig), 1.7) * env * 0.62;
+            var db = (xn - burstX - lag) / 0.07;
+            var burst = Math.exp(-0.5 * db * db) * (0.3 + 0.7 * Math.pow(Math.sin(xn * 46 + p[1] + t * 3.2), 2));
+            var jitter = Math.sin(xn * 260 + p[0] * 3 + t * 2.4) * 0.012;
+            ctx.lineTo(x, base - amp * (v + burst * 0.55 + jitter));
+          }
+          ctx.lineTo(W, base + gap + 2); ctx.lineTo(0, base + gap + 2); ctx.closePath();
+          ctx.globalAlpha = 1; ctx.fillStyle = col.paper; ctx.fill();   // occlude the rows behind
+          var isAccent = i === accentRow;
+          ctx.globalAlpha = isAccent ? 1 : 0.28 + 0.62 * (i / rows);
+          ctx.strokeStyle = isAccent ? col.accent : col.ink;
+          ctx.lineWidth = isAccent ? 1.4 : 1;
+          ctx.beginPath();
+          for (var x2 = 0; x2 <= W + step; x2 += step) {
+            var xn2 = x2 / W;
+            var d2 = (xn2 - c) / w;
+            var env2 = Math.exp(-0.5 * d2 * d2);
+            var sig2 = Math.sin(xn2 * 38 + p[0] + t * 0.9) * 0.5 + Math.sin(xn2 * 91 + p[1] - t * 1.35) * 0.3 + Math.sin(xn2 * 17 + p[2] + t * 0.4) * 0.4;
+            var v2 = Math.pow(Math.abs(sig2), 1.7) * env2 * 0.62;
+            var db2 = (xn2 - burstX - lag) / 0.07;
+            var burst2 = Math.exp(-0.5 * db2 * db2) * (0.3 + 0.7 * Math.pow(Math.sin(xn2 * 46 + p[1] + t * 3.2), 2));
+            var jitter2 = Math.sin(xn2 * 260 + p[0] * 3 + t * 2.4) * 0.012;
+            var y = base - amp * (v2 + burst2 * 0.55 + jitter2);
+            if (x2 === 0) ctx.moveTo(x2, y); else ctx.lineTo(x2, y);
+          }
+          ctx.stroke();
+        }
+        ctx.globalAlpha = 1;
+      }
+
+      function frame(now) {
+        if (state !== s) return;
+        if (s.visible) draw((now - s.t0) / 1000);
+        s.raf = requestAnimationFrame(frame);
+      }
+
+      colours(); resize();
+      s.ro = new ResizeObserver(resize); s.ro.observe(canvas);
+      s.mo = new MutationObserver(function () { colours(); if (reduce) draw(0); });
+      s.mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+      s.io = new IntersectionObserver(function (e) { s.visible = e[0].isIntersecting; });
+      s.io.observe(canvas);
+      canvas.addEventListener('pointermove', function (e) {
+        var r = canvas.getBoundingClientRect(); s.target = (e.clientX - r.left) / r.width;
+      });
+      canvas.addEventListener('pointerleave', function () { s.target = null; });
+      if (reduce) draw(0.8); else s.raf = requestAnimationFrame(frame);
+    }
+
+    function stop() {
+      if (!state) return;
+      cancelAnimationFrame(state.raf);
+      state.ro && state.ro.disconnect(); state.mo && state.mo.disconnect(); state.io && state.io.disconnect();
+      state = null;
+    }
+
+    document.addEventListener('astro:page-load', start);
+    document.addEventListener('astro:before-swap', stop);
+    if (document.readyState !== 'loading') start();
+  })();
+</script>

@@ -2,30 +2,37 @@
 import { APP_BLOG } from 'astrowind:config';
 
 import { getRelatedPosts } from '~/utils/blog';
-import BlogHighlightedPosts from '../widgets/BlogHighlightedPosts.astro';
+import { getPermalink, getBlogPermalink } from '~/utils/permalinks';
 import type { Post } from '~/types';
-import { getBlogPermalink } from '~/utils/permalinks';
 
 export interface Props {
   post: Post;
 }
 
 const { post } = Astro.props;
-
-const relatedPosts = post.tags ? await getRelatedPosts(post, 4) : [];
+const related = APP_BLOG.isRelatedPostsEnabled && post.tags ? await getRelatedPosts(post, 4) : [];
+const fmt = new Intl.DateTimeFormat('en', { year: 'numeric', month: 'short', timeZone: 'UTC' });
 ---
 
-{
-  APP_BLOG.isRelatedPostsEnabled ? (
-    <BlogHighlightedPosts
-      classes={{
-        container:
-          'pt-0 lg:pt-0 md:pt-0 intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade',
-      }}
-      title="Related Posts"
-      linkText="View All Posts"
-      linkUrl={getBlogPermalink()}
-      postIds={relatedPosts.map((post) => post.id)}
-    />
-  ) : null
-}
+<div class="wl-wrap">
+  <section class="wl-section" style="margin-top: clamp(3.5rem, 7vw, 6rem)" aria-labelledby="h-related">
+    <div class="wl-section-head">
+      <span class="wl-label">Keep reading</span>
+      <h2 id="h-related">Related</h2>
+    </div>
+    <div>
+      {related.length > 0 && (
+        <div class="wl-rows">
+          {related.map((p) => (
+            <a class="wl-row" href={getPermalink(p.permalink, 'post')}>
+              <time class="wl-label" datetime={p.publishDate.toISOString()}>{fmt.format(p.publishDate)}</time>
+              <span class="wl-row-title">{p.title}</span>
+              {p.category && <span class="wl-label wl-row-aside">{p.category.title}</span>}
+            </a>
+          ))}
+        </div>
+      )}
+      <p class="wl-section-foot"><a class="wl-arrow" href={getBlogPermalink()}>Back to the notebook</a></p>
+    </div>
+  </section>
+</div>

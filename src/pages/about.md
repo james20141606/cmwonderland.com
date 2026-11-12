@@ -1,6 +1,8 @@
 ---
 layout: ~/layouts/MarkdownLayout.astro
-title: "About Me"
+title: "About"
+label: "Xupeng Chen · 陈旭鹏"
+subtitle: "Research scientist working on large language and multimodal models, and on decoding speech from the human brain."
 ---
 
 ## About me
@@ -27,42 +29,36 @@ Research interests: multimodal large language models, LLM reasoning / alignment,
 
 <div class="contact-grid">
   <div class="contact-item">
-    <span class="contact-icon">📍</span>
     <div>
       <div class="contact-label">Location</div>
       <div class="contact-value">Bellevue, WA 98004</div>
     </div>
   </div>
   <div class="contact-item">
-    <span class="contact-icon">☎︎</span>
     <div>
       <div class="contact-label">Phone</div>
       <div class="contact-value">347-889-0528</div>
     </div>
   </div>
   <div class="contact-item">
-    <span class="contact-icon">✉︎</span>
     <div>
       <div class="contact-label">Email</div>
       <div class="contact-value"><a href="mailto:xc1490@nyu.edu">xc1490@nyu.edu</a></div>
     </div>
   </div>
   <div class="contact-item">
-    <span class="contact-icon">🌐</span>
     <div>
       <div class="contact-label">Notion</div>
       <div class="contact-value"><a href="https://xupengchen.notion.site" target="_blank" rel="noopener">xupengchen.notion.site</a></div>
     </div>
   </div>
   <div class="contact-item">
-    <span class="contact-icon">💻</span>
     <div>
       <div class="contact-label">GitHub</div>
       <div class="contact-value"><a href="https://github.com/james20141606" target="_blank" rel="noopener">james20141606</a></div>
     </div>
   </div>
   <div class="contact-item">
-    <span class="contact-icon">💼</span>
     <div>
       <div class="contact-label">LinkedIn</div>
       <div class="contact-value"><a href="https://www.linkedin.com/in/xupeng-chen-1a3b3b1a3/" target="_blank" rel="noopener">xupeng-chen</a></div>
@@ -71,70 +67,10 @@ Research interests: multimodal large language models, LLM reasoning / alignment,
 </div>
 
 <style>
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.75rem;
-  margin: 1.5rem 0;
-}
-@media (min-width: 640px) {
-  .contact-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (min-width: 860px) {
-  .contact-grid { grid-template-columns: repeat(3, 1fr); }
-}
-.contact-grid .contact-item {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  padding: 0.85rem 1rem;
-  background: rgba(95, 211, 255, 0.05);
-  border: 1px solid rgba(95, 211, 255, 0.15);
-  border-radius: 10px;
-  transition: all 0.2s ease;
-  min-width: 0;
-}
-.contact-grid .contact-item:hover {
-  background: rgba(95, 211, 255, 0.09);
-  border-color: rgba(95, 211, 255, 0.3);
-  transform: translateY(-1px);
-}
-.contact-grid .contact-item > div {
-  min-width: 0;
-  flex: 1;
-}
-.contact-grid .contact-icon {
-  font-size: 1.25rem !important;
-  flex-shrink: 0;
-  opacity: 0.85;
-  line-height: 1;
-}
-.contact-grid .contact-label {
-  font-size: 0.7rem !important;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: rgba(200, 215, 240, 0.55);
-  margin-bottom: 0.15rem;
-  font-weight: 500;
-  line-height: 1.2;
-}
-.contact-grid .contact-value {
-  font-size: 0.88rem !important;
-  color: #f1f5ff;
-  font-weight: 500;
-  line-height: 1.3;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-.contact-grid .contact-value a {
-  color: #7fb8ff !important;
-  text-decoration: none !important;
-  background-image: none !important;
-}
-.contact-grid .contact-value a:hover {
-  color: #9fd3ff !important;
-  background-size: 0 !important;
-}
+.contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 0 2rem; margin: 1.5rem 0; border-top: 1px solid var(--rule); }
+.contact-grid .contact-item { padding: 0.85rem 0; border-bottom: 1px solid var(--rule); min-width: 0; margin: 0; }
+.contact-grid .contact-label { font: 500 0.6875rem/1.4 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
+.contact-grid .contact-value { font: 400 1rem/1.4 var(--sans); color: var(--ink); overflow-wrap: anywhere; margin-top: 0.15rem; }
 </style>
 
 ---

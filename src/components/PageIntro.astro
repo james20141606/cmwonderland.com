@@ -1,0 +1,21 @@
+---
+export interface Props {
+  label?: string;
+  title: string; // may contain <em>
+  lede?: string;
+  ledeZh?: string;
+}
+const { label, title, lede, ledeZh } = Astro.props;
+---
+
+<header class="wl-intro">
+  {label && <p class="wl-label wl-rise" style="--i:0">{label}</p>}
+  <h1 class="wl-rise" style="--i:1" set:html={title} />
+  {(lede || ledeZh) && (
+    <p class="wl-intro-lede wl-rise" style="--i:2">
+      {lede}
+      {ledeZh && <span lang="zh">{ledeZh}</span>}
+    </p>
+  )}
+  <slot />
+</header>

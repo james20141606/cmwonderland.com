@@ -1,33 +1,20 @@
 ---
-// Reading/page progress bar at top of page
+// Reading progress: a 2px accent line at the top of the viewport.
 ---
-
-<div id="progress-bar" class="fixed top-0 left-0 h-[3px] bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 z-[9999] transition-[width] duration-150 ease-out" style="width:0%"></div>
-
+<div id="progress-bar" class="wl-progress" aria-hidden="true"></div>
 <script is:inline>
-(function() {
-  function initProgressBar() {
+(function () {
+  if (window.__wlProgress) return;
+  window.__wlProgress = true;
+  function update() {
     var bar = document.getElementById('progress-bar');
     if (!bar) return;
-
-    function updateProgress() {
-      var scrollTop = window.scrollY;
-      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (docHeight > 0) {
-        var pct = Math.min((scrollTop / docHeight) * 100, 100);
-        bar.style.width = pct + '%';
-      }
-    }
-
-    window.addEventListener('scroll', updateProgress, { passive: true });
-    updateProgress();
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = h > 0 ? Math.min((window.scrollY / h) * 100, 100) + '%' : '0';
   }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initProgressBar);
-  } else {
-    initProgressBar();
-  }
-  document.addEventListener('astro:page-load', initProgressBar);
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update, { passive: true });
+  document.addEventListener('astro:page-load', update);
+  update();
 })();
 </script>

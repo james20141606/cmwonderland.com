@@ -61,4 +61,4 @@ analytics:
       id: null
 
 ui:
-  theme: 'dark:only'
+  theme: 'system'

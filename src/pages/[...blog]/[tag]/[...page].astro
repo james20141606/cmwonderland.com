@@ -4,7 +4,7 @@ import { blogTagRobots, getStaticPathsBlogTag } from '~/utils/blog';
 
 import Layout from '~/layouts/PageLayout.astro';
 import BlogList from '~/components/blog/List.astro';
-import Headline from '~/components/blog/Headline.astro';
+import PageIntro from '~/components/PageIntro.astro';
 import Pagination from '~/components/blog/Pagination.astro';
 
 export const prerender = true;
@@ -29,9 +29,12 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <section class="px-4 md:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
-    <Headline>Tag: {tag.title}</Headline>
+  <div class="wl-wrap">
+    <PageIntro
+      label={`Tag · ${page.total} ${page.total === 1 ? 'entry' : 'entries'}${currentPage > 1 ? ` · page ${currentPage}` : ''}`}
+      title={`<em>#</em>${tag.title}`}
+    />
     <BlogList posts={page.data} />
     <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
-  </section>
+  </div>
 </Layout>

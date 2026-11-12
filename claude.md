@@ -1,4 +1,19 @@
-# WonderLand 博客现代化重构 — 工作总结
+# WonderLand — cmwonderland.com
+
+## 2026-11 视觉重构（分支 `redesign-2026`，读这一节就够，下面的旧总结部分已过时）
+
+- **设计系统**：`src/assets/styles/site.css`。所有颜色、字体、间距都是 `:root` / `.dark` 里的变量（`--paper` `--ink` `--accent` 等），组件只读变量，不写颜色字面量。类名一律 `wl-` 前缀。改配色只改这两个变量块。
+- **字体**：Newsreader（英文衬线）+ Noto Serif SC（中文）+ Inter（UI）+ JetBrains Mono（元数据），全部经 fontsource 自托管，在 `src/components/CustomStyles.astro` 引入。不要引 Google Fonts（国内被墙）。Noto Serif SC 必须用切片版 `400.css` / `600.css`，不要用 `chinese-simplified-*.css`（那是 1.5MB 的整包）。
+- **明暗主题**：`src/config.yaml` 里 `ui.theme: system`，页头有切换按钮。
+- **页面骨架**：`PageLayout` → `SiteHeader` / `SiteFooter`；内页标题用 `PageIntro`；列表统一用 `.wl-rows` / `.wl-post`；文章正文用 `.wl-prose`。
+- **首页**：`src/pages/index.astro`，代表作列表是手写的，要和 `/about` 的论文列表保持一致。签名图在 `src/components/CortexTraces.astro`（canvas 脊线图，模拟数据）。
+- **没动的独立页面**：`/fun-pages`、`/quantum`、`/anniversary`、`/index-shader`、`/mengmeng-2048`，各自有独立样式。
+- **已不再使用但没删的旧文件**：`widgets/Header.astro`、`widgets/Footer.astro`、`widgets/NeuralFlow*.astro`、`ParticleBackground.astro`、`Logo.astro`、`public/landing/`。
+- **部署**：已在 Vercel 上线，push 到 `main` 自动发布。KaTeX 样式已改为打包（原 CDN 链接的 SRI 值是错的）。
+
+---
+
+# （旧）WonderLand 博客现代化重构 — 工作总结
 
 ## 项目概述
 
