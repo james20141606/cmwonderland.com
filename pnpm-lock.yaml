@@ -29,9 +29,6 @@ importers:
       '@fontsource-variable/newsreader':
         specifier: ^5.3.0
         version: 5.3.0
-      '@fontsource/noto-serif-sc':
-        specifier: ^5.3.1
-        version: 5.3.1
       astro:
         specifier: ^5.12.9
         version: 5.17.1(@types/node@25.2.3)(jiti@1.21.7)(lightningcss@1.29.3)(rollup@4.57.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2)
@@ -467,9 +464,6 @@ packages:
 
   '@fontsource-variable/newsreader@5.3.0':
     resolution: {integrity: sha512-rrzYi43qMpbzwuFtf9OkWH8sxAPVPcQQQEwXpPtwaKYeJ8yVg5aLs5kawmo1f2Q1t1M38TLmEKCkGVDsYwgdFw==}
-
-  '@fontsource/noto-serif-sc@5.3.1':
-    resolution: {integrity: sha512-nIK2HyNGcUi2TGwIfrk2MItkh0O3Y5+TI8iPfPSzoNY6uyXYfQ9qqch8czk3aa1VhV4EU52uwCYCe1UDKJELpg==}
 
   '@iconify-json/flat-color-icons@1.2.3':
     resolution: {integrity: sha512-KcmJ7CY0TKFv5GuBjiS4/v++jEcNXna1jfY+yq014tnw/MN/jMI2oYpoMHGuIpYtUqDu7eove+WySnOYO8nS3w==}
@@ -3448,8 +3442,6 @@ snapshots:
   '@fontsource-variable/jetbrains-mono@5.2.8': {}
 
   '@fontsource-variable/newsreader@5.3.0': {}
-
-  '@fontsource/noto-serif-sc@5.3.1': {}
 
   '@iconify-json/flat-color-icons@1.2.3':
     dependencies:

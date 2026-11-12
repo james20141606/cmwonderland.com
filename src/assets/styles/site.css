@@ -19,7 +19,8 @@
   --selection: rgb(181 55 28 / 0.16);
   --shadow: 0 1px 2px rgb(26 25 23 / 0.06), 0 12px 32px -12px rgb(26 25 23 / 0.18);
 
-  --serif: 'Newsreader Variable', 'Noto Serif SC', 'Songti SC', 'Source Han Serif SC', Georgia, serif;
+  --cjk: 'Songti SC', 'Noto Serif CJK SC', 'Source Han Serif SC', 'Microsoft YaHei';
+  --serif: 'Newsreader Variable', var(--cjk), Georgia, serif;
   --sans: 'Inter Variable', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui, sans-serif;
   --mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
 
@@ -154,7 +155,7 @@ body {
   display: grid; place-items: center;
   width: 1.75rem; height: 1.75rem;
   background: var(--accent); color: var(--accent-ink);
-  font: 600 1rem/1 'Noto Serif SC', 'Songti SC', serif;
+  font: 700 1rem/1 var(--cjk), serif;
   border-radius: 3px;
   transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }

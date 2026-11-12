@@ -1,10 +1,9 @@
 ---
-// Fonts are self-hosted through fontsource (no Google Fonts: it is blocked in
-// mainland China, where a good share of readers are).
+// Latin fonts are self-hosted through fontsource (no Google Fonts: it is blocked
+// in mainland China). Chinese uses the system Songti: a CJK webfont costs ~40 KB
+// per slice and a page touches 20+ slices, which took the home page LCP to 6 s.
 import '@fontsource-variable/newsreader/opsz.css';
 import '@fontsource-variable/newsreader/opsz-italic.css';
-import '@fontsource/noto-serif-sc/400.css';
-import '@fontsource/noto-serif-sc/600.css';
 import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '~/assets/styles/site.css';

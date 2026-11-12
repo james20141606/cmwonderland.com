@@ -1,4 +1,7 @@
 ---
+// KaTeX styles are bundled here so only post pages pay for them (the old CDN
+// link had a wrong SRI hash and was being blocked).
+import 'katex/dist/katex.min.css';
 import PostTags from '~/components/blog/Tags.astro';
 import SocialShare from '~/components/common/SocialShare.astro';
 import TableOfContents from '~/components/blog/TableOfContents.astro';
